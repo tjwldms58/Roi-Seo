@@ -10,6 +10,13 @@
 - 관리자: 모든 회원 정보와 운동·식단 기록 조회, 회원 삭제
 - 서버 DB(SQLite) 사용 → 다른 브라우저/PC에서도 같은 데이터 공유
 
+## 미리보기 (배포 없이)
+
+`preview/index.html` 파일을 브라우저로 열면 화면을 바로 확인할 수 있습니다.
+
+- 미리보기 HTML: `preview/index.html`
+- 화면 캡처: `preview/01-home.png`, `preview/02-login.png`, `preview/03-signup.png`
+
 ## 실행 방법
 
 ```bash
