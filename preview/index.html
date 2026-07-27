@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>건강케어 v1.0 미리보기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --sky: #cfefff;
+      --sky-soft: #e8f7fd;
+      --card: #ffffff;
+      --blue: #2f7fd1;
+      --blue-hover: #2469b3;
+      --blue-soft: #ebf5ff;
+      --text: #1c3d5a;
+      --muted: #5a7a94;
+      --danger: #d64545;
+      --border: #b7d9ef;
+      --radius: 18px;
+      --shadow: 0 10px 28px rgba(47, 127, 209, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Noto Sans KR", sans-serif;
+      font-size: 18px;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, #dff4ff 0%, transparent 42%),
+        radial-gradient(circle at bottom right, #bfe6fa 0%, transparent 40%),
+        linear-gradient(180deg, var(--sky) 0%, var(--sky-soft) 100%);
+    }
+    .page { min-height: 100vh; padding: 28px 18px 48px; }
+    .container { width: 100%; max-width: 960px; margin: 0 auto; }
+    .narrow { max-width: 560px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+    .brand { font-size: 2rem; font-weight: 900; color: var(--blue); margin: 0; }
+    .subtitle { margin: 8px 0 0; color: var(--muted); }
+    .heading { margin: 0 0 18px; font-size: 1.55rem; font-weight: 900; }
+    .badge {
+      display: inline-flex; padding: 6px 12px; border-radius: 999px;
+      background: var(--blue-soft); color: var(--blue); font-weight: 800; font-size: 0.95rem;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 54px; padding: 14px 22px; border: none; border-radius: 14px;
+      font: inherit; font-size: 1.1rem; font-weight: 800; cursor: pointer;
+    }
+    .btn-block { width: 100%; }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover { background: var(--blue-hover); }
+    .btn-secondary { background: var(--blue-soft); color: var(--blue); border: 2px solid #cfe3f8; }
+    .btn-danger { background: #ffe8e8; color: var(--danger); border: 2px solid #ffd0d0; }
+    .hero-card { text-align: center; padding: 42px 28px; }
+    .hero-actions { display: grid; gap: 12px; margin-top: 28px; }
+    .hint { margin-top: 14px; color: var(--muted); text-align: center; font-size: 0.98rem; }
+    .form-grid { display: grid; gap: 16px; }
+    .form-row { display: grid; gap: 8px; }
+    .form-row.two { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 720px) { .form-row.two { grid-template-columns: 1fr; } }
+    label { font-weight: 700; }
+    input, select, textarea {
+      width: 100%; font: inherit; border: 2px solid var(--border);
+      border-radius: 14px; padding: 14px 16px; outline: none; background: #fff; color: var(--text);
+    }
+    textarea { min-height: 96px; resize: vertical; }
+    .error-box {
+      background: #fff1f1; color: var(--danger); border: 2px solid #ffd0d0;
+      border-radius: 14px; padding: 14px 16px; font-weight: 700;
+    }
+    .success-box {
+      background: #eef9f2; color: #1f7a45; border: 2px solid #c8ebd4;
+      border-radius: 14px; padding: 14px 16px; font-weight: 700;
+    }
+    .topbar {
+      display: flex; flex-wrap: wrap; align-items: center;
+      justify-content: space-between; gap: 14px; margin-bottom: 22px;
+    }
+    .stack { display: grid; gap: 18px; }
+    .tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+    .tab {
+      background: #fff; color: var(--muted); border: 2px solid var(--border);
+      border-radius: 999px; min-height: 48px; padding: 10px 18px;
+      font: inherit; font-weight: 800; cursor: pointer;
+    }
+    .tab.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .list { display: grid; gap: 12px; }
+    .list-item {
+      background: var(--sky-soft); border: 1px solid var(--border);
+      border-radius: 16px; padding: 16px 18px; display: grid; gap: 6px;
+    }
+    .meta { color: var(--muted); }
+    .empty {
+      color: var(--muted); text-align: center; padding: 28px 12px;
+      background: var(--sky-soft); border-radius: 16px; border: 1px dashed var(--border);
+    }
+    .member-card {
+      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: center;
+      background: var(--sky-soft); border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px;
+    }
+    .member-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .section-title { margin: 0 0 12px; font-size: 1.25rem; font-weight: 900; }
+    .preview-banner {
+      max-width: 960px; margin: 0 auto 18px; background: #fff8e8; border: 2px solid #f0d58a;
+      color: #7a5a10; border-radius: 14px; padding: 14px 16px; font-weight: 700;
+    }
+    .shots {
+      display: grid; gap: 16px; margin-top: 18px;
+    }
+    .shots img {
+      width: 100%; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow);
+      background: #fff;
+    }
+    .hidden { display: none !important; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="preview-banner">
+      미리보기 파일입니다. 화면 흐름을 확인할 수 있어요.
+      (실제 서버 앱은 저장소에서 <code>npm install && npm run dev</code>로 실행)
+    </div>
+
+    <!-- HOME -->
+    <section id="view-home" class="container narrow">
+      <div class="card hero-card">
+        <p class="badge">v1.0</p>
+        <h1 class="brand" style="margin-top:14px">건강케어</h1>
+        <p class="subtitle">운동과 식단을 쉽고 크게, 깔끔하게 관리하세요.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-block" onclick="show('login')">로그인</button>
+          <button class="btn btn-secondary btn-block" onclick="show('signup')">회원가입</button>
+        </div>
+        <p class="hint">관리자 체험: 아이디 <strong>admin</strong> / 비밀번호 <strong>admin1234</strong></p>
+        <p class="hint"><a href="#shots" onclick="show('shots')">화면 캡처 보기</a></p>
+      </div>
+    </section>
+
+    <!-- LOGIN -->
+    <section id="view-login" class="container narrow hidden">
+      <div class="card">
+        <h1 class="heading">로그인</h1>
+        <form class="form-grid" onsubmit="return doLogin(event)">
+          <div class="form-row">
+            <label>아이디</label>
+            <input id="login-id" required />
+          </div>
+          <div class="form-row">
+            <label>비밀번호</label>
+            <input id="login-pw" type="password" required />
+          </div>
+          <div id="login-error" class="error-box hidden"></div>
+          <button class="btn btn-primary btn-block" type="submit">로그인</button>
+        </form>
+        <p class="hint">계정이 없나요? <a href="#" onclick="show('signup');return false;">회원가입</a></p>
+        <p class="hint"><a href="#" onclick="show('home');return false;">← 홈으로</a></p>
+      </div>
+    </section>
+
+    <!-- SIGNUP -->
+    <section id="view-signup" class="container hidden" style="max-width:640px">
+      <div class="card">
+        <h1 class="heading">회원가입</h1>
+        <form class="form-grid" onsubmit="return doSignup(event)">
+          <div class="form-row">
+            <label>이름</label>
+            <input id="su-name" required />
+          </div>
+          <div class="form-row two">
+            <div class="form-row">
+              <label>나이</label>
+              <input id="su-age" type="number" min="1" max="120" required />
+            </div>
+            <div class="form-row">
+              <label>성별</label>
+              <select id="su-gender" required>
+                <option value="">선택</option>
+                <option>남성</option>
+                <option>여성</option>
+                <option>기타</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>암종 또는 질환명</label>
+            <input id="su-disease" placeholder="예: 유방암, 당뇨 등" required />
+          </div>
+          <div class="form-row">
+            <label>아이디</label>
+            <input id="su-id" required />
+          </div>
+          <div class="form-row">
+            <label>비밀번호</label>
+            <input id="su-pw" type="password" required />
+          </div>
+          <div class="form-row">
+            <label>비밀번호 확인</label>
+            <input id="su-pw2" type="password" required oninput="checkPw()" />
+          </div>
+          <div id="su-error" class="error-box hidden"></div>
+          <button class="btn btn-primary btn-block" type="submit">회원가입</button>
+        </form>
+        <p class="hint">이미 계정이 있나요? <a href="#" onclick="show('login');return false;">로그인</a></p>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="container hidden">
+      <div class="topbar">
+        <div>
+          <h1 class="brand">건강케어</h1>
+          <p class="subtitle" id="dash-user">회원님</p>
+        </div>
+        <button class="btn btn-secondary" onclick="logout()">로그아웃</button>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <div class="tabs">
+            <button type="button" class="tab active" id="tab-w" onclick="setTab('workout')">운동 기록</button>
+            <button type="button" class="tab" id="tab-d" onclick="setTab('diet')">식단 기록</button>
+          </div>
+          <div id="dash-msg" class="success-box hidden" style="margin-bottom:14px"></div>
+          <form id="form-workout" class="form-grid" onsubmit="return addWorkout(event)">
+            <div class="form-row two">
+              <div class="form-row"><label>날짜</label><input type="date" id="w-date" required /></div>
+              <div class="form-row"><label>운동 시간(분)</label><input type="number" id="w-min" min="0" /></div>
+            </div>
+            <div class="form-row"><label>운동 내용</label><input id="w-ex" placeholder="예: 산책, 스트레칭" required /></div>
+            <div class="form-row"><label>메모</label><textarea id="w-notes"></textarea></div>
+            <button class="btn btn-primary" type="submit">운동 저장</button>
+          </form>
+          <form id="form-diet" class="form-grid hidden" onsubmit="return addDiet(event)">
+            <div class="form-row two">
+              <div class="form-row"><label>날짜</label><input type="date" id="d-date" required /></div>
+              <div class="form-row">
+                <label>끼니</label>
+                <select id="d-meal"><option>아침</option><option>점심</option><option>저녁</option><option>간식</option></select>
+              </div>
+            </div>
+            <div class="form-row two">
+              <div class="form-row"><label>음식</label><input id="d-food" required /></div>
+              <div class="form-row"><label>칼로리(kcal)</label><input type="number" id="d-cal" min="0" /></div>
+            </div>
+            <div class="form-row"><label>메모</label><textarea id="d-notes"></textarea></div>
+            <button class="btn btn-primary" type="submit">식단 저장</button>
+          </form>
+        </div>
+        <div class="card">
+          <h2 class="section-title" id="list-title">내 운동 기록</h2>
+          <div id="list-box" class="list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="view-admin" class="container hidden">
+      <div class="topbar">
+        <div>
+          <h1 class="brand">관리자 모드</h1>
+          <p class="subtitle">모든 회원의 정보·운동·식단을 확인합니다.</p>
+        </div>
+        <button class="btn btn-secondary" onclick="logout()">로그아웃</button>
+      </div>
+      <div class="card">
+        <h2 class="section-title">회원 목록</h2>
+        <div id="admin-members" class="stack"></div>
+      </div>
+      <div id="admin-detail" class="card hidden" style="margin-top:18px"></div>
+    </section>
+
+    <!-- SHOTS -->
+    <section id="view-shots" class="container hidden">
+      <div class="card">
+        <h1 class="heading">화면 캡처</h1>
+        <p class="subtitle">실제 앱 화면을 캡처한 이미지입니다.</p>
+        <div class="shots">
+          <div>
+            <h3 class="section-title">1. 홈</h3>
+            <img src="01-home.png" alt="홈 화면" />
+          </div>
+          <div>
+            <h3 class="section-title">2. 로그인</h3>
+            <img src="02-login.png" alt="로그인 화면" />
+          </div>
+          <div>
+            <h3 class="section-title">3. 회원가입</h3>
+            <img src="03-signup.png" alt="회원가입 화면" />
+          </div>
+        </div>
+        <p class="hint"><a href="#" onclick="show('home');return false;">← 미리보기로 돌아가기</a></p>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const KEY = "healthcare-preview-v1";
+    function load() {
+      const raw = localStorage.getItem(KEY);
+      if (raw) return JSON.parse(raw);
+      const data = {
+        users: [
+          { id: 1, username: "admin", password: "admin1234", name: "관리자", role: "ADMIN", age: 30, gender: "기타", disease: "관리자" }
+        ],
+        workouts: {},
+        diets: {},
+        session: null
+      };
+      save(data);
+      return data;
+    }
+    function save(data) { localStorage.setItem(KEY, JSON.stringify(data)); }
+    let db = load();
+
+    function show(name) {
+      ["home","login","signup","dashboard","admin","shots"].forEach((n) => {
+        document.getElementById("view-" + n).classList.toggle("hidden", n !== name);
+      });
+      if (name === "dashboard") renderDash();
+      if (name === "admin") renderAdmin();
+    }
+
+    function checkPw() {
+      const err = document.getElementById("su-error");
+      const a = document.getElementById("su-pw").value;
+      const b = document.getElementById("su-pw2").value;
+      if (b && a !== b) {
+        err.textContent = "비밀번호가 일치하지 않습니다.";
+        err.classList.remove("hidden");
+      } else {
+        err.classList.add("hidden");
+      }
+    }
+
+    function doSignup(e) {
+      e.preventDefault();
+      const err = document.getElementById("su-error");
+      const password = document.getElementById("su-pw").value;
+      const password2 = document.getElementById("su-pw2").value;
+      if (password !== password2) {
+        err.textContent = "비밀번호가 일치하지 않습니다.";
+        err.classList.remove("hidden");
+        return false;
+      }
+      const username = document.getElementById("su-id").value.trim();
+      if (db.users.some((u) => u.username.toLowerCase() === username.toLowerCase())) {
+        err.textContent = "이미 사용 중인 아이디입니다.";
+        err.classList.remove("hidden");
+        return false;
+      }
+      const user = {
+        id: Date.now(),
+        username,
+        password,
+        name: document.getElementById("su-name").value.trim(),
+        age: Number(document.getElementById("su-age").value),
+        gender: document.getElementById("su-gender").value,
+        disease: document.getElementById("su-disease").value.trim(),
+        role: "USER"
+      };
+      db.users.push(user);
+      db.workouts[user.id] = db.workouts[user.id] || [];
+      db.diets[user.id] = db.diets[user.id] || [];
+      db.session = user.id;
+      save(db);
+      show("dashboard");
+      return false;
+    }
+
+    function doLogin(e) {
+      e.preventDefault();
+      const err = document.getElementById("login-error");
+      const id = document.getElementById("login-id").value.trim();
+      const pw = document.getElementById("login-pw").value;
+      const user = db.users.find((u) => u.username.toLowerCase() === id.toLowerCase() && u.password === pw);
+      if (!user) {
+        err.textContent = "아이디 또는 비밀번호가 올바르지 않습니다.";
+        err.classList.remove("hidden");
+        return false;
+      }
+      db.session = user.id;
+      save(db);
+      show(user.role === "ADMIN" ? "admin" : "dashboard");
+      return false;
+    }
+
+    function currentUser() {
+      return db.users.find((u) => u.id === db.session) || null;
+    }
+
+    function logout() {
+      db.session = null;
+      save(db);
+      show("home");
+    }
+
+    function setTab( whichtab ) {
+      document.getElementById("tab-w").classList.toggle("active", whichtab === "workout");
+      document.getElementById("tab-d").classList.toggle("active", whichtab === "diet");
+      document.getElementById("form-workout").classList.toggle("hidden", whichtab !== "workout");
+      document.getElementById("form-diet").classList.toggle("hidden", whichtab !== "diet");
+      document.getElementById("list-title").textContent = whichtab === "workout" ? "내 운동 기록" : "내 식단 기록";
+      window.__tab = whichtab;
+      renderDash();
+    }
+
+    function today() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function renderDash() {
+      const user = currentUser();
+      if (!user || user.role === "ADMIN") { show("home"); return; }
+      document.getElementById("dash-user").textContent = user.name + "님 · " + user.disease;
+      document.getElementById("w-date").value = document.getElementById("w-date").value || today();
+      document.getElementById("d-date").value = document.getElementById("d-date").value || today();
+      const tab = window.__tab || "workout";
+      const box = document.getElementById("list-box");
+      if (tab === "workout") {
+        const rows = db.workouts[user.id] || [];
+        box.innerHTML = rows.length ? rows.map((w) => `
+          <div class="list-item">
+            <strong>${w.date} · ${w.exercise}</strong>
+            <div class="meta">${w.min != null && w.min !== "" ? w.min + "분" : "시간 미입력"}${w.notes ? " · " + w.notes : ""}</div>
+          </div>`).join("") : `<div class="empty">아직 운동 기록이 없습니다.</div>`;
+      } else {
+        const rows = db.diets[user.id] || [];
+        box.innerHTML = rows.length ? rows.map((d) => `
+          <div class="list-item">
+            <strong>${d.date} · ${d.meal} · ${d.food}</strong>
+            <div class="meta">${d.cal != null && d.cal !== "" ? d.cal + " kcal" : "칼로리 미입력"}${d.notes ? " · " + d.notes : ""}</div>
+          </div>`).join("") : `<div class="empty">아직 식단 기록이 없습니다.</div>`;
+      }
+    }
+
+    function addWorkout(e) {
+      e.preventDefault();
+      const user = currentUser();
+      db.workouts[user.id] = db.workouts[user.id] || [];
+      db.workouts[user.id].unshift({
+        date: document.getElementById("w-date").value,
+        exercise: document.getElementById("w-ex").value,
+        min: document.getElementById("w-min").value,
+        notes: document.getElementById("w-notes").value
+      });
+      save(db);
+      document.getElementById("w-ex").value = "";
+      document.getElementById("w-min").value = "";
+      document.getElementById("w-notes").value = "";
+      const msg = document.getElementById("dash-msg");
+      msg.textContent = "운동 기록이 저장되었습니다.";
+      msg.classList.remove("hidden");
+      setTab("workout");
+      return false;
+    }
+
+    function addDiet(e) {
+      e.preventDefault();
+      const user = currentUser();
+      db.diets[user.id] = db.diets[user.id] || [];
+      db.diets[user.id].unshift({
+        date: document.getElementById("d-date").value,
+        meal: document.getElementById("d-meal").value,
+        food: document.getElementById("d-food").value,
+        cal: document.getElementById("d-cal").value,
+        notes: document.getElementById("d-notes").value
+      });
+      save(db);
+      document.getElementById("d-food").value = "";
+      document.getElementById("d-cal").value = "";
+      document.getElementById("d-notes").value = "";
+      const msg = document.getElementById("dash-msg");
+      msg.textContent = "식단 기록이 저장되었습니다.";
+      msg.classList.remove("hidden");
+      setTab("diet");
+      return false;
+    }
+
+    function renderAdmin() {
+      const user = currentUser();
+      if (!user || user.role !== "ADMIN") { show("home"); return; }
+      const members = db.users.filter((u) => u.role === "USER");
+      const box = document.getElementById("admin-members");
+      if (!members.length) {
+        box.innerHTML = `<div class="empty">가입된 회원이 없습니다. 회원가입 후 다시 확인해 보세요.</div>`;
+        return;
+      }
+      box.innerHTML = members.map((m) => `
+        <div class="member-card">
+          <div>
+            <strong style="font-size:1.1rem">${m.name} (${m.username})</strong>
+            <div class="meta">${m.age}세 · ${m.gender} · ${m.disease}</div>
+          </div>
+          <div class="member-actions">
+            <button class="btn btn-primary" onclick="openMember(${m.id})">상세 보기</button>
+          </div>
+        </div>`).join("");
+    }
+
+    function openMember(id) {
+      const m = db.users.find((u) => u.id === id);
+      const detail = document.getElementById("admin-detail");
+      const workouts = db.workouts[id] || [];
+      const diets = db.diets[id] || [];
+      detail.classList.remove("hidden");
+      detail.innerHTML = `
+        <h2 class="section-title">${m.name}님 상세 정보</h2>
+        <div class="list-item" style="margin-bottom:16px">
+          <strong>${m.name} / ${m.username}</strong>
+          <div class="meta">${m.age}세 · ${m.gender} · ${m.disease}</div>
+        </div>
+        <h3 class="section-title">운동 기록</h3>
+        ${workouts.length ? `<div class="list">${workouts.map((w) => `<div class="list-item"><strong>${w.date} · ${w.exercise}</strong></div>`).join("")}</div>` : `<div class="empty">운동 기록이 없습니다.</div>`}
+        <h3 class="section-title" style="margin-top:18px">식단 기록</h3>
+        ${diets.length ? `<div class="list">${diets.map((d) => `<div class="list-item"><strong>${d.date} · ${d.meal} · ${d.food}</strong></div>`).join("")}</div>` : `<div class="empty">식단 기록이 없습니다.</div>`}
+      `;
+    }
+
+    show("home");
+  </script>
+</body>
+</html>
