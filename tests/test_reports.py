@@ -33,7 +33,7 @@ def test_sleep_sample_uses_workbook_text(tmp_path):
     assert model["version"] == "19차"
     html = sleep_html(model)
     assert "19차" in html
-    assert "HEALMARU CARE" in html
+    assert "healmarucare" in html
     assert "데이터 기반 참고 리포트" in html
     assert "생략된 섹션은 없습니다" in html or "생성 정보" in html
     pdf = sleep_pdf(html)

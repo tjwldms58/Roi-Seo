@@ -8,6 +8,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from weasyprint import HTML
 
 from reportkit.errors import ReportError
+from sleep_report.charts import hours_label
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = Path(__file__).resolve().parent / "templates"
@@ -18,6 +19,7 @@ def render_html(model: dict) -> str:
         loader=FileSystemLoader(TEMPLATE_DIR),
         autoescape=select_autoescape(["html", "xml"]),
     )
+    env.filters["hours"] = hours_label
     template = env.get_template("report.html.j2")
     return template.render(**model)
 

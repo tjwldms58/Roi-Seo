@@ -11,6 +11,7 @@ import yaml
 from reportkit.empty import as_text, is_empty
 from reportkit.errors import ReportError
 from reportkit.office import recalculate
+from sleep_report.charts import combo_svg, dual_svg, hours_label, line_svg, stacked_svg
 
 ROOT = Path(__file__).resolve().parent
 RULES_PATH = ROOT / "rules.yaml"
@@ -105,6 +106,7 @@ def build_model(workbook_path: Path, rules: dict | None = None) -> dict:
             {
                 "page": page,
                 "layout": layout,
+                "kicker": spec.get("kicker") or f"{page} · {title}",
                 "question": spec.get("question") or title,
                 "title": title,
                 "status": status,
@@ -121,10 +123,10 @@ def build_model(workbook_path: Path, rules: dict | None = None) -> dict:
         )
 
     name = profile_view["name"]
-    dates = [as_text(day["raw"].get("날짜")) for day in days if not is_empty(day["raw"].get("날짜"), tokens)]
-    period = ""
-    if dates:
-        period = dates[0] if len(dates) == 1 else f"{dates[0]} – {dates[-1]}"
+    dates = [as_text(day["raw"].get("날짜"))[:10] for day in days if not is_empty(day["raw"].get("날짜"), tokens)]
+    period = _period(dates)
+    nights = _enrich_nights(nights, series)
+    _attach_charts(sections, series)
     diagnosis = pages.get("16") or {}
     cover_line = _first_sentence(diagnosis.get("meaning") or "") or diagnosis.get("stat") or ""
 
@@ -143,6 +145,9 @@ def build_model(workbook_path: Path, rules: dict | None = None) -> dict:
         "stages": stages,
         "buckets": buckets,
         "refs": refs,
+        "reference_rows": _reference_rows(series, refs),
+        "signals": [row for row in series if row.get("signal")],
+        "averages": _averages(series),
         "sections": sections,
         "omitted": omitted,
         "filled_count": input_filled,
@@ -320,6 +325,9 @@ def _series(days, tokens: set[str]) -> list[dict]:
                 "activity": _pick_number(daily, "활동시간_분", tokens),
                 "kcal": _pick_number(daily, "소모칼로리_기기값", tokens),
                 "vitality": _pick_number(daily, "활력점수_기기값", tokens),
+                "tib": _pick_number(daily, "침상시간_TIB_분", tokens),
+                "steps": _pick_number(raw, "걸음수", tokens),
+                "date": _month_day(as_text(raw.get("날짜"))),
                 "sleep_type": as_text(daily.get("수면유형_분류")),
                 "signal": flagged,
             }
@@ -470,6 +478,180 @@ def _activity_buckets(sheet) -> list[dict]:
             }
         )
     return rows
+
+
+def _month_day(text: str) -> str:
+    parts = text[:10].split("-")
+    if len(parts) != 3 or not parts[0].isdigit():
+        return text
+    return f"{int(parts[1])}/{int(parts[2])}"
+
+
+def _period(dates: list[str]) -> str:
+    if not dates:
+        return ""
+    start = dates[0].replace("-", ".")
+    if len(dates) == 1:
+        return start
+    end = dates[-1]
+    if start[:4] == end[:4]:
+        return f"{start} – {end[5:7]}.{end[8:10]}"
+    return f"{start} – {end.replace('-', '.')}"
+
+
+def _enrich_nights(nights: dict, series: list[dict]) -> dict:
+    for key in ("good", "bad"):
+        night = nights.get(key) or {}
+        match = next((row for row in series if row["label"] == night.get("day")), None)
+        if not match:
+            continue
+        night["date"] = match.get("date") or ""
+        night["tst"] = hours_label(match.get("tst"))
+        night["sol"] = _plain(match.get("sol"))
+        night["deep"] = hours_label(match.get("deep"))
+        night["light"] = hours_label(match.get("light"))
+        night["rem"] = hours_label(match.get("rem"))
+        night["bed"] = night.get("bed") or match.get("bed") or ""
+        night["wake"] = night.get("wake") or match.get("wake") or ""
+    return nights
+
+
+def _plain(value) -> str:
+    if value is None:
+        return ""
+    number = float(value)
+    if number.is_integer():
+        return str(int(number))
+    return f"{number:.1f}"
+
+
+def _averages(series: list[dict]) -> dict:
+    def average(key: str):
+        values = [float(row[key]) for row in series if row.get(key) is not None]
+        if not values:
+            return None
+        return sum(values) / len(values)
+
+    tib = average("tib")
+    steps = average("steps")
+    awake = average("awake")
+    return {
+        "tib": hours_label(tib) if tib is not None else "",
+        "steps": f"{round(steps):,}" if steps is not None else "",
+        "awake": f"{awake:.1f}" if awake is not None else "",
+    }
+
+
+def _reference_rows(series: list[dict], refs: dict) -> list[dict]:
+    def average(key: str):
+        values = [float(row[key]) for row in series if row.get(key) is not None]
+        if not values:
+            return None
+        return sum(values) / len(values)
+
+    specs = [
+        ("수면효율", "se", "%", "min"),
+        ("입면잠복기", "sol", "분", "max"),
+        ("각성횟수", "awake", "회", "max"),
+        ("수면 중 심박수", "hr", "bpm", "band"),
+        ("호흡수", "rr", "회/분", "band"),
+        ("산소포화도", "spo2", "%", "min"),
+    ]
+    rows = []
+    for label, key, unit, mode in specs:
+        value = average(key)
+        if value is None:
+            continue
+        rule = refs.get(key) or {}
+        low, high = rule.get("low"), rule.get("high")
+        shown = _plain(value) + unit
+        guide = ""
+        gap = "범위 안"
+        tone = "ok"
+        if mode == "min" and low is not None:
+            guide = f"{_plain(low)}{unit} 이상"
+            delta = value - low
+            if delta < -0.05:
+                gap = f"{_plain(abs(delta))}{unit} 낮음"
+                tone = "low"
+        elif mode == "max" and high is not None:
+            guide = f"{_plain(high)}{unit} 이내"
+            delta = value - high
+            if delta > 0.05:
+                gap = f"{_plain(delta)}{unit} 김" if unit == "분" else f"{_plain(delta)}{unit} 초과"
+                tone = "low"
+        elif mode == "band":
+            guide = f"{_plain(low) if low is not None else ''}–{_plain(high) if high is not None else ''}{unit}"
+            if low is not None and value < low:
+                gap = "범위 아래"
+                tone = "low"
+            elif high is not None and value > high:
+                gap = "범위 위"
+                tone = "low"
+        rows.append({"label": label, "value": shown, "guide": guide, "gap": gap, "tone": tone})
+    return rows
+
+
+def _attach_charts(sections: list[dict], series: list[dict]) -> None:
+    palette = {
+        "se": ("#a0c8c0", "#184048"),
+        "sol": ("#a0c8c0", "#184048"),
+        "awake": ("#a0c8c0", "#184048"),
+        "spo2": ("#e0c0a8", "#8a5848"),
+        "hr": ("#e0c0a8", "#8a5848"),
+        "rr": ("#d7c3ae", "#8a5848"),
+        "vitality": ("#e0c0a8", "#8a5848"),
+    }
+    keys = {
+        "04": "se",
+        "05": "sol",
+        "06": "awake",
+        "08": "hr",
+        "09": "rr",
+        "10": "spo2",
+        "15": "vitality",
+    }
+    for section in sections:
+        page = section["page"]
+        if section["layout"] == "stacked":
+            totals = [row["tst"] for row in series if row.get("tst")]
+            section["hero"] = hours_label(sum(totals) / len(totals)) if totals else section.get("headline")
+            section["svg"] = stacked_svg(series)
+        elif page in keys:
+            key = keys[page]
+            bar, line = palette[key]
+            section["svg"] = combo_svg(
+                [{"label": row["label"], "value": row.get(key)} for row in series],
+                bar=bar,
+                line=line,
+            )
+            if key == "vitality":
+                totals = [row["vitality"] for row in series if row.get("vitality") is not None]
+                if len(totals) >= 2:
+                    section["hero"] = f"{_plain(totals[0])}점 → {_plain(totals[-1])}점"
+        elif section["layout"] == "quad":
+            section["svg_tib"] = dual_svg(series, bar_key="tib", line_key="se", bar_fmt=hours_label, line_fmt=lambda value: f"{value:.0f}%")
+            section["svg_activity"] = dual_svg(series, bar_key="activity", line_key="sol", line="#c47a4a", bar_fmt=lambda value: f"{value:.0f}", line_fmt=lambda value: f"{value:.0f}분")
+        elif section["layout"] == "clock":
+            section["svg_bed"] = line_svg([{"label": row["label"], "value": row.get("bed_min")} for row in series])
+            section["svg_wake"] = line_svg(
+                [{"label": row["label"], "value": row.get("wake_min")} for row in series],
+                color="#c47a4a",
+            )
+        elif section["layout"] == "activity":
+            section["svg"] = dual_svg(
+                series,
+                bar_key="activity",
+                line_key="steps",
+                line="#8a5848",
+                bar_fmt=lambda value: f"{value:.0f}분",
+                line_fmt=lambda value: f"{value:,.0f}",
+            )
+        elif section["layout"] == "signals":
+            flagged = next((row["label"] for row in series if row.get("signal")), "")
+            section["svg_hr"] = combo_svg([{"label": row["label"], "value": row.get("hr")} for row in series], bar="#d5e4e0", line="#184048", highlight=flagged, height=120)
+            section["svg_rr"] = combo_svg([{"label": row["label"], "value": row.get("rr")} for row in series], bar="#d5e4e0", line="#184048", highlight=flagged, height=120)
+            section["svg_spo2"] = combo_svg([{"label": row["label"], "value": row.get("spo2")} for row in series], bar="#d5e4e0", line="#184048", highlight=flagged, height=120)
 
 
 def _type_counts(series: list[dict]) -> list[dict]:
