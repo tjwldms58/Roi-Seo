@@ -20,6 +20,7 @@ OUTPUT = ROOT / "outputs" / "recovery"
 def create_app() -> Flask:
     app = Flask(__name__, template_folder=str(PACKAGE / "templates"))
     app.secret_key = "recovery-report-local"
+    app.config["SESSION_COOKIE_NAME"] = "recovery_report_session"
     OUTPUT.mkdir(parents=True, exist_ok=True)
 
     @app.get("/fonts/<name>")

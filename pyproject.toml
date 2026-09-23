@@ -12,6 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
+healmaru-reports = "site_app.web:main"
 sleep-report = "sleep_report.web:main"
 recovery-report = "recovery_report.web:main"
 
@@ -20,4 +21,4 @@ pythonpath = ["."]
 testpaths = ["tests"]
 
 [tool.setuptools.packages.find]
-include = ["reportkit*", "sleep_report*", "recovery_report*"]
+include = ["reportkit*", "sleep_report*", "recovery_report*", "site_app*"]

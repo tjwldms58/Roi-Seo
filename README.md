@@ -14,11 +14,10 @@
 ```bash
 pip install -r requirements.txt
 sudo apt install libreoffice-calc
-python -m sleep_report
-python -m recovery_report
+python -m site_app
 ```
 
-수면 화면은 http://127.0.0.1:8081 , 종합 화면은 http://127.0.0.1:8082 입니다. 각 화면의 `샘플 레포트 보기`를 누르면 브라우저에서 레포트가 열립니다. 서버 없이 보려면 `preview/index.html` 을 브라우저로 여세요. 화면에서 각 페이지는 A4(210mm × 297mm)입니다.
+브라우저에서 http://127.0.0.1:8080 을 엽니다. 첫 화면에서 수면 레포트와 종합 레포트를 나눠 고릅니다. 각 화면에서 엑셀을 올리면 그 파일로 레포트가 만들어지고, 샘플 보기로 예시 화면도 열립니다. 서버 없이 샘플만 보려면 `preview/index.html` 을 여세요. 레포트 각 페이지는 A4(210mm × 297mm)입니다.
 
 ## 수면 레포트에서 고치는 곳
 

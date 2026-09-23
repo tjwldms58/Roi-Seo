@@ -24,6 +24,7 @@ def create_app() -> Flask:
         static_folder=str(ROOT / "static"),
     )
     app.secret_key = "sleep-report-local"
+    app.config["SESSION_COOKIE_NAME"] = "sleep_report_session"
     OUTPUT.mkdir(parents=True, exist_ok=True)
 
     @app.get("/fonts/<name>")

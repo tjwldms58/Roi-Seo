@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<title>힐마루케어 레포트</title>
+<style>
+@font-face { font-family: "ReportKR"; src: url("/fonts/NotoSansKR-Regular.otf"); font-weight: 400; }
+@font-face { font-family: "ReportKR"; src: url("/fonts/NotoSansKR-Bold.otf"); font-weight: 700; }
+body { margin: 0; font-family: "ReportKR", sans-serif; background: #e6e2d8; color: #183038; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 36px 20px 64px; }
+.band { background: #183840; color: #f4f1ea; padding: 28px; }
+h1 { margin: 0 0 8px; font-size: 28px; }
+.band p { margin: 0; color: #d7e4e2; line-height: 1.5; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+.card { background: #fff; padding: 22px; }
+.card.sleep { border-top: 4px solid #1d4f4c; }
+.card.recovery { border-top: 4px solid #a84838; }
+.kicker { margin: 0; font-size: 13px; letter-spacing: 0.06em; }
+.sleep .kicker { color: #1d4f4c; }
+.recovery .kicker { color: #a84838; }
+h2 { margin: 6px 0 8px; font-size: 22px; }
+p { line-height: 1.5; }
+a.btn { color: white; text-decoration: none; padding: 10px 16px; display: inline-block; margin: 8px 8px 0 0; }
+.sleep .btn { background: #1d4f4c; }
+.recovery .btn { background: #a84838; }
+a.ghost { background: transparent; text-decoration: none; padding: 9px 14px; display: inline-block; margin: 8px 8px 0 0; }
+.sleep .ghost { color: #1d4f4c; border: 1px solid #1d4f4c; }
+.recovery .ghost { color: #a84838; border: 1px solid #a84838; }
+.fine { color: #5c6a64; font-size: 14px; }
+@media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="band">
+    <h1>힐마루케어 레포트</h1>
+    <p>만들 레포트를 고르세요. 수면과 종합은 서로 다른 프로그램입니다. 엑셀을 올리면 그 파일의 값으로 레포트가 만들어집니다.</p>
+  </header>
+  <div class="grid">
+    <section class="card sleep">
+      <p class="kicker">수면</p>
+      <h2>수면 레포트 만들기</h2>
+      <p class="fine">7일 수면 엑셀을 올리면 불면 중심 수면 리듬 레포트를 만듭니다. 입력칸은 S1, S2입니다.</p>
+      <a class="btn" href="/sleep/">수면 프로그램 열기</a>
+      <a class="ghost" href="/sleep/sample">샘플 보기</a>
+      <a class="ghost" href="/sleep/template">양식 받기</a>
+    </section>
+    <section class="card recovery">
+      <p class="kicker">종합</p>
+      <h2>종합 레포트 만들기</h2>
+      <p class="fine">방문 건강관리 양식의 노란 칸을 채운 엑셀을 올리면 회복 관리 레포트를 만듭니다.</p>
+      <a class="btn" href="/recovery/">종합 프로그램 열기</a>
+      <a class="ghost" href="/recovery/sample">샘플 보기</a>
+      <a class="ghost" href="/recovery/template">양식 받기</a>
+    </section>
+  </div>
+</div>
+</body>
+</html>

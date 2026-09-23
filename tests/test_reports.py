@@ -116,6 +116,25 @@ def test_recovery_omits_capability_when_names_missing(tmp_path):
     assert model["filled_count"] < model["total_count"]
 
 
+def test_one_site_separates_sleep_and_recovery():
+    from site_app.web import create_site
+
+    client = create_site().test_client()
+    home = client.get("/").get_data(as_text=True)
+    assert "수면 레포트 만들기" in home
+    assert "종합 레포트 만들기" in home
+    sleep = client.get("/sleep/")
+    assert sleep.status_code == 200
+    sleep_html = sleep.get_data(as_text=True)
+    assert "수면 로직 엑셀" in sleep_html
+    assert 'action="/sleep/generate"' in sleep_html
+    recovery = client.get("/recovery/")
+    assert recovery.status_code == 200
+    recovery_html = recovery.get_data(as_text=True)
+    assert "종합 레포트 양식" in recovery_html
+    assert 'action="/recovery/generate"' in recovery_html
+
+
 def test_web_uploads(tmp_path, monkeypatch):
     sleep_client = sleep_app().test_client()
     page = sleep_client.get("/")

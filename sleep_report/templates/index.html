@@ -28,6 +28,7 @@ li { margin: 4px 0; }
   <header class="band">
     <h1>수면 레포트</h1>
     <p>로직 엑셀의 S1·S2에 값을 넣고 올리면, 수식 결과로 PDF를 만듭니다.</p>
+    <p><a href="/" style="color:#f4f1ea;">프로그램 선택</a></p>
     <span class="pill">로직 {{ rules.version }} · {{ rules.updated_at }} · 섹션 {{ section_count }}개 · 프로그램 {{ app_version }}</span>
   </header>
   <section class="card">
@@ -50,7 +51,7 @@ li { margin: 4px 0; }
       <li>{{ section.page }} — 핵심: {{ section.core_headers | join(", ") }}</li>
       {% endfor %}
     </ul>
-    <p class="fine">핵심 입력이 전부 비어 있으면 그 섹션은 빠지고, PDF 마지막에 생략 이유가 남습니다. 0은 빈 값이 아닙니다.</p>
+    <p class="fine">핵심 입력이 전부 비어 있으면 그 섹션은 빠집니다. 빠진 이유는 만든 뒤 화면에 나옵니다. 0은 빈 값이 아닙니다.</p>
   </section>
 </div>
 </body>
