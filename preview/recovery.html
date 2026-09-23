@@ -34,10 +34,36 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: "ReportKR", sans-serif; color: #183038; font-size: 10pt; line-height: 1.55; background: #f0f0e8; }
 .cover { page: cover; color: #f4f1ea; min-height: 250mm; }
+.sheet-foot { display: none; }
+@media print {
+  .sheet-inner { zoom: 1 !important; }
+  .sheet-foot { display: none !important; }
+}
 @media screen {
-  body { background: #e6e2d8; padding: 16px 0 40px; }
-  .cover { background: #103840; max-width: 210mm; margin: 0 auto; padding: 16mm 14mm 18mm; min-height: 0; }
-  .page { break-before: auto; max-width: 210mm; margin: 12px auto 0; background: #f0f0e8; padding: 10mm 12mm 14mm; }
+  body { background: #d9d4c8; margin: 0; padding: 8mm 0 12mm; min-width: 210mm; }
+  .cover, .page {
+    width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    margin: 8mm auto 0;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 22px rgba(24, 40, 48, 0.14);
+    break-before: auto;
+  }
+  .cover { background: #103840; padding: 16mm 16mm 16mm; }
+  .page { background: #f0f0e8; padding: 13mm 14mm 16mm; }
+  .sheet-foot {
+    display: block;
+    position: absolute;
+    left: 14mm;
+    right: 14mm;
+    bottom: 6mm;
+    font-size: 8pt;
+    color: #6d7874;
+  }
+  .cover .sheet-foot { color: #8aa4a8; }
 }
 .brand { margin: 0; letter-spacing: 0.22em; font-size: 11pt; color: #d7e4e2; }
 .cover h1 { margin: 28mm 0 0; font-size: 28pt; line-height: 1.28; font-weight: 700; }
@@ -80,7 +106,7 @@ h2 { margin: 1mm 0 4mm; font-size: 18pt; line-height: 1.3; color: #143840; }
 .fine { color: #5c6a66; font-size: 9pt; }
 </style>
 </head>
-<body>
+<body data-brand="HEALMARU CARE" data-note="데이터 기반 참고 리포트 · 의료 진단 아님" data-version="1.0.0" data-cover-foot="데이터 기반 참고 리포트 · 의료 진단 아님">
 
 
 
@@ -377,8 +403,115 @@ h2 { margin: 1mm 0 4mm; font-size: 18pt; line-height: 1.3; color: #143840; }
   <h2>생성 정보</h2>
   <p>노란 입력칸 163/211개가 채워져 있습니다.</p>
   <p>생략된 섹션은 없습니다.</p>
-  <p class="fine">로직 1.0.0 · 수정일 2026-09-23 · 생성 2026-09-23 16:20 · recovery_template.xlsx</p>
+  <p class="fine">로직 1.0.0 · 수정일 2026-09-23 · 생성 2026-09-23 16:46 · recovery_template.xlsx</p>
   <p class="fine">데이터 기반 참고 리포트 · 의료 진단 아님</p>
 </section>
+<script>
+(function () {
+  function fits(sheet) {
+    if (sheet.clientHeight < 50) return true;
+    return sheet.scrollHeight <= sheet.clientHeight + 1;
+  }
+  function isHeader(node) {
+    return node.nodeType === 1 && (node.classList.contains("run") || node.classList.contains("top"));
+  }
+  function makeNext(sheet, header) {
+    if (document.querySelectorAll(".cover, .page").length > 60) return null;
+    var next = sheet.cloneNode(false);
+    sheet.parentNode.insertBefore(next, sheet.nextSibling);
+    if (header) next.appendChild(header.cloneNode(true));
+    return next;
+  }
+  function scaleToFit(sheet, node) {
+    var style = getComputedStyle(sheet);
+    var room = sheet.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+    Array.prototype.forEach.call(sheet.children, function (el) { if (el !== node) room -= el.offsetHeight; });
+    if (room > 0 && node.scrollHeight > room) node.style.zoom = String(room / node.scrollHeight);
+  }
+  function splitTable(sheet, table, header) {
+    var rows = Array.prototype.slice.call(table.rows);
+    sheet.removeChild(table);
+    var current = sheet;
+    var working = table.cloneNode(false);
+    current.appendChild(working);
+    rows.forEach(function (row) {
+      working.appendChild(row);
+      if (fits(current)) return;
+      if (working.rows.length > 1) {
+        working.removeChild(row);
+        current = makeNext(current, header);
+        working = table.cloneNode(false);
+        current.appendChild(working);
+        working.appendChild(row);
+      }
+      if (!fits(current)) scaleToFit(current, working);
+    });
+    return current;
+  }
+  function appendNode(sheet, node, header) {
+    sheet.appendChild(node);
+    if (fits(sheet) || node.nodeType !== 1) return sheet;
+    var blocks = Array.prototype.filter.call(sheet.children, function (el) { return !isHeader(el); });
+    if (blocks.length > 1) {
+      sheet.removeChild(node);
+      var next = makeNext(sheet, header);
+      if (!next) { sheet.appendChild(node); scaleToFit(sheet, node); return sheet; }
+      return appendNode(next, node, header);
+    }
+    if (node.tagName === "TABLE" && node.rows.length > 1) return splitTable(sheet, node, header);
+    if (node.children.length > 1) {
+      var kids = Array.prototype.slice.call(node.children);
+      sheet.removeChild(node);
+      var current = sheet;
+      var holder = node.cloneNode(false);
+      current.appendChild(holder);
+      kids.forEach(function (kid) {
+        holder.appendChild(kid);
+        if (fits(current) || holder.children.length === 1) return;
+        holder.removeChild(kid);
+        current = makeNext(current, header);
+        holder = node.cloneNode(false);
+        current.appendChild(holder);
+        holder.appendChild(kid);
+      });
+      if (!fits(current)) scaleToFit(current, holder);
+      return current;
+    }
+    scaleToFit(sheet, node);
+    return sheet;
+  }
+  function paginate() {
+    if (document.body.dataset.paged) return;
+    document.body.dataset.paged = "1";
+    var originals = Array.prototype.slice.call(document.querySelectorAll(".cover, .page"));
+    originals.forEach(function (sheet) {
+      var nodes = Array.prototype.slice.call(sheet.childNodes);
+      var header = null;
+      nodes.forEach(function (node) { sheet.removeChild(node); if (!header && isHeader(node)) header = node; });
+      var current = sheet;
+      nodes.forEach(function (node) { current = appendNode(current, node, header); });
+    });
+    var all = document.querySelectorAll(".cover, .page");
+    var brand = document.body.dataset.brand || "";
+    var note = document.body.dataset.note || "";
+    var version = document.body.dataset.version || "";
+    Array.prototype.forEach.call(all, function (el, index) {
+      var foot = document.createElement("div");
+      foot.className = "sheet-foot";
+      var pageNo = (index + 1) + " / " + all.length;
+      foot.textContent = el.classList.contains("cover")
+        ? (document.body.dataset.coverFoot || "")
+        : [brand, note, version ? ("로직 " + version) : "", pageNo].filter(Boolean).join("  ·  ");
+      el.appendChild(foot);
+    });
+  }
+  window.addEventListener("beforeprint", function () {
+    document.querySelectorAll(".cover, .page").forEach(function (el) { el.style.zoom = "1"; });
+  });
+  function start() { if (document.fonts && document.fonts.ready) document.fonts.ready.then(paginate); else paginate(); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
+})();
+</script>
 </body>
 </html>

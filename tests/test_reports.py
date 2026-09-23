@@ -36,6 +36,7 @@ def test_sleep_sample_uses_workbook_text(tmp_path):
     assert "healmarucare" in html
     assert "데이터 기반 참고 리포트" in html
     assert "생략된 섹션은 없습니다" in html or "생성 정보" in html
+    assert "width: 210mm" in html and "height: 297mm" in html
     pdf = sleep_pdf(html)
     assert pdf.startswith(b"%PDF")
 
@@ -93,6 +94,7 @@ def test_recovery_sample_keeps_capability_page(tmp_path):
     html = recovery_html(model)
     assert "HEALMARU CARE" in html
     assert "데이터 기반 참고 리포트" in html
+    assert "width: 210mm" in html and "height: 297mm" in html
     pdf = recovery_pdf(html)
     assert pdf.startswith(b"%PDF")
 

@@ -24,10 +24,36 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: "ReportKR", sans-serif; color: #243033; font-size: 9pt; line-height: 1.45; background: #f4f1ec; }
 .cover { page: cover; color: #f7f4ef; }
+.sheet-foot { display: none; }
+@media print {
+  .sheet-inner { zoom: 1 !important; }
+  .sheet-foot { display: none !important; }
+}
 @media screen {
-  body { background: #e6e2d8; padding: 16px 0 40px; }
-  .cover { background: #183840; max-width: 210mm; margin: 0 auto; padding: 16mm 14mm 18mm; }
-  .page { break-before: auto; max-width: 210mm; margin: 12px auto 0; background: #f4f1ec; padding: 10mm 11mm 12mm; }
+  body { background: #d9d4c8; margin: 0; padding: 8mm 0 12mm; min-width: 210mm; }
+  .cover, .page {
+    width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    margin: 8mm auto 0;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 22px rgba(24, 40, 48, 0.14);
+    break-before: auto;
+  }
+  .cover { background: #183840; padding: 14mm 14mm 16mm; }
+  .page { background: #f4f1ec; padding: 10mm 11mm 16mm; }
+  .sheet-foot {
+    display: block;
+    position: absolute;
+    left: 11mm;
+    right: 11mm;
+    bottom: 6mm;
+    font-size: 8pt;
+    color: #7a847f;
+  }
+  .cover .sheet-foot { left: 14mm; right: 14mm; color: #9eb0b0; }
 }
 .date { text-align: right; color: #d5dedc; font-size: 10pt; margin: 0; }
 .cover-rule { border: 0; border-top: 0.6pt solid #3d5c60; margin: 4mm 0 28mm; }
@@ -90,7 +116,7 @@ h2 { margin: 0 0 1.5mm; font-size: 16pt; line-height: 1.25; color: #1c3338; }
 .bucket b { display: block; height: 10px; background: #1d4f4c; }
 </style>
 </head>
-<body>
+<body data-brand="{{ document.brand }}" data-note="{{ document.footer_note }}" data-cover-foot="이 리포트가 실제로 들여다보는 6가지 지표">
 <header class="cover">
   <p class="date">{{ period }}</p>
   <hr class="cover-rule"/>
@@ -335,5 +361,112 @@ h2 { margin: 0 0 1.5mm; font-size: 16pt; line-height: 1.25; color: #1c3338; }
   <p class="fine">로직 {{ version }} · 수정일 {{ updated_at }} · 생성 {{ generated_at }} · {{ source_name }}</p>
   <p class="fine">{{ document.footer_note }}</p>
 </section>
+<script>
+(function () {
+  function fits(sheet) {
+    if (sheet.clientHeight < 50) return true;
+    return sheet.scrollHeight <= sheet.clientHeight + 1;
+  }
+  function isHeader(node) {
+    return node.nodeType === 1 && (node.classList.contains("run") || node.classList.contains("top"));
+  }
+  function makeNext(sheet, header) {
+    if (document.querySelectorAll(".cover, .page").length > 60) return null;
+    var next = sheet.cloneNode(false);
+    sheet.parentNode.insertBefore(next, sheet.nextSibling);
+    if (header) next.appendChild(header.cloneNode(true));
+    return next;
+  }
+  function scaleToFit(sheet, node) {
+    var style = getComputedStyle(sheet);
+    var room = sheet.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+    Array.prototype.forEach.call(sheet.children, function (el) { if (el !== node) room -= el.offsetHeight; });
+    if (room > 0 && node.scrollHeight > room) node.style.zoom = String(room / node.scrollHeight);
+  }
+  function splitTable(sheet, table, header) {
+    var rows = Array.prototype.slice.call(table.rows);
+    sheet.removeChild(table);
+    var current = sheet;
+    var working = table.cloneNode(false);
+    current.appendChild(working);
+    rows.forEach(function (row) {
+      working.appendChild(row);
+      if (fits(current)) return;
+      if (working.rows.length > 1) {
+        working.removeChild(row);
+        current = makeNext(current, header);
+        working = table.cloneNode(false);
+        current.appendChild(working);
+        working.appendChild(row);
+      }
+      if (!fits(current)) scaleToFit(current, working);
+    });
+    return current;
+  }
+  function appendNode(sheet, node, header) {
+    sheet.appendChild(node);
+    if (fits(sheet) || node.nodeType !== 1) return sheet;
+    var blocks = Array.prototype.filter.call(sheet.children, function (el) { return !isHeader(el); });
+    if (blocks.length > 1) {
+      sheet.removeChild(node);
+      var next = makeNext(sheet, header);
+      if (!next) { sheet.appendChild(node); scaleToFit(sheet, node); return sheet; }
+      return appendNode(next, node, header);
+    }
+    if (node.tagName === "TABLE" && node.rows.length > 1) return splitTable(sheet, node, header);
+    if (node.children.length > 1) {
+      var kids = Array.prototype.slice.call(node.children);
+      sheet.removeChild(node);
+      var current = sheet;
+      var holder = node.cloneNode(false);
+      current.appendChild(holder);
+      kids.forEach(function (kid) {
+        holder.appendChild(kid);
+        if (fits(current) || holder.children.length === 1) return;
+        holder.removeChild(kid);
+        current = makeNext(current, header);
+        holder = node.cloneNode(false);
+        current.appendChild(holder);
+        holder.appendChild(kid);
+      });
+      if (!fits(current)) scaleToFit(current, holder);
+      return current;
+    }
+    scaleToFit(sheet, node);
+    return sheet;
+  }
+  function paginate() {
+    if (document.body.dataset.paged) return;
+    document.body.dataset.paged = "1";
+    var originals = Array.prototype.slice.call(document.querySelectorAll(".cover, .page"));
+    originals.forEach(function (sheet) {
+      var nodes = Array.prototype.slice.call(sheet.childNodes);
+      var header = null;
+      nodes.forEach(function (node) { sheet.removeChild(node); if (!header && isHeader(node)) header = node; });
+      var current = sheet;
+      nodes.forEach(function (node) { current = appendNode(current, node, header); });
+    });
+    var all = document.querySelectorAll(".cover, .page");
+    var brand = document.body.dataset.brand || "";
+    var note = document.body.dataset.note || "";
+    var version = document.body.dataset.version || "";
+    Array.prototype.forEach.call(all, function (el, index) {
+      var foot = document.createElement("div");
+      foot.className = "sheet-foot";
+      var pageNo = (index + 1) + " / " + all.length;
+      foot.textContent = el.classList.contains("cover")
+        ? (document.body.dataset.coverFoot || "")
+        : [brand, note, version ? ("로직 " + version) : "", pageNo].filter(Boolean).join("  ·  ");
+      el.appendChild(foot);
+    });
+  }
+  window.addEventListener("beforeprint", function () {
+    document.querySelectorAll(".cover, .page").forEach(function (el) { el.style.zoom = "1"; });
+  });
+  function start() { if (document.fonts && document.fonts.ready) document.fonts.ready.then(paginate); else paginate(); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
+})();
+</script>
 </body>
 </html>
