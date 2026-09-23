@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<title>힐마루케어 레포트 미리보기</title>
+<style>
+@font-face { font-family: "ReportKR"; src: url("../assets/fonts/NotoSansKR-Regular.otf"); font-weight: 400; }
+@font-face { font-family: "ReportKR"; src: url("../assets/fonts/NotoSansKR-Bold.otf"); font-weight: 700; }
+body { margin: 0; font-family: "ReportKR", sans-serif; background: #e6e2d8; color: #183038; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 36px 20px 64px; }
+.band { background: #183840; color: #f4f1ea; padding: 28px; }
+h1 { margin: 0 0 8px; font-size: 28px; }
+.band p { margin: 0; color: #d7e4e2; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+.card { background: #fff; padding: 22px; border-top: 3px solid #a84838; }
+h2 { margin: 0 0 8px; }
+a.btn { background: #a84838; color: white; text-decoration: none; padding: 10px 16px; display: inline-block; margin-top: 12px; }
+.fine { color: #5c6a64; font-size: 14px; line-height: 1.5; }
+@media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="band">
+    <h1>힐마루케어 레포트</h1>
+    <p>엑셀에 있는 값으로 만든 샘플입니다. 아래 버튼을 누르면 브라우저에서 레포트가 열립니다.</p>
+  </header>
+  <div class="grid">
+    <section class="card">
+      <h2>수면 레포트</h2>
+      <p class="fine">로직 엑셀 19차 샘플입니다. 이름, 7일 수치, 문장은 그 파일의 수식 결과입니다.</p>
+      <a class="btn" href="sleep.html">수면 레포트 보기</a>
+    </section>
+    <section class="card">
+      <h2>종합 레포트</h2>
+      <p class="fine">회복 관리 양식 샘플입니다. 노란 칸에 들어 있는 값으로 페이지를 그립니다.</p>
+      <a class="btn" href="recovery.html">종합 레포트 보기</a>
+    </section>
+  </div>
+  <section class="card">
+    <p class="fine">다른 대상자 파일로 만들려면 로직 엑셀의 입력칸을 고친 뒤 프로그램을 실행하세요. 수면은 <code>python -m sleep_report</code> (8081), 종합은 <code>python -m recovery_report</code> (8082)입니다. 화면의 샘플 레포트 보기로도 열 수 있습니다.</p>
+  </section>
+</div>
+</body>
+</html>

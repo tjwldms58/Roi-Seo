@@ -21,7 +21,8 @@ a.ghost { background: transparent; color: #103840; border: 1px solid #103840; }
     <p class="score">{{ log.filled_count }} / {{ log.total_count }}</p>
     <p>로직 {{ log.logic_version }} · {{ log.logic_updated_at }}</p>
     <p>
-      <a class="btn" href="{{ url_for('download', report_id=report_id, kind='pdf') }}">PDF 받기</a>
+      <a class="btn" href="{{ url_for('download', report_id=report_id, kind='html') }}">화면으로 보기</a>
+      <a class="btn ghost" href="{{ url_for('download', report_id=report_id, kind='pdf') }}">PDF 받기</a>
       <a class="btn ghost" href="{{ url_for('download', report_id=report_id, kind='log') }}">로그 받기</a>
       <a class="btn ghost" href="{{ url_for('index') }}">다시 만들기</a>
     </p>

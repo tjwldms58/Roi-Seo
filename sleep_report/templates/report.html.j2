@@ -24,6 +24,11 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: "ReportKR", sans-serif; color: #243033; font-size: 9pt; line-height: 1.45; background: #f4f1ec; }
 .cover { page: cover; color: #f7f4ef; }
+@media screen {
+  body { background: #e6e2d8; padding: 16px 0 40px; }
+  .cover { background: #183840; max-width: 210mm; margin: 0 auto; padding: 16mm 14mm 18mm; }
+  .page { break-before: auto; max-width: 210mm; margin: 12px auto 0; background: #f4f1ec; padding: 10mm 11mm 12mm; }
+}
 .date { text-align: right; color: #d5dedc; font-size: 10pt; margin: 0; }
 .cover-rule { border: 0; border-top: 0.6pt solid #3d5c60; margin: 4mm 0 28mm; }
 .eye { margin: 8mm 0 0; letter-spacing: 0.14em; color: #d7c4a4; font-size: 9pt; }

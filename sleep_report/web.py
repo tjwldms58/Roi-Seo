@@ -46,6 +46,10 @@ def create_app() -> Flask:
     def template_file():
         return send_file(LOGIC_PATH, as_attachment=True, download_name="수면_로직_양식.xlsx")
 
+    @app.get("/sample")
+    def sample():
+        return _html_for_browser(build_model(LOGIC_PATH))
+
     @app.post("/generate")
     def generate():
         upload = request.files.get("file")
@@ -59,11 +63,12 @@ def create_app() -> Flask:
         upload.save(source)
         try:
             model = build_model(source)
-            html = render_html(model)
-            pdf = render_pdf(html)
+            html = _html_for_browser(model)
+            pdf = render_pdf(render_html(model))
         except ReportError as exc:
             flash(str(exc))
             return redirect(url_for("index"))
+        (folder / "report.html").write_text(html, encoding="utf-8")
         (folder / "report.pdf").write_bytes(pdf)
         (folder / "log.json").write_text(
             json.dumps(_log(model), ensure_ascii=False, indent=2),
@@ -82,11 +87,17 @@ def create_app() -> Flask:
         folder = _folder(report_id)
         if kind == "pdf":
             return send_file(folder / "report.pdf", as_attachment=True, download_name="수면레포트.pdf")
+        if kind == "html":
+            return send_file(folder / "report.html")
         if kind == "log":
             return send_file(folder / "log.json", as_attachment=True, download_name="수면레포트_로그.json")
         return redirect(url_for("index"))
 
     return app
+
+
+def _html_for_browser(model: dict) -> str:
+    return render_html(model).replace('url("assets/fonts/', 'url("/fonts/')
 
 
 def _folder(report_id: str) -> Path:

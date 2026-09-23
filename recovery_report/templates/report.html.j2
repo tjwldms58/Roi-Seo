@@ -34,6 +34,11 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: "ReportKR", sans-serif; color: #183038; font-size: 10pt; line-height: 1.55; background: #f0f0e8; }
 .cover { page: cover; color: #f4f1ea; min-height: 250mm; }
+@media screen {
+  body { background: #e6e2d8; padding: 16px 0 40px; }
+  .cover { background: #103840; max-width: 210mm; margin: 0 auto; padding: 16mm 14mm 18mm; min-height: 0; }
+  .page { break-before: auto; max-width: 210mm; margin: 12px auto 0; background: #f0f0e8; padding: 10mm 12mm 14mm; }
+}
 .brand { margin: 0; letter-spacing: 0.22em; font-size: 11pt; color: #d7e4e2; }
 .cover h1 { margin: 28mm 0 0; font-size: 28pt; line-height: 1.28; font-weight: 700; }
 .rule { width: 28mm; height: 2px; background: #a84838; margin: 8mm 0; }

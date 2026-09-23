@@ -32,6 +32,7 @@ button, .btn { background: #a84838; color: white; border: 0; padding: 10px 16px;
       <label for="file">종합 레포트 양식 (.xlsx)</label>
       <input id="file" name="file" type="file" accept=".xlsx" required/>
       <button type="submit">PDF 만들기</button>
+      <a class="btn ghost" href="{{ url_for('sample') }}">샘플 레포트 보기</a>
       <a class="btn ghost" href="{{ url_for('template_file') }}">양식 받기</a>
     </form>
     <p class="fine">파란 칸은 수식입니다. 노란 칸과 문장만 고치고 파일을 교체하면 프로그램 코드는 그대로 둡니다. 섹션을 언제 빼 낼지는 rules.yaml에서 바꿉니다.</p>

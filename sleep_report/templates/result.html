@@ -24,7 +24,8 @@ li { margin: 6px 0; }
     <p class="score">{{ log.filled_count }}<span> / {{ log.total_count }} 항목</span></p>
     <p>측정 {{ log.monitored_count }}/{{ log.day_count }}일 · 로직 {{ log.logic_version }} · {{ log.logic_updated_at }}</p>
     <p>
-      <a class="btn" href="{{ url_for('download', report_id=report_id, kind='pdf') }}">PDF 받기</a>
+      <a class="btn" href="{{ url_for('download', report_id=report_id, kind='html') }}">화면으로 보기</a>
+      <a class="btn ghost" href="{{ url_for('download', report_id=report_id, kind='pdf') }}">PDF 받기</a>
       <a class="btn ghost" href="{{ url_for('download', report_id=report_id, kind='log') }}">로그 받기</a>
       <a class="btn ghost" href="{{ url_for('index') }}">다시 만들기</a>
     </p>
