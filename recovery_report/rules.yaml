@@ -9,8 +9,10 @@ updated_at: "2026-09-23"
 document:
   title: "회복 관리 종합 레포트"
   subtitle: "방문 건강관리 회차 기록"
+  brand: "HEALMARU CARE"
+  running_title: "회복 관리 종합 레포트"
   missing_text: "해당 데이터 없음"
-  footer_note: "업로드한 종합 레포트 양식의 입력값과 수식으로 만들었습니다. 진단을 대신하지 않습니다."
+  footer_note: "데이터 기반 참고 리포트 · 의료 진단 아님"
 
 # 시트 이름과 머리글은 양식 엑셀과 같아야 합니다. 행 번호는 적지 않습니다.
 locators:

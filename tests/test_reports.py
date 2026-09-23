@@ -33,6 +33,8 @@ def test_sleep_sample_uses_workbook_text(tmp_path):
     assert model["version"] == "19차"
     html = sleep_html(model)
     assert "19차" in html
+    assert "HEALMARU CARE" in html
+    assert "데이터 기반 참고 리포트" in html
     assert "생략된 섹션은 없습니다" in html or "생성 정보" in html
     pdf = sleep_pdf(html)
     assert pdf.startswith(b"%PDF")
@@ -88,7 +90,10 @@ def test_recovery_sample_keeps_capability_page(tmp_path):
     # 양식의 예비 입력칸(추가 지표 행)은 샘플에서 비어 있다. 섹션은 그대로 그린다.
     assert 0 < model["filled_count"] < model["total_count"]
     assert model["omitted"] == []
-    pdf = recovery_pdf(recovery_html(model))
+    html = recovery_html(model)
+    assert "HEALMARU CARE" in html
+    assert "데이터 기반 참고 리포트" in html
+    pdf = recovery_pdf(html)
     assert pdf.startswith(b"%PDF")
 
 

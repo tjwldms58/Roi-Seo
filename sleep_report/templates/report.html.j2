@@ -8,80 +8,317 @@
 @font-face { font-family: "ReportKR"; src: url("assets/fonts/NotoSansKR-Bold.otf"); font-weight: 700; }
 @page {
   size: A4;
-  margin: 16mm 14mm 18mm 14mm;
+  margin: 13mm 14mm 14mm 14mm;
+  background: #f0f0e8;
   @bottom-left {
-    content: "로직 {{ version }} · {{ updated_at }} · 채움 {{ filled_count }}/{{ total_count }} · 생략 {{ omitted|length }}";
+    content: "{{ document.footer_note }}  ·  로직 {{ version }}";
     font-family: "ReportKR", sans-serif;
     font-size: 8pt;
-    color: #5d6b66;
+    color: #6d7874;
   }
   @bottom-right {
-    content: counter(page) " / " counter(pages);
+    content: counter(page);
     font-family: "ReportKR", sans-serif;
     font-size: 8pt;
-    color: #5d6b66;
+    color: #6d7874;
+  }
+}
+@page cover {
+  margin: 16mm 16mm 14mm 16mm;
+  background: #103840;
+  @bottom-left {
+    content: "{{ document.footer_note }}";
+    font-family: "ReportKR", sans-serif;
+    font-size: 8pt;
+    color: #8aa4a8;
+  }
+  @bottom-right {
+    content: counter(page);
+    font-family: "ReportKR", sans-serif;
+    font-size: 8pt;
+    color: #8aa4a8;
   }
 }
 * { box-sizing: border-box; }
-body { margin: 0; font-family: "ReportKR", sans-serif; color: #1c2824; font-size: 10.5pt; line-height: 1.55; }
-.cover { background: #14352e; color: #f4f7f5; padding: 28px 26px 24px; }
-.eyebrow { letter-spacing: 0.14em; font-size: 9pt; margin: 0 0 10px; color: #d5e4dc; }
-h1 { font-size: 22pt; line-height: 1.3; margin: 0 0 8px; font-weight: 700; }
-.sub { margin: 0; color: #d7e3dd; }
-.who { margin: 16px 0 0; font-size: 13pt; }
-.meta { margin: 8px 0 0; color: #c5d5ce; font-size: 10pt; }
-section.page { break-before: page; padding-top: 4px; }
-h2 { font-size: 15pt; margin: 0 0 6px; color: #14352e; }
-.page-no { color: #b85c38; margin-right: 8px; }
-.stat { background: #f3f6f4; border-left: 4px solid #1f6f5b; padding: 8px 12px; margin: 8px 0 12px; font-weight: 700; }
-.partial { color: #7a6248; font-size: 9pt; margin: 0 0 8px; }
-h3 { font-size: 11pt; margin: 14px 0 4px; color: #24584a; }
-p { margin: 0 0 8px; }
-.chart-row { width: 100%; border-collapse: collapse; margin: 0 0 4px; }
-.chart-row td { padding: 2px 0; vertical-align: middle; }
-.chart-label { width: 52px; font-size: 9.5pt; }
-.track { background: #e7eeea; height: 10px; }
-.bar { background: #1f6f5b; height: 10px; }
-.chart-value { width: 72px; text-align: right; font-size: 9pt; padding-left: 8px; }
-.audit { break-before: page; }
-.audit li { margin-bottom: 3px; }
-.fine { color: #5c6b65; font-size: 9pt; }
-.missing { color: #8a8175; font-style: italic; }
+body { margin: 0; font-family: "ReportKR", sans-serif; color: #183038; font-size: 10pt; line-height: 1.55; background: #f0f0e8; }
+.cover { page: cover; color: #f4f1ea; min-height: 250mm; }
+.brand { margin: 0; letter-spacing: 0.22em; font-size: 11pt; color: #d7e4e2; }
+.cover h1 { margin: 28mm 0 0; font-size: 28pt; line-height: 1.28; font-weight: 700; max-width: 150mm; }
+.rule { width: 28mm; height: 2px; background: #a84838; margin: 8mm 0; }
+.who { margin: 0; font-size: 13pt; }
+.meta { margin: 3mm 0 0; color: #c5d5d2; font-size: 10.5pt; }
+.cover-line { margin-top: 16mm; max-width: 150mm; font-size: 12pt; line-height: 1.6; color: #e7eeec; }
+.page { break-before: page; }
+.top { width: 100%; border-bottom: 0.6pt solid #d5d3c8; padding-bottom: 2mm; margin-bottom: 6mm; }
+.top td { font-size: 8pt; letter-spacing: 0.14em; color: #5e6c68; }
+.top .right { text-align: right; letter-spacing: 0.04em; }
+.kicker { margin: 0; color: #a84838; font-size: 8.5pt; letter-spacing: 0.08em; }
+h2 { margin: 1mm 0 3mm; font-size: 18pt; line-height: 1.3; color: #143840; font-weight: 700; }
+.big { margin: 0; font-size: 22pt; font-weight: 700; color: #143840; line-height: 1.2; }
+.range { margin: 1mm 0 5mm; color: #5c6a66; font-size: 10pt; }
+.meaning, .suggest { width: 48%; vertical-align: top; padding: 4mm; }
+.meaning { background: #d8e8e0; }
+.suggest { background: #f0e0d8; }
+.box-label { margin: 0 0 2mm; font-size: 8pt; letter-spacing: 0.12em; color: #5c5048; }
+.box p { margin: 0; font-size: 9.5pt; }
+.pair { width: 100%; border-collapse: separate; border-spacing: 4mm 0; margin: 5mm 0 0; }
+.callout { background: #fff; border-left: 3px solid #a84838; padding: 3mm 4mm; margin-top: 4mm; font-size: 9.5pt; }
+.chart { width: 100%; border-collapse: collapse; margin: 0 0 2mm; }
+.chart td { padding: 1.2mm 0; vertical-align: middle; }
+.lab { width: 14mm; font-size: 9pt; }
+.val { width: 28mm; text-align: right; font-size: 8.5pt; color: #3c4c48; }
+.track { position: relative; background: #e4e6e0; height: 7px; }
+.bar { display: block; height: 7px; }
+.bar.ok { background: #7fa8a2; }
+.bar.low { background: #a84838; }
+.bar.neutral { background: #1d4f4c; }
+.refline { position: absolute; top: -2px; width: 0; height: 11px; border-left: 1px solid #a84838; }
+.stack { height: 11px; border-collapse: collapse; background: transparent; }
+.stack td { height: 11px; padding: 0; }
+.deep { background: #184040; }
+.light { background: #7fa8a2; }
+.rem { background: #8878a0; }
+.legend { margin: 0 0 3mm; font-size: 8pt; color: #5c6a66; }
+.swatch { display: inline-block; width: 8px; height: 8px; margin: 0 1mm 0 3mm; vertical-align: -1px; }
+.mini { width: 50%; vertical-align: top; padding: 0 3mm 4mm 0; }
+.mini h3 { margin: 0 0 2mm; font-size: 10pt; color: #143840; }
+.clock-track { position: relative; background: #e4e6e0; height: 8px; }
+.clock-bar { position: absolute; top: 0; height: 8px; background: #1d4f4c; }
+.axis { width: 100%; margin: 0 0 2mm; color: #7a8682; font-size: 7.5pt; }
+.axis td { padding: 0; }
+.cards { width: 100%; border-collapse: separate; border-spacing: 3mm; margin-left: -3mm; }
+.cards td { background: #fff; border-top: 3px solid #1d4f4c; padding: 4mm; width: 50%; vertical-align: top; }
+.cards .k { margin: 0 0 2mm; color: #a84838; font-size: 8pt; letter-spacing: 0.08em; }
+.night { width: 48%; background: #fff; padding: 5mm; vertical-align: top; }
+.night .day { margin: 0; font-size: 16pt; font-weight: 700; }
+.night .se { margin: 1mm 0 3mm; font-size: 20pt; font-weight: 700; color: #143840; }
+.good { border-top: 4px solid #1d4f4c; }
+.bad { border-top: 4px solid #a84838; }
+.facts { width: 32%; background: #fff; padding: 4mm; vertical-align: top; }
+.facts .n { margin: 0; font-size: 14pt; font-weight: 700; }
+.facts .l { margin: 0 0 3mm; color: #6a7672; font-size: 8pt; }
+.signal { background: #fff; border-left: 3px solid #a84838; padding: 3mm 4mm; margin: 0 0 2mm; }
+.routine td { background: #fff; border-top: 3px solid #a84838; padding: 4mm; width: 33%; vertical-align: top; font-size: 9pt; }
+.mark { color: #a84838; font-weight: 700; }
+.profile { width: 100%; border-collapse: collapse; margin-top: 4mm; }
+.profile td { width: 25%; background: #fff; padding: 3mm 4mm; border-right: 2mm solid #f0f0e8; }
+.profile .l { margin: 0; color: #6a7672; font-size: 8pt; }
+.profile .n { margin: 0; font-size: 13pt; font-weight: 700; }
+.toc { width: 100%; border-collapse: collapse; margin-top: 2mm; }
+.toc td { border-bottom: 0.4pt solid #ddd9cc; padding: 1.4mm 0; font-size: 9.5pt; }
+.toc .pn { text-align: right; color: #6a7672; width: 12mm; }
+.toc a { color: #183038; text-decoration: none; }
+.toc a::after { content: target-counter(attr(href), page); float: right; color: #6a7672; }
+.track { overflow: hidden; }
+.fine { color: #5c6a66; font-size: 9pt; }
+.missing { color: #8a8175; }
 </style>
 </head>
 <body>
 <header class="cover">
-  <p class="eyebrow">HEALMARU CARE · SLEEP</p>
+  <p class="brand">{{ document.brand }}</p>
   <h1>{{ document.title }}</h1>
-  <p class="sub">{{ document.subtitle }}</p>
+  <div class="rule"></div>
   <p class="who {% if name_missing %}missing{% endif %}">{{ name }}</p>
+  <p class="meta">{{ profile.sex }}{% if profile.age %} · {{ profile.age }}세{% endif %}{% if profile.weight %} · {{ profile.weight }}kg{% endif %}{% if profile.height %} · {{ profile.height }}cm{% endif %}</p>
   <p class="meta">{{ period }} · 측정 {{ monitored_count }}/{{ day_count }}일</p>
+  {% if cover_line %}<p class="cover-line">{{ cover_line }}</p>{% endif %}
 </header>
 
-{% for section in sections %}
 <section class="page">
-  <h2><span class="page-no">{{ section.page }}</span>{{ section.title }}</h2>
-  {% if section.status == "partial" %}<p class="partial">{{ section.reason }}</p>{% endif %}
-  <p class="stat">{{ section.stat }}</p>
+  <table class="top"><tr><td>{{ document.brand }}</td><td class="right">{{ document.running_title }}</td></tr></table>
+  <p class="kicker">CONTENTS</p>
+  <h2>이번 주 요약</h2>
+  <table class="profile">
+    <tr>
+      <td><p class="l">대상</p><p class="n">{{ name }}</p></td>
+      <td><p class="l">기간</p><p class="n">{{ period }}</p></td>
+      <td><p class="l">BMI</p><p class="n">{{ profile.bmi or "—" }}</p></td>
+      <td><p class="l">기초대사량</p><p class="n">{{ profile.bmr or "—" }}</p></td>
+    </tr>
+  </table>
+  <table class="toc">
+    {% for section in sections %}
+    <tr>
+      <td style="width:16mm;color:#a84838">{{ section.page }}</td>
+      <td><a href="#s{{ loop.index }}">{{ section.question }}</a></td>
+      <td class="pn"></td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+
+{% for section in sections %}
+<section class="page" id="s{{ loop.index }}">
+  <table class="top"><tr><td>{{ document.brand }}</td><td class="right">{{ document.running_title }}</td></tr></table>
+  <p class="kicker">PAGE {{ section.page }}</p>
+  <h2>{{ section.question }}</h2>
+  {% if section.headline %}<p class="big">{{ section.headline }}</p>{% endif %}
+  {% if section.stat %}<p class="range">{{ section.stat }}</p>{% endif %}
+
+  {% if section.layout == "stacked" %}
+  <p class="legend"><span class="swatch deep"></span>깊은수면 <span class="swatch light"></span>얕은수면 <span class="swatch rem"></span>렘수면</p>
+  <table class="chart">
+    {% for row in series %}
+    <tr>
+      <td class="lab">{{ row.label }}</td>
+      <td>
+        <table class="stack" style="width: {{ row.tst_pct }}%"><tr>
+          <td class="deep" style="width: {{ row.deep_share }}%"></td>
+          <td class="light" style="width: {{ row.light_share }}%"></td>
+          <td class="rem" style="width: {{ row.rem_share }}%"></td>
+        </tr></table>
+      </td>
+      <td class="val">{{ row.tst|round(0, 'floor')|int if row.tst is not none else "" }}분</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% if stages.long and stages.short %}
+  <div class="callout">가장 길게 잔 {{ stages.long.day }}요일은 깊은수면 {{ stages.long.deep }}% · 얕은수면 {{ stages.long.light }}% · 렘수면 {{ stages.long.rem }}%. 가장 짧게 잔 {{ stages.short.day }}요일은 깊은수면 {{ stages.short.deep }}% · 얕은수면 {{ stages.short.light }}% · 렘수면 {{ stages.short.rem }}%.</div>
+  {% endif %}
+
+  {% elif section.layout == "bars" or section.layout == "calories" %}
+  {% if section.layout == "calories" %}
+  <table><tr>
+  <td style="width:68%; vertical-align:top">
+  {% endif %}
   {% if section.chart %}
   <table class="chart">
     {% for point in section.chart.points %}
-    <tr class="chart-row">
-      <td class="chart-label">{{ point.label }}</td>
-      <td><div class="track"><div class="bar" style="width: {{ point.pct }}%"></div></div></td>
-      <td class="chart-value">{{ point.display }}</td>
+    <tr>
+      <td class="lab">{{ point.label }}</td>
+      <td>
+        <div class="track">
+          {% if section.chart.marker %}<i class="refline" style="left: {{ section.chart.marker }}%"></i>{% endif %}
+          <b class="bar {{ point.tone }}" style="width: {{ point.pct }}%"></b>
+        </div>
+      </td>
+      <td class="val">{{ point.display }}</td>
     </tr>
     {% endfor %}
   </table>
   {% endif %}
-  <h3>무엇을 의미하나요</h3>
-  <p>{{ section.meaning }}</p>
-  <h3>제안</h3>
-  <p>{{ section.suggestion }}</p>
+  {% if section.layout == "calories" %}
+  </td>
+  <td class="facts">
+    <p class="l">BMI</p><p class="n">{{ profile.bmi or "—" }}</p>
+    <p class="l">기초대사량</p><p class="n">{{ profile.bmr or "—" }} kcal</p>
+    <p class="fine">기기 칼로리와 추정 소모량은 활동이 많은 날 같이 올라가는지 보는 참고값입니다.</p>
+  </td>
+  </tr></table>
+  {% endif %}
+
+  {% elif section.layout == "quad" %}
+  <table>
+    <tr>
+      <td class="mini">
+        <h3>입면잠복기</h3>
+        {% for row in series %}
+        <table class="chart"><tr><td class="lab">{{ row.label }}</td><td><div class="track"><b class="bar {% if refs.sol.high and row.sol and row.sol > refs.sol.high %}low{% else %}ok{% endif %}" style="width: {{ (row.sol or 0) / 40 * 100 }}%"></b></div></td><td class="val">{{ row.sol|round(0)|int if row.sol is not none else "" }}분</td></tr></table>
+        {% endfor %}
+      </td>
+      <td class="mini">
+        <h3>수면효율</h3>
+        {% for row in series %}
+        <table class="chart"><tr><td class="lab">{{ row.label }}</td><td><div class="track">{% if refs.se.low %}<i class="refline" style="left: {{ refs.se.low }}%"></i>{% endif %}<b class="bar {% if refs.se.low and row.se and row.se < refs.se.low %}low{% else %}ok{% endif %}" style="width: {{ row.se or 0 }}%"></b></div></td><td class="val">{{ row.se|round(0)|int if row.se is not none else "" }}%</td></tr></table>
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
+      <td class="mini">
+        <h3>각성횟수</h3>
+        {% for row in series %}
+        <table class="chart"><tr><td class="lab">{{ row.label }}</td><td><div class="track"><b class="bar {% if refs.awake.high and row.awake and row.awake > refs.awake.high %}low{% else %}ok{% endif %}" style="width: {{ (row.awake or 0) / 6 * 100 }}%"></b></div></td><td class="val">{{ row.awake|round(1) if row.awake is not none else "" }}회</td></tr></table>
+        {% endfor %}
+      </td>
+      <td class="mini">
+        <h3>수면 유형</h3>
+        {% for item in type_counts %}
+        <p style="margin:0 0 2mm"><strong>{{ item.name }}</strong> {{ item.days }}일</p>
+        {% endfor %}
+      </td>
+    </tr>
+  </table>
+
+  {% elif section.layout == "clock" %}
+  <table class="axis"><tr><td>21:00</td><td style="text-align:center">00:00</td><td style="text-align:right">11:00</td></tr></table>
+  <table class="chart">
+    {% for row in series %}
+    <tr>
+      <td class="lab">{{ row.label }}</td>
+      <td><div class="clock-track"><b class="clock-bar" style="left: {{ row.clock_left }}%; width: {{ row.clock_width }}%"></b></div></td>
+      <td class="val">{{ row.bed }}–{{ row.wake }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  {% elif section.layout == "compare" %}
+  <table class="pair">
+    <tr>
+      <td class="night good">
+        <p class="kicker">잘 잔 밤</p>
+        <p class="day">{{ nights.good.day or "—" }}요일</p>
+        <p class="se">{{ nights.good.se or "—" }}%</p>
+        <p class="fine">취침 {{ nights.good.bed or "—" }} · 기상 {{ nights.good.wake or "—" }}</p>
+      </td>
+      <td class="night bad">
+        <p class="kicker">힘들었던 밤</p>
+        <p class="day">{{ nights.bad.day or "—" }}요일</p>
+        <p class="se">{{ nights.bad.se or "—" }}%</p>
+        <p class="fine">취침 {{ nights.bad.bed or "—" }} · 기상 {{ nights.bad.wake or "—" }}</p>
+      </td>
+    </tr>
+  </table>
+
+  {% elif section.layout == "diagnosis" %}
+  <table class="cards">
+    <tr>
+      <td><p class="k">수면 구조</p><p>{{ section.meaning }}</p></td>
+      <td><p class="k">활동과 수면</p>
+        {% for bucket in buckets %}
+        <p style="margin:0 0 1mm">{{ bucket.name }} {{ bucket.days }}일 · 수면효율 {{ bucket.se }}% · 총수면 {{ bucket.tst }}분</p>
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
+      <td><p class="k">다음으로 볼 것</p><p>{{ section.suggestion }}</p></td>
+      <td><p class="k">한 줄</p><p>{{ section.stat }}</p></td>
+    </tr>
+  </table>
+
+  {% elif section.layout == "signals" %}
+  {% for row in series if row.signal %}
+  <div class="signal"><strong>{{ row.label }}요일</strong> · 심박 {{ row.hr }}bpm · 호흡 {{ row.rr }}회/분 · SpO2 {{ row.spo2 }}%</div>
+  {% else %}
+  <p class="fine">이번 기간에 표시된 이상신호 밤은 없습니다.</p>
+  {% endfor %}
+
+  {% elif section.layout == "routine" %}
+  <table class="routine">
+    <tr>
+      {% for card in section.cards %}
+      <td><span class="mark">{{ card.mark }}</span> {{ card.text }}</td>
+      {% endfor %}
+    </tr>
+  </table>
+  {% endif %}
+
+  {% if section.layout not in ["diagnosis", "routine", "compare"] %}
+  <table class="pair">
+    <tr>
+      <td class="meaning"><p class="box-label">무엇을 의미하나요</p><p>{{ section.meaning }}</p></td>
+      <td class="suggest"><p class="box-label">제안</p><p>{{ section.suggestion }}</p></td>
+    </tr>
+  </table>
+  {% elif section.layout == "compare" %}
+  <p class="fine" style="margin-top:4mm">수면효율이 가장 높았던 날과 가장 낮았던 날을 로직 시트의 주간 요약에서 골랐습니다.</p>
+  {% endif %}
 </section>
 {% endfor %}
 
-<section class="page audit">
+<section class="page">
+  <table class="top"><tr><td>{{ document.brand }}</td><td class="right">{{ document.running_title }}</td></tr></table>
+  <p class="kicker">LOG</p>
   <h2>생성 정보</h2>
   <p>입력 항목 {{ filled_count }}/{{ total_count }}개가 채워져 있습니다. 측정된 날은 {{ monitored_count }}/{{ day_count }}일입니다.</p>
   {% if omitted %}
@@ -93,9 +330,6 @@ p { margin: 0 0 8px; }
   </ul>
   {% else %}
   <p>생략된 섹션은 없습니다.</p>
-  {% endif %}
-  {% if missing_labels %}
-  <p class="fine">비어 있는 항목: {{ missing_labels | join(", ") }}</p>
   {% endif %}
   <p class="fine">로직 {{ version }} · 수정일 {{ updated_at }} · 생성 {{ generated_at }} · {{ source_name }}</p>
   <p class="fine">{{ document.footer_note }}</p>
