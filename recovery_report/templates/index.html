@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<title>종합 레포트</title>
+<style>
+@font-face { font-family: "ReportKR"; src: url("/fonts/NotoSansKR-Regular.otf"); font-weight: 400; }
+body { margin: 0; font-family: "ReportKR", sans-serif; background: #f3ece6; color: #241c18; }
+.wrap { max-width: 820px; margin: 0 auto; padding: 36px 20px 64px; }
+.band { background: #3d2a24; color: #f8f1ea; padding: 28px; }
+h1 { margin: 0 0 8px; }
+.pill { display: inline-block; margin-top: 12px; border: 1px solid #8c6d5e; padding: 4px 10px; font-size: 13px; }
+.card { background: white; margin-top: 16px; padding: 20px; border: 1px solid #e6d9cf; }
+button, .btn { background: #9a4e32; color: white; border: 0; padding: 10px 16px; font: inherit; text-decoration: none; display: inline-block; }
+.ghost { background: transparent; color: #3d2a24; border: 1px solid #3d2a24; margin-left: 8px; }
+.flash { background: #f8e6dc; padding: 10px; }
+.fine { color: #6d564c; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="band">
+    <h1>종합 레포트</h1>
+    <p>양식 엑셀의 노란 칸을 채우면 회차 기록 PDF를 만듭니다. 비교 데이터가 없으면 그 페이지는 빠집니다.</p>
+    <span class="pill">로직 {{ rules.version }} · {{ rules.updated_at }} · 섹션 {{ section_count }}개 · 프로그램 {{ app_version }}</span>
+  </header>
+  <section class="card">
+    {% with messages = get_flashed_messages() %}
+      {% for message in messages %}<p class="flash">{{ message }}</p>{% endfor %}
+    {% endwith %}
+    <form action="{{ url_for('generate') }}" method="post" enctype="multipart/form-data">
+      <label for="file">종합 레포트 양식 (.xlsx)</label>
+      <input id="file" name="file" type="file" accept=".xlsx" required/>
+      <button type="submit">PDF 만들기</button>
+      <a class="btn ghost" href="{{ url_for('template_file') }}">양식 받기</a>
+    </form>
+    <p class="fine">파란 칸은 수식입니다. 노란 칸과 문장만 고치고 파일을 교체하면 프로그램 코드는 그대로 둡니다. 섹션을 언제 빼 낼지는 rules.yaml에서 바꿉니다.</p>
+  </section>
+  <section class="card">
+    <ul>
+      {% for section in rules.sections %}
+      <li>{{ section.title }} — 핵심 {{ section.core | join(", ") }} · {{ section.core_policy }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>
+</body>
+</html>

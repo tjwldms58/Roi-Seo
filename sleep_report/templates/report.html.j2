@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<title>{{ document.title }}</title>
+<style>
+@font-face { font-family: "ReportKR"; src: url("assets/fonts/NotoSansKR-Regular.otf"); font-weight: 400; }
+@font-face { font-family: "ReportKR"; src: url("assets/fonts/NotoSansKR-Bold.otf"); font-weight: 700; }
+@page {
+  size: A4;
+  margin: 16mm 14mm 18mm 14mm;
+  @bottom-left {
+    content: "로직 {{ version }} · {{ updated_at }} · 채움 {{ filled_count }}/{{ total_count }} · 생략 {{ omitted|length }}";
+    font-family: "ReportKR", sans-serif;
+    font-size: 8pt;
+    color: #5d6b66;
+  }
+  @bottom-right {
+    content: counter(page) " / " counter(pages);
+    font-family: "ReportKR", sans-serif;
+    font-size: 8pt;
+    color: #5d6b66;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "ReportKR", sans-serif; color: #1c2824; font-size: 10.5pt; line-height: 1.55; }
+.cover { background: #14352e; color: #f4f7f5; padding: 28px 26px 24px; }
+.eyebrow { letter-spacing: 0.14em; font-size: 9pt; margin: 0 0 10px; color: #d5e4dc; }
+h1 { font-size: 22pt; line-height: 1.3; margin: 0 0 8px; font-weight: 700; }
+.sub { margin: 0; color: #d7e3dd; }
+.who { margin: 16px 0 0; font-size: 13pt; }
+.meta { margin: 8px 0 0; color: #c5d5ce; font-size: 10pt; }
+section.page { break-before: page; padding-top: 4px; }
+h2 { font-size: 15pt; margin: 0 0 6px; color: #14352e; }
+.page-no { color: #b85c38; margin-right: 8px; }
+.stat { background: #f3f6f4; border-left: 4px solid #1f6f5b; padding: 8px 12px; margin: 8px 0 12px; font-weight: 700; }
+.partial { color: #7a6248; font-size: 9pt; margin: 0 0 8px; }
+h3 { font-size: 11pt; margin: 14px 0 4px; color: #24584a; }
+p { margin: 0 0 8px; }
+.chart-row { width: 100%; border-collapse: collapse; margin: 0 0 4px; }
+.chart-row td { padding: 2px 0; vertical-align: middle; }
+.chart-label { width: 52px; font-size: 9.5pt; }
+.track { background: #e7eeea; height: 10px; }
+.bar { background: #1f6f5b; height: 10px; }
+.chart-value { width: 72px; text-align: right; font-size: 9pt; padding-left: 8px; }
+.audit { break-before: page; }
+.audit li { margin-bottom: 3px; }
+.fine { color: #5c6b65; font-size: 9pt; }
+.missing { color: #8a8175; font-style: italic; }
+</style>
+</head>
+<body>
+<header class="cover">
+  <p class="eyebrow">HEALMARU CARE · SLEEP</p>
+  <h1>{{ document.title }}</h1>
+  <p class="sub">{{ document.subtitle }}</p>
+  <p class="who {% if name_missing %}missing{% endif %}">{{ name }}</p>
+  <p class="meta">{{ period }} · 측정 {{ monitored_count }}/{{ day_count }}일</p>
+</header>
+
+{% for section in sections %}
+<section class="page">
+  <h2><span class="page-no">{{ section.page }}</span>{{ section.title }}</h2>
+  {% if section.status == "partial" %}<p class="partial">{{ section.reason }}</p>{% endif %}
+  <p class="stat">{{ section.stat }}</p>
+  {% if section.chart %}
+  <table class="chart">
+    {% for point in section.chart.points %}
+    <tr class="chart-row">
+      <td class="chart-label">{{ point.label }}</td>
+      <td><div class="track"><div class="bar" style="width: {{ point.pct }}%"></div></div></td>
+      <td class="chart-value">{{ point.display }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+  <h3>무엇을 의미하나요</h3>
+  <p>{{ section.meaning }}</p>
+  <h3>제안</h3>
+  <p>{{ section.suggestion }}</p>
+</section>
+{% endfor %}
+
+<section class="page audit">
+  <h2>생성 정보</h2>
+  <p>입력 항목 {{ filled_count }}/{{ total_count }}개가 채워져 있습니다. 측정된 날은 {{ monitored_count }}/{{ day_count }}일입니다.</p>
+  {% if omitted %}
+  <p>생략된 섹션</p>
+  <ul>
+    {% for item in omitted %}
+    <li>{{ item.page }} {{ item.title }} — {{ item.reason }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>생략된 섹션은 없습니다.</p>
+  {% endif %}
+  {% if missing_labels %}
+  <p class="fine">비어 있는 항목: {{ missing_labels | join(", ") }}</p>
+  {% endif %}
+  <p class="fine">로직 {{ version }} · 수정일 {{ updated_at }} · 생성 {{ generated_at }} · {{ source_name }}</p>
+  <p class="fine">{{ document.footer_note }}</p>
+</section>
+</body>
+</html>

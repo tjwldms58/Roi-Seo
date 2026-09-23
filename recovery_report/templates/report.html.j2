@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<title>{{ document.title }}</title>
+<style>
+@font-face { font-family: "ReportKR"; src: url("assets/fonts/NotoSansKR-Regular.otf"); font-weight: 400; }
+@font-face { font-family: "ReportKR"; src: url("assets/fonts/NotoSansKR-Bold.otf"); font-weight: 700; }
+@page {
+  size: A4;
+  margin: 14mm 13mm 16mm 13mm;
+  @bottom-left {
+    content: "로직 {{ version }} · {{ updated_at }} · 채움 {{ filled_count }}/{{ total_count }} · 생략 {{ omitted|length }}";
+    font-family: "ReportKR", sans-serif; font-size: 8pt; color: #6a5b52;
+  }
+  @bottom-right {
+    content: counter(page) " / " counter(pages);
+    font-family: "ReportKR", sans-serif; font-size: 8pt; color: #6a5b52;
+  }
+}
+body { font-family: "ReportKR", sans-serif; color: #241c18; font-size: 10.5pt; line-height: 1.5; margin: 0; }
+.cover { background: #3d2a24; color: #f8f1ea; padding: 26px; }
+h1 { margin: 0 0 8px; font-size: 22pt; }
+.eyebrow { letter-spacing: 0.12em; font-size: 9pt; margin: 0 0 8px; }
+h2 { color: #3d2a24; font-size: 15pt; margin: 0 0 8px; }
+.page { break-before: page; }
+.lead { margin: 0; color: #eadfd4; }
+.grid { width: 100%; border-collapse: collapse; margin: 8px 0 12px; }
+.grid th, .grid td { border-bottom: 1px solid #eadfd4; text-align: left; padding: 5px 6px; vertical-align: top; }
+.grid th { color: #6d564c; font-weight: 400; font-size: 9pt; }
+.cards { width: 100%; border-collapse: separate; border-spacing: 6px 0; margin: 8px 0; }
+.cards td { background: #f7f1ea; padding: 8px; width: 25%; }
+.k { font-size: 8.5pt; color: #6d564c; }
+.v { font-size: 13pt; font-weight: 700; }
+.note { background: #f7f1ea; padding: 8px 10px; }
+.missing { color: #8d7b70; font-style: italic; }
+.fine { color: #6d564c; font-size: 9pt; }
+.chip { display: inline-block; border: 1px solid #c4a48f; padding: 1px 6px; margin-right: 4px; font-size: 8.5pt; }
+ul { margin: 4px 0 8px; padding-left: 18px; }
+</style>
+</head>
+<body>
+{% macro txt(value, blank) -%}
+{%- if value -%}{{ value }}{%- elif blank -%}<span class="missing">{{ content.missing_text }}</span>{%- endif -%}
+{%- endmacro %}
+
+{% for section in sections %}
+{% if section.id == "cover" %}
+<header class="cover">
+  <p class="eyebrow">HEALMARU CARE</p>
+  <h1>{{ document.title }}</h1>
+  <p class="lead">{{ txt(content.name, section.show_blank) }} · {{ txt(content.cancer_type, section.show_blank) }}</p>
+  <p class="lead">{{ txt(content.date_range, section.show_blank) }} · {{ txt(content.visit_count, true) }} · 발행 {{ txt(content.issued_on, section.show_blank) }}</p>
+</header>
+{% elif section.id == "summary" %}
+<section class="page">
+  <h2>요약</h2>
+  <table class="grid">
+    <tr><th>회차</th><th>날짜</th><th>상태</th></tr>
+    {% for visit in content.visits %}
+    <tr><td>{{ visit.no }}</td><td>{{ visit.date }}</td><td>{{ visit.status }}</td></tr>
+    {% endfor %}
+  </table>
+  <h3>이런 변화가 있었어요</h3>
+  <table class="cards"><tr>
+    {% for stat in content.summary_stats %}
+    <td><div class="v">{{ txt(stat.value, section.show_blank) }}</div><div class="k">{{ stat.label }}</div><div class="fine">{{ stat.sub }}</div></td>
+    {% endfor %}
+  </tr></table>
+  <p>{{ txt(content.summary_narrative, section.show_blank) }}</p>
+  <h3>이렇게 실천했어요</h3>
+  <table class="grid">
+    {% for row in content.practice_rows %}
+    <tr><td>{{ row.group }}</td><td>{{ txt(row.value, section.show_blank) }}</td><td>{{ row.label }}</td></tr>
+    {% endfor %}
+  </table>
+  <p>{{ txt(content.practice_narrative, section.show_blank) }}</p>
+  <h3>이렇게 관리해드렸어요</h3>
+  <table class="cards"><tr>
+    {% for stat in content.care_stats %}
+    <td><div class="v">{{ txt(stat.value, section.show_blank) }}</div><div class="k">{{ stat.label }}</div></td>
+    {% endfor %}
+  </tr></table>
+  <p>{{ txt(content.care_narrative, section.show_blank) }}</p>
+  <p class="note">{{ txt(content.professor, section.show_blank) }}</p>
+  <p>{{ txt(content.next_plan, section.show_blank) }}</p>
+  <p>{{ txt(content.next_chips, section.show_blank) }}</p>
+</section>
+{% elif section.id == "sessions" %}
+<section class="page">
+  <h2>회차별 실천 기록</h2>
+  {% for row in content.sessions %}
+  <h3>{{ row.no }}회차 · {{ row.date }}</h3>
+  <p><strong>{{ txt(row.title, section.show_blank) }}</strong></p>
+  <p>{{ txt(row.desc, section.show_blank) }}</p>
+  {% if row.note_text %}<p><span class="chip">{{ row.note_type or "메모" }}</span>{{ row.note_text }}</p>{% endif %}
+  {% endfor %}
+  <p class="fine">{{ content.session_note }}</p>
+</section>
+{% elif section.id == "capability" %}
+<section class="page">
+  <h2>운동별 체력 변화</h2>
+  {% for row in content.capabilities %}
+  <h3>{{ row.name }}</h3>
+  <p>{{ txt(row.before, section.show_blank) }} → {{ txt(row.after, section.show_blank) }}</p>
+  <p>{{ txt(row.note, section.show_blank) }}</p>
+  {% endfor %}
+  <p class="note">{{ content.capability_quote }}</p>
+</section>
+{% elif section.id == "functional" %}
+<section class="page">
+  <h2>수행 지표로 확인한 변화</h2>
+  <p class="fine">{{ content.learned_badge }}</p>
+  <table class="grid">
+    {% for row in content.learned %}
+    <tr><td>{{ row.label }}</td><td>{{ row.range }}</td></tr>
+    {% else %}
+    {% if section.show_blank %}<tr><td class="missing" colspan="2">{{ content.missing_text }}</td></tr>{% endif %}
+    {% endfor %}
+  </table>
+  <h3>SPPB {{ content.sppb_total }}</h3>
+  <p class="fine">{{ content.sppb_badge }}</p>
+  <table class="grid">
+    <tr><th>항목</th><th>첫 검사</th><th>재검사</th><th>메모</th></tr>
+    {% for row in content.sppb %}
+    <tr><td>{{ row.label }}<div class="fine">{{ row.caption }}</div></td><td>{{ row.first }}{{ row.unit }}</td><td>{{ row.last }}{{ row.unit }}</td><td>{{ row.note }}</td></tr>
+    {% endfor %}
+  </table>
+  <p><strong>{{ content.sppb_headline }}</strong></p>
+  <p>{{ content.sppb_detail }}</p>
+  <h3>체중</h3>
+  {% if content.weight %}
+  <p>{{ content.weight.first }}{{ content.weight.unit }} → {{ content.weight.last }}{{ content.weight.unit }} ({{ content.weight.delta }})</p>
+  {% elif section.show_blank %}<p class="missing">{{ content.missing_text }}</p>{% endif %}
+  <p>{{ content.weight_note }}</p>
+  <p class="fine">BMI {{ content.bmi_text }}</p>
+</section>
+{% elif section.id == "cancer" %}
+<section class="page">
+  <h2>암종별 특화 지표 · {{ content.cancer_type_metric or content.cancer_type }}</h2>
+  {% if content.arm_rows %}
+  <h3>{{ content.arm_badge }} {% if content.arm_delta %}· {{ content.arm_delta }}{% endif %}</h3>
+  <table class="grid">
+    {% for row in content.arm_rows %}<tr><td>{{ row.label }}</td><td>{{ row.value }} cm</td></tr>{% endfor %}
+  </table>
+  <p>{{ content.arm_interp }}</p>
+  {% if content.volume %}<p>{{ content.volume.label }} {{ content.volume.first }} → {{ content.volume.last }} {{ content.volume.unit }} ({{ content.volume.delta }})</p>{% endif %}
+  {% if content.relative %}<p>{{ content.relative.label }} {{ content.relative.first }} → {{ content.relative.last }}{{ content.relative.unit }} ({{ content.relative.delta }})</p>{% endif %}
+  <p class="fine">{{ content.arm_footnote }}</p>
+  {% endif %}
+  {% if content.rom_rows %}
+  <h3>{{ content.rom_headline }}</h3>
+  <table class="grid">
+    <tr><th>동작</th><th>이전</th><th>이후</th><th>변화</th></tr>
+    {% for row in content.rom_rows %}
+    <tr><td>{{ row.motion }}<div class="fine">{{ row.desc }}</div></td><td>{{ row.before }}{{ row.unit }}</td><td>{{ row.after }}{{ row.unit }}</td><td>{{ row.delta }}</td></tr>
+    {% endfor %}
+  </table>
+  <p>{{ content.rom_detail }}</p>
+  <p class="fine">{{ content.rom_footnote }}</p>
+  {% endif %}
+  <p class="fine">{{ content.other_cancer_note }}</p>
+</section>
+{% elif section.id == "next_steps" %}
+<section class="page">
+  <h2>다음 단계</h2>
+  <p class="fine">{{ content.next_date }}</p>
+  <h3>유지할 것</h3>
+  <p>{{ txt(content.next_keep, section.show_blank) }}</p>
+  <h3>관찰할 것</h3>
+  <p>{{ txt(content.next_watch, section.show_blank) }}</p>
+  <h3>의료진에게 확인할 것</h3>
+  <p>{{ txt(content.next_ask, section.show_blank) }}</p>
+  <p class="note"><strong>{{ txt(content.nurse_author, section.show_blank) }}</strong><br/>{{ txt(content.nurse_text, section.show_blank) }}</p>
+  <p class="fine">{{ content.closing }}</p>
+</section>
+{% endif %}
+{% endfor %}
+
+<section class="page">
+  <h2>생성 정보</h2>
+  <p>노란 입력칸 {{ filled_count }}/{{ total_count }}개가 채워져 있습니다.</p>
+  {% if omitted %}
+  <ul>{% for item in omitted %}<li>생략 · {{ item.title }} — {{ item.reason }}</li>{% endfor %}</ul>
+  {% else %}<p>생략된 섹션은 없습니다.</p>{% endif %}
+  <p class="fine">로직 {{ version }} · 수정일 {{ updated_at }} · 생성 {{ generated_at }} · {{ source_name }}</p>
+  <p class="fine">{{ document.footer_note }}</p>
+</section>
+</body>
+</html>

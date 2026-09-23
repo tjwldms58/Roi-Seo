@@ -1,0 +1,15 @@
+__pycache__/
+.pytest_cache__/
+.pytest_cache/
+.venv/
+venv/
+outputs/
+*.calculated.xlsx
+
+rules/active.txt
+rules/custom.yaml
+rules/custom.xlsx
+*.pyc
+.DS_Store
+dist/
+*.egg-info/

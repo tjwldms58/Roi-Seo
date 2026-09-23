@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<title>수면 레포트</title>
+<style>
+@font-face { font-family: "ReportKR"; src: url("/fonts/NotoSansKR-Regular.otf"); font-weight: 400; }
+@font-face { font-family: "ReportKR"; src: url("/fonts/NotoSansKR-Bold.otf"); font-weight: 700; }
+body { margin: 0; font-family: "ReportKR", sans-serif; background: #efeae2; color: #1c2824; }
+.wrap { max-width: 820px; margin: 0 auto; padding: 36px 20px 64px; }
+.band { background: #14352e; color: #f4f7f5; padding: 28px 28px 22px; }
+h1 { margin: 0 0 8px; font-size: 28px; }
+.band p { margin: 0; color: #d5e4dc; }
+.pill { display: inline-block; margin-top: 14px; border: 1px solid #3e6b5e; padding: 4px 10px; font-size: 13px; }
+.card { background: #fffdf8; padding: 22px; margin-top: 18px; border: 1px solid #e3d9cc; }
+label { display: block; font-weight: 700; margin-bottom: 8px; }
+input[type=file] { display: block; margin-bottom: 14px; }
+button, .btn { background: #b85c38; color: white; border: 0; padding: 10px 16px; font: inherit; text-decoration: none; display: inline-block; }
+.ghost { background: transparent; color: #14352e; border: 1px solid #14352e; margin-left: 8px; }
+.flash { background: #f8e8df; padding: 10px 12px; }
+ul { padding-left: 18px; }
+li { margin: 4px 0; }
+.fine { color: #5c6a64; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="band">
+    <h1>수면 레포트</h1>
+    <p>로직 엑셀의 S1·S2에 값을 넣고 올리면, 수식 결과로 PDF를 만듭니다.</p>
+    <span class="pill">로직 {{ rules.version }} · {{ rules.updated_at }} · 섹션 {{ section_count }}개 · 프로그램 {{ app_version }}</span>
+  </header>
+  <section class="card">
+    {% with messages = get_flashed_messages() %}
+      {% for message in messages %}<p class="flash">{{ message }}</p>{% endfor %}
+    {% endwith %}
+    <form action="{{ url_for('generate') }}" method="post" enctype="multipart/form-data">
+      <label for="file">수면 로직 엑셀 (.xlsx)</label>
+      <input id="file" name="file" type="file" accept=".xlsx" required/>
+      <button type="submit">PDF 만들기</button>
+      <a class="btn ghost" href="{{ url_for('template_file') }}">양식 받기</a>
+    </form>
+    <p class="fine">파란 입력칸(S1 원본, S2 프로필)만 바꾸면 됩니다. S3의 노란 기준값과 S6 문장 수식을 고친 뒤 이 파일을 교체하면 프로그램 코드는 그대로 두고 레포트가 바뀝니다.</p>
+  </section>
+  <section class="card">
+    <h2>섹션과 필요한 입력</h2>
+    <ul>
+      {% for section in rules.sections %}
+      <li>{{ section.page }} — 핵심: {{ section.core_headers | join(", ") }}</li>
+      {% endfor %}
+    </ul>
+    <p class="fine">핵심 입력이 전부 비어 있으면 그 섹션은 빠지고, PDF 마지막에 생략 이유가 남습니다. 0은 빈 값이 아닙니다.</p>
+  </section>
+</div>
+</body>
+</html>

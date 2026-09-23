@@ -1,0 +1,23 @@
+[project]
+name = "healmaru-reports"
+version = "1.0.0"
+description = "수면 레포트와 종합 레포트 PDF 생성"
+requires-python = ">=3.11"
+dependencies = [
+  "openpyxl>=3.1",
+  "Jinja2>=3.1",
+  "WeasyPrint>=62",
+  "PyYAML>=6.0",
+  "Flask>=3.0",
+]
+
+[project.scripts]
+sleep-report = "sleep_report.web:main"
+recovery-report = "recovery_report.web:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+include = ["reportkit*", "sleep_report*", "recovery_report*"]
