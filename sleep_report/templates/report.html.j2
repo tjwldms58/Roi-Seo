@@ -350,17 +350,6 @@ h2 { margin: 0 0 1.5mm; font-size: 16pt; line-height: 1.25; color: #1c3338; }
   {% endif %}
 </section>
 {% endfor %}
-
-<section class="page">
-  <table class="run"><tr><td>생성 정보</td><td class="right">로직 {{ version }}</td></tr></table>
-  <h2>생성 정보</h2>
-  <p>입력 항목 {{ filled_count }}/{{ total_count }}개가 채워져 있습니다. 측정된 날은 {{ monitored_count }}/{{ day_count }}일입니다.</p>
-  {% if omitted %}
-  <ul>{% for item in omitted %}<li>{{ item.page }} {{ item.title }} — {{ item.reason }}</li>{% endfor %}</ul>
-  {% else %}<p>생략된 섹션은 없습니다.</p>{% endif %}
-  <p class="fine">로직 {{ version }} · 수정일 {{ updated_at }} · 생성 {{ generated_at }} · {{ source_name }}</p>
-  <p class="fine">{{ document.footer_note }}</p>
-</section>
 <script>
 (function () {
   function fits(sheet) {

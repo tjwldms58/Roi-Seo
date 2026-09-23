@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from xml.sax.saxutils import escape
 
 import openpyxl
 import yaml
@@ -86,6 +87,9 @@ def build_model(workbook_path: Path, rules: dict | None = None) -> dict:
         "missing_labels": missing_labels,
         "generated_at": datetime.now(KST).strftime("%Y-%m-%d %H:%M"),
         "source_name": Path(workbook_path).name,
+        "tag_labels": rules.get("tag_labels") or {},
+        "note_labels": rules.get("note_labels") or {},
+        "practice_groups": _practice_groups(content["practice_rows"]),
     }
 
 
@@ -176,6 +180,7 @@ def _read_content(book, loc: dict, tokens: set[str], missing_text: str) -> dict:
         "bmi_text": key_value(functional, "weight.bmi (첫/재)"),
         "cancer_type_metric": key_value(cancer, "cancerSpecific.type"),
         "arm_rows": arm_rows,
+        "arm_svg": _arm_svg(arm_rows),
         "arm_badge": key_value(cancer, "armCircumference.badge"),
         "arm_delta": key_value(cancer, "armCircumference.deltaLabel"),
         "arm_interp": key_value(cancer, "armCircumference.interp"),
@@ -361,6 +366,59 @@ def _arm_rows(sheet, header: str, tokens: set[str]) -> list[dict]:
             continue
         rows.append({"label": label, "value": as_text(value)})
     return rows
+
+
+def _practice_groups(rows: list[dict]) -> list[dict]:
+    groups = []
+    for row in rows:
+        name = row.get("group") or ""
+        if not groups or groups[-1]["name"] != name:
+            groups.append({"name": name, "items": []})
+        groups[-1]["items"].append(row)
+    return groups
+
+
+def _arm_svg(rows: list[dict]) -> str:
+    numbers = []
+    for row in rows:
+        try:
+            numbers.append(float(str(row.get("value") or "").replace(",", "")))
+        except ValueError:
+            return ""
+    if len(numbers) < 2:
+        return ""
+    width, height = 640, 128
+    low, high = min(numbers), max(numbers)
+    if high <= low:
+        high = low + 1
+    pad_l, pad_r, pad_t, pad_b = 28, 12, 18, 24
+    inner_w = width - pad_l - pad_r
+    inner_h = height - pad_t - pad_b
+
+    def xpos(index: int) -> float:
+        return pad_l + inner_w * index / (len(numbers) - 1)
+
+    def ypos(value: float) -> float:
+        return pad_t + inner_h * (high - value) / (high - low)
+
+    points = " ".join(f"{xpos(index):.1f},{ypos(value):.1f}" for index, value in enumerate(numbers))
+    marks = []
+    for index, value in enumerate(numbers):
+        label = escape(str(rows[index].get("label") or ""))
+        shown = escape(str(rows[index].get("value") or ""))
+        marks.append(f'<circle cx="{xpos(index):.1f}" cy="{ypos(value):.1f}" r="3.5" fill="#1d4f4c"/>')
+        marks.append(
+            f'<text x="{xpos(index):.1f}" y="{ypos(value) - 7:.1f}" text-anchor="middle" font-size="11" fill="#143840">{shown}</text>'
+        )
+        marks.append(
+            f'<text x="{xpos(index):.1f}" y="{height - 6}" text-anchor="middle" font-size="11" fill="#5c6a66">{label}</text>'
+        )
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="100%" font-family="ReportKR, sans-serif">'
+        f'<polyline points="{points}" fill="none" stroke="#1d4f4c" stroke-width="2"/>'
+        + "".join(marks)
+        + "</svg>"
+    )
 
 
 def _render_section(spec, content, missing_text, partial: bool, mode: str) -> dict:

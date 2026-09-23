@@ -32,10 +32,9 @@ def test_sleep_sample_uses_workbook_text(tmp_path):
     assert model["total_count"] >= model["filled_count"]
     assert model["version"] == "19차"
     html = sleep_html(model)
-    assert "19차" in html
     assert "healmarucare" in html
     assert "데이터 기반 참고 리포트" in html
-    assert "생략된 섹션은 없습니다" in html or "생성 정보" in html
+    assert "생성 정보" not in html
     assert "width: 210mm" in html and "height: 297mm" in html
     pdf = sleep_pdf(html)
     assert pdf.startswith(b"%PDF")
@@ -94,6 +93,9 @@ def test_recovery_sample_keeps_capability_page(tmp_path):
     html = recovery_html(model)
     assert "HEALMARU CARE" in html
     assert "데이터 기반 참고 리포트" in html
+    assert "생성 정보" not in html
+    assert "이런 변화가 있었어요" in html
+    assert "서지은 간호사" in html
     assert "width: 210mm" in html and "height: 297mm" in html
     pdf = recovery_pdf(html)
     assert pdf.startswith(b"%PDF")

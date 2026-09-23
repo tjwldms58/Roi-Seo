@@ -11,7 +11,7 @@
   margin: 13mm 14mm 14mm 14mm;
   background: #f0f0e8;
   @bottom-left {
-    content: "{{ document.footer_note }}  ·  로직 {{ version }}";
+    content: "{{ document.footer_note }}";
     font-family: "ReportKR", sans-serif; font-size: 8pt; color: #6d7874;
   }
   @bottom-right {
@@ -65,48 +65,67 @@ body { margin: 0; font-family: "ReportKR", sans-serif; color: #183038; font-size
   }
   .cover .sheet-foot { color: #8aa4a8; }
 }
-.brand { margin: 0; letter-spacing: 0.22em; font-size: 11pt; color: #d7e4e2; }
-.cover h1 { margin: 28mm 0 0; font-size: 28pt; line-height: 1.28; font-weight: 700; }
-.rule { width: 28mm; height: 2px; background: #a84838; margin: 8mm 0; }
-.who { margin: 0; font-size: 14pt; }
-.meta { margin: 3mm 0 0; color: #c5d5d2; }
-.cover-line { margin-top: 16mm; max-width: 155mm; font-size: 12pt; line-height: 1.6; color: #e7eeec; }
+.brand { margin: 0; letter-spacing: 0.18em; font-size: 10pt; color: #d7e4e2; }
+.cover h1 { margin: 22mm 0 0; font-size: 26pt; line-height: 1.28; font-weight: 700; }
+.rule { width: 28mm; height: 2px; background: #a84838; margin: 7mm 0; }
+.who { margin: 0; font-size: 16pt; }
+.meta { margin: 2mm 0 0; color: #c5d5d2; font-size: 11pt; }
+.facts { width: 100%; margin-top: 14mm; border-collapse: separate; border-spacing: 3mm 0; margin-left: -3mm; }
+.facts td { background: #214850; border-radius: 8px; padding: 3.5mm; width: 33%; vertical-align: top; }
+.facts .k { margin: 0; color: #b7c6c4; font-size: 8pt; }
+.facts .v { margin: 1mm 0 0; font-size: 12pt; font-weight: 700; color: #f4f1ea; }
 .page { break-before: page; }
-.top { width: 100%; border-bottom: 0.6pt solid #d5d3c8; padding-bottom: 2mm; margin-bottom: 6mm; }
-.top td { font-size: 8pt; letter-spacing: 0.14em; color: #5e6c68; }
-.top .right { text-align: right; letter-spacing: 0.04em; }
-.kicker { margin: 0; color: #a84838; font-size: 8.5pt; letter-spacing: 0.08em; }
-h2 { margin: 1mm 0 4mm; font-size: 18pt; line-height: 1.3; color: #143840; }
-.cards { width: 100%; border-collapse: separate; border-spacing: 3mm 0; margin: 2mm 0 4mm -3mm; }
-.cards td { background: #fff; border-top: 3px solid #1d4f4c; padding: 3.5mm; width: 25%; vertical-align: top; }
-.n { margin: 0; font-size: 14pt; font-weight: 700; color: #143840; }
-.l { margin: 1mm 0 0; font-size: 8.5pt; color: #5c6a66; }
-.sub { margin: 0; font-size: 8pt; color: #6a7672; }
-.note { background: #d8e8e0; padding: 4mm; margin: 3mm 0; }
-.warm { background: #f0e0d8; padding: 4mm; margin: 3mm 0; }
-.box-label { margin: 0 0 2mm; font-size: 8pt; letter-spacing: 0.12em; color: #5c5048; }
-.session { border-left: 3px solid #1d4f4c; background: #fff; padding: 3mm 4mm; margin: 0 0 3mm; }
-.session h3 { margin: 0; font-size: 11pt; }
-.chip { display: inline-block; border: 1px solid #a84838; color: #a84838; padding: 0 2mm; margin-right: 2mm; font-size: 8pt; }
-.cap { width: 100%; border-collapse: collapse; margin: 0 0 3mm; background: #fff; }
-.cap td { padding: 3mm 4mm; vertical-align: top; }
-.cap .before, .cap .after { width: 32%; }
-.before { background: #f4f1ea; }
-.after { background: #d8e8e0; }
-.grid { width: 100%; border-collapse: collapse; background: #fff; margin: 2mm 0 4mm; }
-.grid th, .grid td { border-bottom: 0.4pt solid #e0ddd2; text-align: left; padding: 2mm 2.5mm; vertical-align: top; font-size: 9pt; }
-.grid th { color: #6a7672; font-weight: 400; font-size: 8pt; }
+.top { width: 100%; border-bottom: 0.6pt solid #d5d3c8; padding-bottom: 1.5mm; margin-bottom: 3.5mm; }
+.top td { font-size: 8pt; color: #5e6c68; }
+.top .right { text-align: right; }
+h2 { margin: 1mm 0 2mm; font-size: 13pt; line-height: 1.25; color: #143840; }
+.h3 { margin: 3mm 0 1.5mm; font-size: 11pt; color: #143840; }
+.timeline { width: 100%; border-collapse: collapse; margin: 0 0 3mm; }
+.timeline td { text-align: center; width: 16%; font-size: 8pt; color: #5c6a66; border-top: 1.5px solid #c8c4b8; padding-top: 2mm; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #1d4f4c; margin-top: -6.5mm; }
+.timeline .current .dot { background: #a84838; }
+.timeline .upcoming .dot { background: #f0f0e8; border: 1.5px solid #8a8175; }
+.cards { width: 100%; border-collapse: separate; border-spacing: 2mm 0; margin: 0 0 2mm -2mm; }
+.cards td { background: #fff; border-top: 3px solid #1d4f4c; padding: 2mm 2.5mm; vertical-align: top; }
+.n { margin: 0; font-size: 12pt; font-weight: 700; color: #143840; }
+.l { margin: 0.5mm 0 0; font-size: 8pt; color: #5c6a66; }
+.sub { margin: 0; font-size: 7.5pt; color: #6a7672; }
+.note { background: #e5f0ea; padding: 2.5mm 3mm; margin: 0 0 2.5mm; font-size: 8.5pt; }
+.warm { background: #f6e6dc; padding: 2.5mm 3mm; margin: 0 0 2.5mm; font-size: 8.5pt; }
+.groups { width: 100%; border-collapse: separate; border-spacing: 2mm 0; margin: 0 0 2mm -2mm; }
+.groups td { background: #fff; padding: 2mm 2.5mm; vertical-align: top; width: 33%; }
+.groups h3 { margin: 0 0 1mm; font-size: 9pt; color: #a84838; }
+.groups p { margin: 0 0 1mm; font-size: 8pt; }
+.pair-grid { width: 100%; border-collapse: separate; border-spacing: 2.5mm 2.5mm; margin-left: -2.5mm; }
+.pair-grid td { width: 50%; background: #fff; vertical-align: top; padding: 2.5mm 3mm; border-radius: 8px; }
+.session h3 { margin: 1mm 0; font-size: 9.5pt; line-height: 1.35; }
+.tag { display: inline-block; background: #103840; color: #f4f1ea; font-size: 7.5pt; padding: 0 1.5mm; margin-right: 1mm; }
+.chip { display: inline-block; padding: 0 1.8mm; margin-right: 1.5mm; font-size: 7.5pt; border-radius: 8px; }
+.chip.nutrition { background: #d7ebe4; color: #1d4f4c; }
+.chip.psych { background: #e4dced; color: #5a4678; }
+.cap { width: 100%; border-collapse: collapse; margin: 0 0 1.2mm; background: #fff; }
+.cap td { padding: 1.1mm 2.2mm; vertical-align: top; font-size: 8pt; line-height: 1.32; }
+.cap .name { font-weight: 700; }
+.before { background: #f4f1ea; width: 50%; }
+.after { background: #d8e8e0; width: 50%; }
+.grid { width: 100%; border-collapse: collapse; background: #fff; margin: 0 0 2mm; }
+.grid th, .grid td { border-bottom: 0.4pt solid #e0ddd2; text-align: left; padding: 1.4mm 2mm; vertical-align: top; font-size: 8pt; }
+.grid th { color: #6a7672; font-weight: 400; }
 .delta { color: #a84838; font-weight: 700; }
-.cols td { width: 33%; background: #fff; vertical-align: top; padding: 4mm; border-top: 3px solid #a84838; }
-.cols { width: 100%; border-collapse: separate; border-spacing: 3mm 0; margin-left: -3mm; }
-.cols ul { margin: 2mm 0 0; padding-left: 4mm; }
-.nurse { background: #103840; color: #f4f1ea; padding: 5mm; margin-top: 4mm; }
-.nurse .who { font-size: 11pt; margin: 0 0 2mm; }
+.cols td { width: 33%; background: #fff; vertical-align: top; padding: 2.5mm; border-top: 3px solid #a84838; }
+.cols { width: 100%; border-collapse: separate; border-spacing: 2mm 0; margin-left: -2mm; }
+.cols h3 { margin: 0; font-size: 9pt; color: #a84838; }
+.cols ul { margin: 1.5mm 0 0; padding-left: 4mm; font-size: 8pt; }
+.nurse { background: #103840; color: #f4f1ea; padding: 3.5mm; margin-top: 3mm; }
+.nurse .who { font-size: 11pt; margin: 0 0 1.5mm; }
 .missing { color: #8a8175; }
-.fine { color: #5c6a66; font-size: 9pt; }
+.fine { color: #5c6a66; font-size: 8pt; margin: 0 0 2mm; }
+.rowhead { width: 100%; }
+.rowhead td { vertical-align: bottom; }
+.badge { text-align: right; color: #a84838; font-size: 8pt; font-weight: 700; }
 </style>
 </head>
-<body data-brand="{{ document.brand }}" data-note="{{ document.footer_note }}" data-version="{{ version }}" data-cover-foot="{{ document.footer_note }}">
+<body data-brand="{{ document.brand }}" data-note="{{ document.footer_note }}" data-cover-foot="{{ document.footer_note }}">
 {% macro txt(value, blank) -%}
 {%- if value -%}{{ value }}{%- elif blank -%}<span class="missing">{{ content.missing_text }}</span>{%- endif -%}
 {%- endmacro %}
@@ -122,60 +141,73 @@ h2 { margin: 1mm 0 4mm; font-size: 18pt; line-height: 1.3; color: #143840; }
   <div class="rule"></div>
   <p class="who">{{ txt(content.name, section.show_blank) }}</p>
   <p class="meta">{{ txt(content.cancer_type, section.show_blank) }}</p>
-  <p class="meta">{{ txt(content.date_range, section.show_blank) }} · {{ txt(content.visit_count, true) }} · 발행 {{ txt(content.issued_on, section.show_blank) }}</p>
-  {% if content.summary_narrative %}<p class="cover-line">{{ content.summary_narrative.split("습니다.")[0] }}{% if "습니다." in content.summary_narrative %}습니다.{% endif %}</p>{% endif %}
+  <table class="facts"><tr>
+    <td><p class="k">관리 기간</p><p class="v">{{ txt(content.date_range, section.show_blank) }}</p></td>
+    <td><p class="k">총 방문</p><p class="v">{{ txt(content.visit_count, true) }}</p></td>
+    <td><p class="k">발행일</p><p class="v">{{ txt(content.issued_on, section.show_blank) }}</p></td>
+  </tr></table>
 </header>
 
 {% elif section.id == "summary" %}
 <section class="page">
-  <table class="top"><tr><td>{{ document.brand }}</td><td class="right">{{ document.running_title }}</td></tr></table>
-  <p class="kicker">SUMMARY</p>
-  <h2>이런 변화가 있었어요</h2>
+  <table class="top"><tr><td>02 · 요약</td><td class="right">{{ document.running_title }}</td></tr></table>
+  <table class="timeline"><tr>
+    {% for visit in content.visits %}
+    <td class="{{ visit.status }}"><span class="dot"></span><br/>{{ visit.no }}차<br/>{{ visit.date }}</td>
+    {% endfor %}
+  </tr></table>
+  <h2>① 이런 변화가 있었어요</h2>
   <table class="cards"><tr>
     {% for stat in content.summary_stats %}
     <td><p class="n">{{ txt(stat.value, section.show_blank) }}</p><p class="l">{{ stat.label }}</p><p class="sub">{{ stat.sub }}</p></td>
     {% endfor %}
   </tr></table>
-  <div class="note"><p class="box-label">요약</p><p>{{ txt(content.summary_narrative, section.show_blank) }}</p></div>
-  <p class="kicker">PRACTICE</p>
-  <h2>이렇게 실천했어요</h2>
-  <table class="grid">
-    {% for row in content.practice_rows %}
-    <tr><td>{{ row.group }}</td><td><strong>{{ txt(row.value, section.show_blank) }}</strong></td><td>{{ row.label }}</td></tr>
+  <div class="note">{{ txt(content.summary_narrative, section.show_blank) }}</div>
+  <h2>② 이렇게 실천했어요</h2>
+  <table class="groups"><tr>
+    {% for group in practice_groups %}
+    <td>
+      <h3>{{ group.name }}</h3>
+      {% for item in group["items"] %}<p><strong>{{ txt(item.value, section.show_blank) }}</strong> {{ item.label }}</p>{% endfor %}
+    </td>
     {% endfor %}
-  </table>
-  <p>{{ txt(content.practice_narrative, section.show_blank) }}</p>
+  </tr></table>
+  <div class="note">{{ txt(content.practice_narrative, section.show_blank) }}</div>
+  <h2>③ 이렇게 관리해드렸어요</h2>
   <table class="cards"><tr>
     {% for stat in content.care_stats %}
     <td><p class="n">{{ txt(stat.value, section.show_blank) }}</p><p class="l">{{ stat.label }}</p></td>
     {% endfor %}
+    {% if content.call_count %}<td><p class="n">{{ content.call_count }}회</p><p class="l">담당자 소통</p></td>{% endif %}
   </tr></table>
-  <div class="warm"><p class="box-label">이렇게 관리해드렸어요</p><p>{{ txt(content.care_narrative, section.show_blank) }}</p></div>
-  {% if content.professor %}<div class="note"><p>{{ content.professor }}</p></div>{% endif %}
-  {% if content.next_plan %}<p>{{ content.next_plan }}</p>{% endif %}
-  {% if content.next_chips %}<p>{% for chip in content.next_chips.replace("·", "\n").split("\n") if chip.strip() %}<span class="chip">{{ chip.strip() }}</span>{% endfor %}</p>{% endif %}
+  <div class="warm">{{ txt(content.care_narrative, section.show_blank) }}</div>
+  {% if content.professor %}<div class="note">{{ content.professor }}</div>{% endif %}
+  {% if content.next_plan %}<p class="fine">{{ content.next_plan }}</p>{% endif %}
+  {% if content.next_chips %}<p>{% for chip in content.next_chips.split("\n") if chip.strip() %}<span class="chip nutrition">{{ chip.strip() }}</span>{% endfor %}</p>{% endif %}
 </section>
 
 {% elif section.id == "sessions" %}
 <section class="page">
-  <table class="top"><tr><td>{{ document.brand }}</td><td class="right">{{ document.running_title }}</td></tr></table>
-  <p class="kicker">SESSIONS</p>
+  <table class="top"><tr><td>03 · 회차별 실천 기록</td><td class="right">{{ document.running_title }}</td></tr></table>
   <h2>회차별 실천 기록</h2>
+  <table class="pair-grid">
   {% for row in content.sessions %}
-  <div class="session">
-    <p class="kicker">{{ row.no }}회차 · {{ row.date }}{% if row.tag %} · {{ row.tag }}{% endif %}</p>
-    <h3>{{ txt(row.title, section.show_blank) }}</h3>
-    <p>{{ txt(row.desc, section.show_blank) }}</p>
-    {% if row.note_text %}<p><span class="chip">{{ row.note_type or "메모" }}</span>{{ row.note_text }}</p>{% endif %}
-  </div>
+    {% if loop.index0 % 2 == 0 %}<tr>{% endif %}
+    <td class="session">
+      <p class="fine">{{ row.no }}회차 · {{ row.date }} {% if row.tag %}<span class="tag">{{ tag_labels.get(row.tag, row.tag) }}</span>{% endif %}</p>
+      <h3>{{ txt(row.title, section.show_blank) }}</h3>
+      <p>{{ txt(row.desc, section.show_blank) }}</p>
+      {% if row.note_text %}<p><span class="chip {{ row.note_type }}">{{ note_labels.get(row.note_type, row.note_type or "메모") }}</span>{{ row.note_text }}</p>{% endif %}
+    </td>
+    {% if loop.index % 2 == 0 or loop.last %}{% if loop.index % 2 == 1 %}<td></td>{% endif %}</tr>{% endif %}
   {% endfor %}
+  </table>
   <p class="fine">{{ content.session_note }}</p>
 </section>
 
 {% elif section.id == "capability" %}
 <section class="page">
-  <table class="top"><tr><td>{{ document.brand }}</td><td class="right">{{ document.running_title }}</td></tr></table>
-  <p class="kicker">CAPABILITY</p>
+  <table class="top"><tr><td>04 · 운동별 체력 변화</td><td class="right">{{ document.running_title }}</td></tr></table>
   <h2>운동별 체력 변화</h2>
   {% for row in content.capabilities %}
   <table class="cap">
@@ -192,60 +224,55 @@ h2 { margin: 1mm 0 4mm; font-size: 18pt; line-height: 1.3; color: #143840; }
 
 {% elif section.id == "functional" %}
 <section class="page">
-  <table class="top"><tr><td>{{ document.brand }}</td><td class="right">{{ document.running_title }}</td></tr></table>
-  <p class="kicker">FUNCTION</p>
+  <table class="top"><tr><td>05 · 수행 지표로 확인한 변화</td><td class="right">{{ document.running_title }}</td></tr></table>
   <h2>수행 지표로 확인한 변화</h2>
+  <table class="rowhead"><tr><td><p class="h3">이번 3개월 동안 익힌 운동</p></td><td class="badge">{{ content.learned_badge }}</td></tr></table>
   {% if content.learned %}
-  <p class="fine">{{ content.learned_badge }}</p>
-  <table class="grid">
-    {% for row in content.learned %}<tr><td>{{ row.label }}</td><td>{{ row.range }}</td></tr>{% endfor %}
-  </table>
+  <table class="cards"><tr>
+    {% for row in content.learned %}<td><p class="n">{{ row.label }}</p><p class="l">{{ row.range }}</p></td>{% endfor %}
+  </tr></table>
   {% elif section.show_blank %}<p class="missing">{{ content.missing_text }}</p>{% endif %}
-  <p class="kicker">SPPB {{ content.sppb_total }}</p>
-  <p class="fine">{{ content.sppb_badge }}</p>
+  <table class="rowhead"><tr><td><p class="h3">SPPB {{ content.sppb_total }}</p></td><td class="badge">{{ content.sppb_badge }}</td></tr></table>
   {% if content.sppb_headline %}<p class="n">{{ content.sppb_headline }}</p>{% endif %}
   <table class="grid">
-    <tr><th>항목</th><th>첫 검사</th><th>재검사</th><th>메모</th></tr>
+    <tr><th>항목</th><th>첫 검사</th><th>재검사</th><th>점수</th><th>메모</th></tr>
     {% for row in content.sppb %}
-    <tr><td>{{ row.label }}<div class="fine">{{ row.caption }}</div></td><td>{{ row.first }}{{ row.unit }}</td><td>{{ row.last }}{{ row.unit }}</td><td>{{ row.note }}</td></tr>
+    <tr><td>{{ row.label }}<div class="fine">{{ row.caption }}</div></td><td>{{ row.first }}{{ row.unit }}</td><td>{{ row.last }}{{ row.unit }}</td><td>{{ row.score_first }} → {{ row.score_last }}</td><td>{{ row.note }}</td></tr>
     {% endfor %}
   </table>
-  <div class="note"><p>{{ content.sppb_detail }}</p></div>
-  <p class="kicker">WEIGHT</p>
+  <div class="note">{{ content.sppb_detail }}</div>
+  <p class="h3">체중 · BMI</p>
   {% if content.weight %}
   <p class="n">{{ content.weight.first }}{{ content.weight.unit }} → {{ content.weight.last }}{{ content.weight.unit }} <span class="delta">{{ content.weight.delta }}</span></p>
   {% elif section.show_blank %}<p class="missing">{{ content.missing_text }}</p>{% endif %}
-  <p>{{ content.weight_note }}</p>
-  <p class="fine">BMI {{ content.bmi_text }}</p>
+  <p class="fine">{{ content.weight_note }}</p>
+  <p class="fine">BMI {{ content.bmi_text }} · 참고정보</p>
 </section>
 
 {% elif section.id == "cancer" %}
 <section class="page">
-  <table class="top"><tr><td>{{ document.brand }}</td><td class="right">{{ document.running_title }}</td></tr></table>
-  <p class="kicker">{{ content.cancer_type_metric or content.cancer_type }}</p>
+  <table class="top"><tr><td>06 · 암종별 특화 지표</td><td class="right">{{ content.cancer_type_metric or content.cancer_type }}</td></tr></table>
   <h2>암종별 특화 지표</h2>
   {% if content.arm_rows %}
-  <p class="n">{{ content.arm_delta }} <span class="fine">{{ content.arm_badge }}</span></p>
-  <table class="grid">
-    {% for row in content.arm_rows %}<tr><td>{{ row.label }}</td><td>{{ row.value }} cm</td></tr>{% endfor %}
-  </table>
-  <div class="note"><p>{{ content.arm_interp }}</p></div>
+  <table class="rowhead"><tr><td><p class="h3">① 환측 팔둘레 추이</p></td><td class="badge">{{ content.arm_delta }} · {{ content.arm_badge }}</td></tr></table>
+  <div class="note">{{ content.arm_svg | safe }}</div>
+  <div class="warm">{{ content.arm_interp }}</div>
   <table class="cards"><tr>
-    {% if content.volume %}<td><p class="l">{{ content.volume.label }}</p><p class="n">{{ content.volume.delta }}</p><p class="sub">{{ content.volume.first }} → {{ content.volume.last }} {{ content.volume.unit }}</p></td>{% endif %}
-    {% if content.relative %}<td><p class="l">{{ content.relative.label }}</p><p class="n">{{ content.relative.delta }}</p><p class="sub">{{ content.relative.first }} → {{ content.relative.last }}{{ content.relative.unit }}</p></td>{% endif %}
+    {% if content.volume %}<td><p class="l">{{ content.volume.label.split(" (")[0] }}</p><p class="n">{{ content.volume.delta }}</p><p class="sub">{{ content.volume.first }} → {{ content.volume.last }} {{ content.volume.unit }}</p></td>{% endif %}
+    {% if content.relative %}<td><p class="l">{{ content.relative.label.split(" (")[0] }}</p><p class="n">{{ content.relative.delta }}</p><p class="sub">{{ content.relative.first }} → {{ content.relative.last }}{{ content.relative.unit }}</p></td>{% endif %}
   </tr></table>
   <p class="fine">{{ content.arm_footnote }}</p>
   {% endif %}
   {% if content.rom_rows %}
-  <p class="kicker">ROM</p>
-  <h2>{{ content.rom_headline }}</h2>
+  <p class="h3">② 어깨 관절가동범위(ROM)</p>
+  <p class="n">{{ content.rom_headline }}</p>
   <table class="grid">
     <tr><th>동작</th><th>이전</th><th>이후</th><th>변화</th></tr>
     {% for row in content.rom_rows %}
     <tr><td>{{ row.motion }}<div class="fine">{{ row.desc }}</div></td><td>{{ row.before }}{{ row.unit }}</td><td>{{ row.after }}{{ row.unit }}</td><td class="delta">{{ row.delta }}</td></tr>
     {% endfor %}
   </table>
-  <div class="warm"><p>{{ content.rom_detail }}</p></div>
+  <div class="warm">{{ content.rom_detail }}</div>
   <p class="fine">{{ content.rom_footnote }}</p>
   {% endif %}
   <p class="fine">{{ content.other_cancer_note }}</p>
@@ -253,15 +280,14 @@ h2 { margin: 1mm 0 4mm; font-size: 18pt; line-height: 1.3; color: #143840; }
 
 {% elif section.id == "next_steps" %}
 <section class="page">
-  <table class="top"><tr><td>{{ document.brand }}</td><td class="right">{{ document.running_title }}</td></tr></table>
-  <p class="kicker">NEXT</p>
-  <h2>다음 단계</h2>
+  <table class="top"><tr><td>07 · 다음 3개월을 위한 제안</td><td class="right">{{ document.running_title }}</td></tr></table>
+  <h2>다음 3개월을 위한 제안</h2>
   <p class="fine">{{ content.next_date }}</p>
   <table class="cols">
     <tr>
-      <td><p class="kicker">유지할 것</p>{{ lines(content.next_keep) }}</td>
-      <td><p class="kicker">관찰할 것</p>{{ lines(content.next_watch) }}</td>
-      <td><p class="kicker">의료진에게 확인할 것</p>{{ lines(content.next_ask) }}</td>
+      <td><h3>유지할 것</h3>{{ lines(content.next_keep) }}</td>
+      <td><h3>관찰할 것</h3>{{ lines(content.next_watch) }}</td>
+      <td><h3>의료진에게 확인할 것</h3>{{ lines(content.next_ask) }}</td>
     </tr>
   </table>
   <div class="nurse">
@@ -272,18 +298,6 @@ h2 { margin: 1mm 0 4mm; font-size: 18pt; line-height: 1.3; color: #143840; }
 </section>
 {% endif %}
 {% endfor %}
-
-<section class="page">
-  <table class="top"><tr><td>{{ document.brand }}</td><td class="right">{{ document.running_title }}</td></tr></table>
-  <p class="kicker">LOG</p>
-  <h2>생성 정보</h2>
-  <p>노란 입력칸 {{ filled_count }}/{{ total_count }}개가 채워져 있습니다.</p>
-  {% if omitted %}
-  <ul>{% for item in omitted %}<li>생략 · {{ item.title }} — {{ item.reason }}</li>{% endfor %}</ul>
-  {% else %}<p>생략된 섹션은 없습니다.</p>{% endif %}
-  <p class="fine">로직 {{ version }} · 수정일 {{ updated_at }} · 생성 {{ generated_at }} · {{ source_name }}</p>
-  <p class="fine">{{ document.footer_note }}</p>
-</section>
 <script>
 (function () {
   function fits(sheet) {

@@ -14,6 +14,18 @@ document:
   missing_text: "해당 데이터 없음"
   footer_note: "데이터 기반 참고 리포트 · 의료 진단 아님"
 
+# 회차 카드의 단계 코드와 메모 칩 문구. 엑셀에는 코드만 있고, 보이는 말은 여기서 바꿉니다.
+tag_labels:
+  eval: "평가"
+  plan: "계획"
+  new: "새 동작"
+  add: "추가"
+  review: "점검"
+  done: "마무리"
+note_labels:
+  nutrition: "영양"
+  psych: "심리"
+
 # 시트 이름과 머리글은 양식 엑셀과 같아야 합니다. 행 번호는 적지 않습니다.
 locators:
   cover_sheet: "01_표지"
