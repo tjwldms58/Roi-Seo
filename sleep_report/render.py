@@ -5,9 +5,9 @@ from __future__ import annotations
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from weasyprint import HTML
 
 from reportkit.errors import ReportError
+from reportkit.pdf import html_to_pdf
 from sleep_report.charts import hours_label
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -28,4 +28,4 @@ def render_pdf(html: str) -> bytes:
     font = ROOT / "assets" / "fonts" / "NotoSansKR-Regular.otf"
     if not font.is_file():
         raise ReportError("한글 폰트를 찾을 수 없습니다.")
-    return HTML(string=html, base_url=str(ROOT)).write_pdf()
+    return html_to_pdf(html, ROOT)

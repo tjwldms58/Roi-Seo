@@ -16,12 +16,25 @@ from reportkit.errors import ReportError
 _LOCK = threading.Lock()
 
 
+def _find_soffice() -> str | None:
+    found = shutil.which("soffice") or shutil.which("libreoffice")
+    if found:
+        return found
+    for candidate in (
+        Path(r"C:\Program Files\LibreOffice\program\soffice.exe"),
+        Path(r"C:\Program Files (x86)\LibreOffice\program\soffice.exe"),
+    ):
+        if candidate.is_file():
+            return str(candidate)
+    return None
+
+
 def recalculate(source: Path, dest: Path) -> None:
     source = Path(source)
     dest = Path(dest)
     if not source.is_file():
         raise ReportError(f"엑셀 파일을 찾을 수 없습니다: {source.name}")
-    soffice = shutil.which("soffice") or shutil.which("libreoffice")
+    soffice = _find_soffice()
     if not soffice:
         raise ReportError("LibreOffice Calc가 설치되어 있어야 엑셀 수식을 계산할 수 있습니다.")
     with _LOCK:
