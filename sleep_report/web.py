@@ -12,6 +12,7 @@ from reportkit.errors import ReportError
 from sleep_report import __version__
 from sleep_report.engine import LOGIC_PATH, ROOT, build_model, load_rules
 from sleep_report.render import render_html, render_pdf
+from sleep_report.xiaomi import fill_logic, list_people, workbook_kind
 
 PACKAGE = Path(__file__).resolve().parent
 OUTPUT = ROOT / "outputs" / "sleep"
@@ -63,19 +64,50 @@ def create_app() -> Flask:
         source = folder / "input.xlsx"
         upload.save(source)
         try:
-            model = build_model(source)
-            html = _html_for_browser(model)
-            pdf = render_pdf(render_html(model))
+            kind = workbook_kind(source)
+            if kind == "logic":
+                return _publish(folder, source, report_id, "")
+            if kind == "xiaomi":
+                people = list_people(source)
+                if not people:
+                    raise ReportError("수면 기록이 있는 고객이 없습니다.")
+                (folder / "people.json").write_text(
+                    json.dumps(people, ensure_ascii=False, indent=2),
+                    encoding="utf-8",
+                )
+                if len(people) == 1:
+                    return _publish_person(folder, report_id, 0)
+                return redirect(url_for("pick", report_id=report_id))
+            raise ReportError(
+                "이 엑셀에서는 수면 데이터를 찾지 못했습니다. "
+                "샤오미 수면 데이터(날짜, 고객명, 잠든 시각) 또는 수면 로직 엑셀을 올려 주세요."
+            )
         except ReportError as exc:
             flash(str(exc))
             return redirect(url_for("index"))
-        (folder / "report.html").write_text(html, encoding="utf-8")
-        (folder / "report.pdf").write_bytes(pdf)
-        (folder / "log.json").write_text(
-            json.dumps(_log(model), ensure_ascii=False, indent=2),
-            encoding="utf-8",
-        )
-        return redirect(url_for("result", report_id=report_id))
+
+    @app.get("/pick/<report_id>")
+    def pick(report_id: str):
+        folder = _folder(report_id)
+        people = json.loads((folder / "people.json").read_text(encoding="utf-8"))
+        return render_template("pick.html", report_id=report_id, people=people)
+
+    @app.post("/pick/<report_id>")
+    def pick_submit(report_id: str):
+        folder = _folder(report_id)
+        people = json.loads((folder / "people.json").read_text(encoding="utf-8"))
+        try:
+            index = int(request.form.get("person", ""))
+        except ValueError:
+            index = -1
+        if index < 0 or index >= len(people):
+            flash("고객을 다시 골라 주세요.")
+            return redirect(url_for("pick", report_id=report_id))
+        try:
+            return _publish_person(folder, report_id, index)
+        except ReportError as exc:
+            flash(str(exc))
+            return redirect(url_for("pick", report_id=report_id))
 
     @app.get("/result/<report_id>")
     def result(report_id: str):
@@ -95,6 +127,26 @@ def create_app() -> Flask:
         return redirect(url_for("index"))
 
     return app
+
+
+def _publish_person(folder: Path, report_id: str, index: int):
+    people = json.loads((folder / "people.json").read_text(encoding="utf-8"))
+    filled = folder / "logic.xlsx"
+    notice = fill_logic(folder / "input.xlsx", filled, people[index]["name"])
+    return _publish(folder, filled, report_id, notice)
+
+
+def _publish(folder: Path, workbook: Path, report_id: str, notice: str):
+    model = build_model(workbook)
+    html = _html_for_browser(model)
+    pdf = render_pdf(render_html(model))
+    (folder / "report.html").write_text(html, encoding="utf-8")
+    (folder / "report.pdf").write_bytes(pdf)
+    log = _log(model)
+    if notice:
+        log["notice"] = notice
+    (folder / "log.json").write_text(json.dumps(log, ensure_ascii=False, indent=2), encoding="utf-8")
+    return redirect(url_for("result", report_id=report_id))
 
 
 def _html_for_browser(model: dict) -> str:

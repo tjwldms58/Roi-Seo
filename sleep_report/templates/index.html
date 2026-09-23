@@ -27,7 +27,7 @@ li { margin: 4px 0; }
 <div class="wrap">
   <header class="band">
     <h1>수면 레포트</h1>
-    <p>로직 엑셀의 S1·S2에 값을 넣고 올리면, 수식 결과로 PDF를 만듭니다.</p>
+    <p>샤오미 수면 데이터 엑셀을 올리면, 로직에 필요한 칸만 골라 레포트를 만듭니다.</p>
     <p><a href="/" style="color:#f4f1ea;">프로그램 선택</a></p>
     <span class="pill">로직 {{ rules.version }} · {{ rules.updated_at }} · 섹션 {{ section_count }}개 · 프로그램 {{ app_version }}</span>
   </header>
@@ -36,13 +36,13 @@ li { margin: 4px 0; }
       {% for message in messages %}<p class="flash">{{ message }}</p>{% endfor %}
     {% endwith %}
     <form action="{{ url_for('generate') }}" method="post" enctype="multipart/form-data">
-      <label for="file">수면 로직 엑셀 (.xlsx)</label>
-      <input id="file" name="file" type="file" accept=".xlsx" required/>
+      <label for="file">샤오미 수면 데이터 (.xlsx)</label>
+      <input id="file" name="file" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required/>
       <button type="submit">PDF 만들기</button>
       <a class="btn ghost" href="{{ url_for('sample') }}">샘플 레포트 보기</a>
-      <a class="btn ghost" href="{{ url_for('template_file') }}">양식 받기</a>
+      <a class="btn ghost" href="{{ url_for('template_file') }}">로직 양식 받기</a>
     </form>
-    <p class="fine">파란 입력칸(S1 원본, S2 프로필)만 바꾸면 됩니다. S3의 노란 기준값과 S6 문장 수식을 고친 뒤 이 파일을 교체하면 프로그램 코드는 그대로 두고 레포트가 바뀝니다.</p>
+    <p class="fine">올리는 파일은 날짜, 고객명, 잠든 시각이 있는 샤오미 수면 표입니다. 계산식은 프로그램 안의 로직 엑셀이 합니다. 고객이 여러 명이면 한 명을 고른 뒤 만듭니다. 예전에 쓰던 수면 로직 엑셀을 그대로 올려도 됩니다.</p>
   </section>
   <section class="card">
     <h2>섹션과 필요한 입력</h2>

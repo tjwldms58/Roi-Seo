@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<title>고객 고르기</title>
+<style>
+@font-face { font-family: "ReportKR"; src: url("/fonts/NotoSansKR-Regular.otf"); font-weight: 400; }
+@font-face { font-family: "ReportKR"; src: url("/fonts/NotoSansKR-Bold.otf"); font-weight: 700; }
+body { margin: 0; font-family: "ReportKR", sans-serif; background: #f0f0e8; color: #183038; }
+.wrap { max-width: 820px; margin: 0 auto; padding: 36px 20px 64px; }
+.card { background: #fff; padding: 22px; border-top: 3px solid #a84838; margin-top: 16px; }
+h1 { margin-top: 0; }
+button { background: #a84838; color: white; border: 0; padding: 10px 16px; font: inherit; cursor: pointer; }
+.who { font-weight: 700; font-size: 18px; margin: 0; }
+.meta { color: #5c6a64; margin: 4px 0 12px; }
+.flash { background: #f8e8df; padding: 10px 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="card">
+    <h1>누구의 수면 레포트를 만들까요?</h1>
+    <p>올린 파일에 고객이 여러 명 있습니다. 한 명을 고르면 그 사람의 기록만 로직에 넣어 레포트를 만듭니다.</p>
+    {% with messages = get_flashed_messages() %}
+      {% for message in messages %}<p class="flash">{{ message }}</p>{% endfor %}
+    {% endwith %}
+  </section>
+  {% for person in people %}
+  <section class="card">
+    <p class="who">{{ person.name }}</p>
+    <p class="meta">{{ person.sex }} {% if person.age %}{{ person.age }}세{% endif %} · {{ person.start }} – {{ person.end }} · 수면 기록 {{ person.nights }}일</p>
+    <form action="{{ url_for('pick_submit', report_id=report_id) }}" method="post">
+      <input type="hidden" name="person" value="{{ loop.index0 }}"/>
+      <button type="submit">이 사람 레포트 만들기</button>
+    </form>
+  </section>
+  {% endfor %}
+</div>
+</body>
+</html>
