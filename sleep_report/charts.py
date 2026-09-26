@@ -251,7 +251,7 @@ def _bars_and_line(
 def _open(width: int, height: int) -> str:
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="100%" '
-        f'font-family="ReportKR, sans-serif">'
+        f'font-family="ReportKR, Malgun Gothic, Apple SD Gothic Neo, sans-serif">'
     )
 
 

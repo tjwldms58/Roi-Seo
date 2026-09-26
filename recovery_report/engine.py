@@ -414,7 +414,7 @@ def _arm_svg(rows: list[dict]) -> str:
             f'<text x="{xpos(index):.1f}" y="{height - 6}" text-anchor="middle" font-size="11" fill="#5c6a66">{label}</text>'
         )
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="100%" font-family="ReportKR, sans-serif">'
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="100%" font-family="ReportKR, Malgun Gothic, Apple SD Gothic Neo, sans-serif">'
         f'<polyline points="{points}" fill="none" stroke="#1d4f4c" stroke-width="2"/>'
         + "".join(marks)
         + "</svg>"

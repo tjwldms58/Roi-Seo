@@ -22,6 +22,6 @@ def render_html(model: dict) -> str:
 
 
 def render_pdf(html: str) -> bytes:
-    if not (ROOT / "assets" / "fonts" / "NotoSansKR-Regular.otf").is_file():
+    if not (ROOT / "assets" / "fonts" / "NotoSansKR-Regular.woff2").is_file():
         raise ReportError("한글 폰트를 찾을 수 없습니다.")
     return html_to_pdf(html, ROOT)

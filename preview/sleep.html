@@ -4,25 +4,25 @@
 <meta charset="utf-8"/>
 <title>불면 중심 수면 리듬 진단 리포트</title>
 <style>
-@font-face { font-family: "ReportKR"; src: url("../assets/fonts/NotoSansKR-Regular.otf"); font-weight: 400; }
-@font-face { font-family: "ReportKR"; src: url("../assets/fonts/NotoSansKR-Bold.otf"); font-weight: 700; }
+@font-face { font-family: "ReportKR"; src: url("../assets/fonts/NotoSansKR-Regular.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "ReportKR"; src: url("../assets/fonts/NotoSansKR-Bold.woff2") format("woff2"); font-weight: 700; }
 @page {
   size: A4;
   margin: 10mm 11mm 12mm 11mm;
   background: #f4f1ec;
-  @bottom-left { content: "healmarucare VIP Care"; font-family: "ReportKR", sans-serif; font-size: 8pt; color: #7a847f; }
-  @bottom-center { content: "데이터 기반 참고 리포트 · 의료 진단 아님"; font-family: "ReportKR", sans-serif; font-size: 8pt; color: #7a847f; }
-  @bottom-right { content: counter(page) " / " counter(pages); font-family: "ReportKR", sans-serif; font-size: 8pt; color: #7a847f; }
+  @bottom-left { content: "healmarucare VIP Care"; font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #7a847f; }
+  @bottom-center { content: "데이터 기반 참고 리포트 · 의료 진단 아님"; font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #7a847f; }
+  @bottom-right { content: counter(page) " / " counter(pages); font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #7a847f; }
 }
 @page cover {
   margin: 14mm 14mm 12mm 14mm;
   background: #183840;
-  @bottom-left { content: "이 리포트가 실제로 들여다보는 6가지 지표"; font-family: "ReportKR", sans-serif; font-size: 8pt; color: #9eb0b0; }
+  @bottom-left { content: "이 리포트가 실제로 들여다보는 6가지 지표"; font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #9eb0b0; }
   @bottom-center { content: none; }
   @bottom-right { content: none; }
 }
 * { box-sizing: border-box; }
-body { margin: 0; font-family: "ReportKR", sans-serif; color: #243033; font-size: 9pt; line-height: 1.45; background: #f4f1ec; }
+body { margin: 0; font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; color: #243033; font-size: 9pt; line-height: 1.45; background: #f4f1ec; }
 .cover { page: cover; color: #f7f4ef; }
 .sheet-foot { display: none; }
 @media print {

@@ -37,6 +37,8 @@ def test_sleep_sample_uses_workbook_text(tmp_path):
     assert model["version"] == "19차"
     html = sleep_html(model)
     assert "healmarucare" in html
+    assert "NotoSansKR-Regular.woff2" in html
+    assert ".otf" not in html
     assert "데이터 기반 참고 리포트" in html
     assert "생성 정보" not in html
     assert "width: 210mm" in html and "height: 297mm" in html
@@ -126,7 +128,12 @@ def test_one_site_separates_sleep_and_recovery():
     client = create_site().test_client()
     home = client.get("/").get_data(as_text=True)
     assert "수면 레포트 만들기" in home
+    assert "동료와 함께 쓰기" in home
     assert "종합 레포트 만들기" in home
+    font = client.get("/fonts/NotoSansKR-Regular.woff2")
+    assert font.status_code == 200
+    assert font.mimetype == "font/woff2"
+    assert font.data[:4] == b"wOF2"
     sleep = client.get("/sleep/")
     assert sleep.status_code == 200
     sleep_html = sleep.get_data(as_text=True)

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 import os
 import re
 import shutil
@@ -29,8 +30,7 @@ def _browser_pdf(html: str, base_dir: Path) -> bytes:
     browser = _find_browser()
     if browser is None:
         raise ReportError("PDF를 만들 크롬이나 엣지를 찾지 못했습니다.")
-    fonts = (Path(base_dir) / "assets" / "fonts").as_uri()
-    html = _SCRIPT.sub("", html).replace('url("assets/fonts/', f'url("{fonts}/')
+    html = _embed_fonts(_SCRIPT.sub("", html), base_dir)
     with tempfile.TemporaryDirectory(prefix="report-pdf-") as folder:
         root = Path(folder)
         page = root / "report.html"
@@ -56,6 +56,18 @@ def _browser_pdf(html: str, base_dir: Path) -> bytes:
             detail = (run.stderr or run.stdout or "").strip()
             raise ReportError(f"PDF를 만들지 못했습니다. {detail[:300]}")
         return output.read_bytes()
+
+
+def _embed_fonts(html: str, base_dir: Path) -> str:
+    """크롬 PDF는 한글 이름 폴더의 폰트 파일을 빼먹는 경우가 있어 글꼴을 문서에 넣습니다."""
+    fonts = Path(base_dir) / "assets" / "fonts"
+    for path in fonts.glob("*.woff2"):
+        payload = base64.b64encode(path.read_bytes()).decode("ascii")
+        html = html.replace(
+            f'url("assets/fonts/{path.name}")',
+            f'url("data:font/woff2;base64,{payload}")',
+        )
+    return html
 
 
 def _find_browser() -> Path | None:

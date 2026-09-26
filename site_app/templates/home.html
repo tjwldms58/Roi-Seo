@@ -4,9 +4,9 @@
 <meta charset="utf-8"/>
 <title>힐마루케어 레포트</title>
 <style>
-@font-face { font-family: "ReportKR"; src: url("/fonts/NotoSansKR-Regular.otf"); font-weight: 400; }
-@font-face { font-family: "ReportKR"; src: url("/fonts/NotoSansKR-Bold.otf"); font-weight: 700; }
-body { margin: 0; font-family: "ReportKR", sans-serif; background: #e6e2d8; color: #183038; }
+@font-face { font-family: "ReportKR"; src: url("/fonts/NotoSansKR-Regular.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "ReportKR"; src: url("/fonts/NotoSansKR-Bold.woff2") format("woff2"); font-weight: 700; }
+body { margin: 0; font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; background: #e6e2d8; color: #183038; }
 .wrap { max-width: 980px; margin: 0 auto; padding: 36px 20px 64px; }
 .band { background: #183840; color: #f4f1ea; padding: 28px; }
 h1 { margin: 0 0 8px; font-size: 28px; }
@@ -27,6 +27,8 @@ a.ghost { background: transparent; text-decoration: none; padding: 9px 14px; dis
 .sleep .ghost { color: #1d4f4c; border: 1px solid #1d4f4c; }
 .recovery .ghost { color: #a84838; border: 1px solid #a84838; }
 .fine { color: #5c6a64; font-size: 14px; }
+.share { border-top: 4px solid #183840; margin-top: 16px; }
+.addr { font-size: 22px; font-weight: 700; letter-spacing: 0.01em; margin: 8px 0; }
 @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -54,6 +56,19 @@ a.ghost { background: transparent; text-decoration: none; padding: 9px 14px; dis
       <a class="ghost" href="/recovery/template">양식 받기</a>
     </section>
   </div>
+  <section class="card share">
+    <h2>동료와 함께 쓰기</h2>
+    {% if share_urls %}
+    <p>같은 와이파이에 있는 동료에게 아래 주소를 보내세요. 프로그램을 실행한 창은 닫지 마세요. 창을 닫으면 동료도 사이트가 안 열립니다.</p>
+    {% for url in share_urls %}
+    <p class="addr">{{ url }}</p>
+    {% endfor %}
+    <p class="fine">윈도우에 ‘액세스 허용’이 뜨면 허용을 누르세요. 환자 정보가 오가므로 같은 사무실 망에서만 쓰세요.</p>
+    {% else %}
+    <p>지금은 이 컴퓨터에서만 열립니다. 와이파이에 연결한 뒤 프로그램을 다시 실행하면, 동료에게 보낼 주소가 여기에 나옵니다.</p>
+    {% endif %}
+    <p class="fine">다른 장소에 있는 동료는 이 프로그램 압축을 받아 자기 컴퓨터에서 실행하면 됩니다.</p>
+  </section>
 </div>
 </body>
 </html>

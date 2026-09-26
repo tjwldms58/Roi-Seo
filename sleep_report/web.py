@@ -30,9 +30,9 @@ def create_app() -> Flask:
 
     @app.get("/fonts/<name>")
     def fonts(name: str):
-        if name not in {"NotoSansKR-Regular.otf", "NotoSansKR-Bold.otf"}:
+        if name not in {"NotoSansKR-Regular.woff2", "NotoSansKR-Bold.woff2"}:
             abort(404)
-        return send_from_directory(ROOT.parent / "assets" / "fonts", name)
+        return send_from_directory(ROOT.parent / "assets" / "fonts", name, mimetype="font/woff2")
 
     @app.get("/")
     def index():
