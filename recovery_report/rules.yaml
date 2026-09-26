@@ -1,0 +1,95 @@
+# 종합 레포트 섹션 규칙
+# 문장과 자동 숫자는 양식 엑셀의 수식이 만듭니다.
+# 여기에는 섹션이 어떤 입력에 기대는지, 비었을 때 페이지를 빼 낼지만 적습니다.
+# 표의 행 수는 고정하지 않습니다. 엑셀에서 데이터 행을 늘리면 그대로 따라갑니다.
+
+version: "1.0.0"
+updated_at: "2026-09-23"
+
+document:
+  title: "회복 관리 종합 레포트"
+  subtitle: "방문 건강관리 회차 기록"
+  brand: "HEALMARU CARE"
+  running_title: "회복 관리 종합 레포트"
+  missing_text: "해당 데이터 없음"
+  footer_note: "데이터 기반 참고 리포트 · 의료 진단 아님"
+
+# 회차 카드의 단계 코드와 메모 칩 문구. 엑셀에는 코드만 있고, 보이는 말은 여기서 바꿉니다.
+tag_labels:
+  eval: "평가"
+  plan: "계획"
+  new: "새 동작"
+  add: "추가"
+  review: "점검"
+  done: "마무리"
+note_labels:
+  nutrition: "영양"
+  psych: "심리"
+
+# 시트 이름과 머리글은 양식 엑셀과 같아야 합니다. 행 번호는 적지 않습니다.
+locators:
+  cover_sheet: "01_표지"
+  summary_sheet: "02_요약"
+  session_sheet: "03_회차별실천기록"
+  capability_sheet: "04_운동별체력변화"
+  functional_sheet: "05_수행지표변화"
+  cancer_sheet: "06_암종별특화지표"
+  next_sheet: "07_다음단계"
+  visit_header: "회차(no)"
+  capability_header: "동작명(name)"
+  learned_header: "아이콘(icon)"
+  sppb_header: "항목(label)"
+  arm_header: "회차"
+  rom_header: "동작명(motion)"
+
+empty_tokens:
+  - ""
+  - "nan"
+  - "none"
+  - "null"
+  - "n/a"
+  - "na"
+  - "-"
+  - "—"
+  - "없음"
+  - "해당없음"
+  - "해당 없음"
+
+# core_policy: any_missing 이면 핵심이 하나라도 없을 때 섹션을 생략합니다.
+# all_missing 이면 핵심이 전부 없을 때만 생략합니다.
+sections:
+  - id: cover
+    title: "표지"
+    core: [name]
+    core_policy: any_missing
+    on_partial: show_placeholder
+  - id: summary
+    title: "요약"
+    core: [visit_no]
+    core_policy: all_missing
+    on_partial: show_placeholder
+  - id: sessions
+    title: "회차별 실천 기록"
+    core: [session_title]
+    core_policy: all_missing
+    on_partial: show_placeholder
+  - id: capability
+    title: "운동별 체력 변화"
+    core: [capability_name]
+    core_policy: all_missing
+    on_partial: render_available
+  - id: functional
+    title: "수행 지표로 확인한 변화"
+    core: [learned_label, sppb_label, weight_first]
+    core_policy: all_missing
+    on_partial: show_placeholder
+  - id: cancer
+    title: "암종별 특화 지표"
+    core: [arm_value, rom_motion]
+    core_policy: all_missing
+    on_partial: render_available
+  - id: next_steps
+    title: "다음 단계를 위한 제안"
+    core: [next_keep, next_watch, next_ask]
+    core_policy: all_missing
+    on_partial: show_placeholder

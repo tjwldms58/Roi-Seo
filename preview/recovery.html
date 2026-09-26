@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<title>회복 관리 종합 레포트</title>
+<style>
+@font-face { font-family: "ReportKR"; src: url("../assets/fonts/NotoSansKR-Regular.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "ReportKR"; src: url("../assets/fonts/NotoSansKR-Bold.woff2") format("woff2"); font-weight: 700; }
+@page {
+  size: A4;
+  margin: 13mm 14mm 14mm 14mm;
+  background: #f0f0e8;
+  @bottom-left {
+    content: "데이터 기반 참고 리포트 · 의료 진단 아님";
+    font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #6d7874;
+  }
+  @bottom-right {
+    content: counter(page);
+    font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #6d7874;
+  }
+}
+@page cover {
+  margin: 16mm 16mm 14mm 16mm;
+  background: #103840;
+  @bottom-left {
+    content: "데이터 기반 참고 리포트 · 의료 진단 아님";
+    font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #8aa4a8;
+  }
+  @bottom-right {
+    content: counter(page);
+    font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #8aa4a8;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; color: #183038; font-size: 10pt; line-height: 1.55; background: #f0f0e8; }
+.cover { page: cover; color: #f4f1ea; min-height: 250mm; }
+.sheet-foot { display: none; }
+@media print {
+  .sheet-inner { zoom: 1 !important; }
+  .sheet-foot { display: none !important; }
+}
+@media screen {
+  body { background: #d9d4c8; margin: 0; padding: 8mm 0 12mm; min-width: 210mm; }
+  .cover, .page {
+    width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    margin: 8mm auto 0;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 22px rgba(24, 40, 48, 0.14);
+    break-before: auto;
+  }
+  .cover { background: #103840; padding: 16mm 16mm 16mm; }
+  .page { background: #f0f0e8; padding: 13mm 14mm 16mm; }
+  .sheet-foot {
+    display: block;
+    position: absolute;
+    left: 14mm;
+    right: 14mm;
+    bottom: 6mm;
+    font-size: 8pt;
+    color: #6d7874;
+  }
+  .cover .sheet-foot { color: #8aa4a8; }
+}
+.brand { margin: 0; letter-spacing: 0.18em; font-size: 10pt; color: #d7e4e2; }
+.cover h1 { margin: 22mm 0 0; font-size: 26pt; line-height: 1.28; font-weight: 700; }
+.rule { width: 28mm; height: 2px; background: #a84838; margin: 7mm 0; }
+.who { margin: 0; font-size: 16pt; }
+.meta { margin: 2mm 0 0; color: #c5d5d2; font-size: 11pt; }
+.facts { width: 100%; margin-top: 14mm; border-collapse: separate; border-spacing: 3mm 0; margin-left: -3mm; }
+.facts td { background: #214850; border-radius: 8px; padding: 3.5mm; width: 33%; vertical-align: top; }
+.facts .k { margin: 0; color: #b7c6c4; font-size: 8pt; }
+.facts .v { margin: 1mm 0 0; font-size: 12pt; font-weight: 700; color: #f4f1ea; }
+.page { break-before: page; }
+.top { width: 100%; border-bottom: 0.6pt solid #d5d3c8; padding-bottom: 1.5mm; margin-bottom: 3.5mm; }
+.top td { font-size: 8pt; color: #5e6c68; }
+.top .right { text-align: right; }
+h2 { margin: 1mm 0 2mm; font-size: 13pt; line-height: 1.25; color: #143840; }
+.h3 { margin: 3mm 0 1.5mm; font-size: 11pt; color: #143840; }
+.timeline { width: 100%; border-collapse: collapse; margin: 0 0 3mm; }
+.timeline td { text-align: center; width: 16%; font-size: 8pt; color: #5c6a66; border-top: 1.5px solid #c8c4b8; padding-top: 2mm; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #1d4f4c; margin-top: -6.5mm; }
+.timeline .current .dot { background: #a84838; }
+.timeline .upcoming .dot { background: #f0f0e8; border: 1.5px solid #8a8175; }
+.cards { width: 100%; border-collapse: separate; border-spacing: 2mm 0; margin: 0 0 2mm -2mm; }
+.cards td { background: #fff; border-top: 3px solid #1d4f4c; padding: 2mm 2.5mm; vertical-align: top; }
+.n { margin: 0; font-size: 12pt; font-weight: 700; color: #143840; }
+.l { margin: 0.5mm 0 0; font-size: 8pt; color: #5c6a66; }
+.sub { margin: 0; font-size: 7.5pt; color: #6a7672; }
+.note { background: #e5f0ea; padding: 2.5mm 3mm; margin: 0 0 2.5mm; font-size: 8.5pt; }
+.warm { background: #f6e6dc; padding: 2.5mm 3mm; margin: 0 0 2.5mm; font-size: 8.5pt; }
+.groups { width: 100%; border-collapse: separate; border-spacing: 2mm 0; margin: 0 0 2mm -2mm; }
+.groups td { background: #fff; padding: 2mm 2.5mm; vertical-align: top; width: 33%; }
+.groups h3 { margin: 0 0 1mm; font-size: 9pt; color: #a84838; }
+.groups p { margin: 0 0 1mm; font-size: 8pt; }
+.pair-grid { width: 100%; border-collapse: separate; border-spacing: 2.5mm 2.5mm; margin-left: -2.5mm; }
+.pair-grid td { width: 50%; background: #fff; vertical-align: top; padding: 2.5mm 3mm; border-radius: 8px; }
+.session h3 { margin: 1mm 0; font-size: 9.5pt; line-height: 1.35; }
+.tag { display: inline-block; background: #103840; color: #f4f1ea; font-size: 7.5pt; padding: 0 1.5mm; margin-right: 1mm; }
+.chip { display: inline-block; padding: 0 1.8mm; margin-right: 1.5mm; font-size: 7.5pt; border-radius: 8px; }
+.chip.nutrition { background: #d7ebe4; color: #1d4f4c; }
+.chip.psych { background: #e4dced; color: #5a4678; }
+.cap { width: 100%; border-collapse: collapse; margin: 0 0 1.2mm; background: #fff; }
+.cap td { padding: 1.1mm 2.2mm; vertical-align: top; font-size: 8pt; line-height: 1.32; }
+.cap .name { font-weight: 700; }
+.before { background: #f4f1ea; width: 50%; }
+.after { background: #d8e8e0; width: 50%; }
+.grid { width: 100%; border-collapse: collapse; background: #fff; margin: 0 0 2mm; }
+.grid th, .grid td { border-bottom: 0.4pt solid #e0ddd2; text-align: left; padding: 1.4mm 2mm; vertical-align: top; font-size: 8pt; }
+.grid th { color: #6a7672; font-weight: 400; }
+.delta { color: #a84838; font-weight: 700; }
+.cols td { width: 33%; background: #fff; vertical-align: top; padding: 2.5mm; border-top: 3px solid #a84838; }
+.cols { width: 100%; border-collapse: separate; border-spacing: 2mm 0; margin-left: -2mm; }
+.cols h3 { margin: 0; font-size: 9pt; color: #a84838; }
+.cols ul { margin: 1.5mm 0 0; padding-left: 4mm; font-size: 8pt; }
+.nurse { background: #103840; color: #f4f1ea; padding: 3.5mm; margin-top: 3mm; }
+.nurse .who { font-size: 11pt; margin: 0 0 1.5mm; }
+.missing { color: #8a8175; }
+.fine { color: #5c6a66; font-size: 8pt; margin: 0 0 2mm; }
+.rowhead { width: 100%; }
+.rowhead td { vertical-align: bottom; }
+.badge { text-align: right; color: #a84838; font-size: 8pt; font-weight: 700; }
+</style>
+</head>
+<body data-brand="HEALMARU CARE" data-note="데이터 기반 참고 리포트 · 의료 진단 아님" data-cover-foot="데이터 기반 참고 리포트 · 의료 진단 아님">
+
+
+
+
+
+<header class="cover">
+  <p class="brand">HEALMARU CARE</p>
+  <h1>회복 관리 종합 레포트</h1>
+  <div class="rule"></div>
+  <p class="who">김OO 님</p>
+  <p class="meta">유방암</p>
+  <table class="facts"><tr>
+    <td><p class="k">관리 기간</p><p class="v">2026.06.15 – 09.14</p></td>
+    <td><p class="k">총 방문</p><p class="v">6회</p></td>
+    <td><p class="k">발행일</p><p class="v">2026.09.14</p></td>
+  </tr></table>
+</header>
+
+
+
+
+<section class="page">
+  <table class="top"><tr><td>02 · 요약</td><td class="right">회복 관리 종합 레포트</td></tr></table>
+  <table class="timeline"><tr>
+    
+    <td class="done"><span class="dot"></span><br/>1차<br/>06.15</td>
+    
+    <td class="done"><span class="dot"></span><br/>2차<br/>06.29</td>
+    
+    <td class="done"><span class="dot"></span><br/>3차<br/>07.13</td>
+    
+    <td class="done"><span class="dot"></span><br/>4차<br/>07.27</td>
+    
+    <td class="done"><span class="dot"></span><br/>5차<br/>08.17</td>
+    
+    <td class="current"><span class="dot"></span><br/>6차<br/>09.14</td>
+    
+  </tr></table>
+  <h2>① 이런 변화가 있었어요</h2>
+  <table class="cards"><tr>
+    
+    <td><p class="n">4가지</p><p class="l">새로 익힌 운동</p><p class="sub">스트레칭 · 기능성 훈련</p></td>
+    
+    <td><p class="n">12점</p><p class="l">SPPB 총점</p><p class="sub">10점 → 12점</p></td>
+    
+    <td><p class="n">56.2kg</p><p class="l">체중</p><p class="sub">-1.2kg · -2.1%</p></td>
+    
+    <td><p class="n">21.9</p><p class="l">BMI(참고정보)</p><p class="sub">22.4 → 21.9</p></td>
+    
+  </tr></table>
+  <div class="note">SPPB 점수와 4m 보행·의자 일어서기 수행시간까지 함께 좋아졌어요. 다양한 운동을 새로 익히며 꾸준히 참여해주셨어요. 체중은 소폭 감소했으며, 부종·수분 변화 가능성을 함께 확인하며 지켜보고 있어요. BMI는 성과지표가 아닌 참고정보로만 병기합니다.</div>
+  <h2>② 이렇게 실천했어요</h2>
+  <table class="groups"><tr>
+    
+    <td>
+      <h3>운동</h3>
+      <p><strong>6회</strong> 전체 방문</p><p><strong>4가지</strong> 새로 익힌 운동</p><p><strong>1회</strong> 컨디션 저하로 강도 조정</p><p><strong>7일</strong> 수면 모니터링</p>
+    </td>
+    
+    <td>
+      <h3>영양</h3>
+      <p><strong>4회</strong> 영양사 면담</p><p><strong>14일</strong> 식이일지 기록</p><p><strong>별도 전달</strong> 식이 리포트</p>
+    </td>
+    
+    <td>
+      <h3>심리·연계 시</h3>
+      <p><strong>1회</strong> 심리상담 참여</p><p><strong>치료 스트레스 관리</strong> 상담 주제</p>
+    </td>
+    
+  </tr></table>
+  <div class="note">1~2회차 평가·계획 이후 저항밴드·밸런스·기능성 훈련까지 순서대로 배우셨어요. 대상자분의 필요에 맞춰 영양사와 4회 면담하고 2주간 식이일지를 기록해주셨으며, 이 내용은 별도 식이 리포트로 정리해드릴 예정이에요. 치료 과정의 심리적 부담을 다루기 위해 심리상담도 함께 연계해드렸어요.</div>
+  <h2>③ 이렇게 관리해드렸어요</h2>
+  <table class="cards"><tr>
+    
+    <td><p class="n">6회</p><p class="l">매 회차 컨디션 체크</p></td>
+    
+    <td><p class="n">1회</p><p class="l">일정·강도 조정</p></td>
+    
+    <td><p class="n">2종</p><p class="l">유방암 특이 측정 항목</p></td>
+    
+    <td><p class="n">2회</p><p class="l">영양사 협진</p></td>
+    
+    <td><p class="n">5회</p><p class="l">담당자 소통</p></td>
+  </tr></table>
+  <div class="warm">매 회차 시작 전 컨디션을 확인하고 통증·부종 변화를 관찰하며 필요 시 일정과 강도를 조정해드렸어요. 유방암 환자분은 양팔 부피·어깨 ROM을 별도로 측정해 함께 기록했고, 영양사와 협진해 식이 상태를 모니터링하며 별도 식이 리포트로 전달해드릴 예정이에요. 필요한 경우 심리상담도 함께 연계해드렸어요.</div>
+  <div class="note">통증 관리에 대해 진료 시 꼭 상의해보시고, 자세 교정 운동을 꾸준히 이어가시면 좋겠습니다.</div>
+  <p class="fine">지금과 같은 속도라면 무리하지 않아도 충분해요. 다음 방문까지는 아래 내용을 함께 챙겨봐 주세요.</p>
+  <p><span class="chip nutrition">엉덩이 들기 · 날개뼈 모으기 자세 익히기</span><span class="chip nutrition">통증 있는 날은 기록해두기</span><span class="chip nutrition">진료 시 통증 관리 상담하기</span></p>
+</section>
+
+
+
+
+<section class="page">
+  <table class="top"><tr><td>03 · 회차별 실천 기록</td><td class="right">회복 관리 종합 레포트</td></tr></table>
+  <h2>회차별 실천 기록</h2>
+  <table class="pair-grid">
+  
+    <tr>
+    <td class="session">
+      <p class="fine">1회차 · 06.15 <span class="tag">평가</span></p>
+      <h3>기초 스트레칭과 호흡 훈련, 걷기 적응 운동을 배우셨어요.</h3>
+      <p>몸을 서서히 움직임에 적응시키고 호흡과 근육의 긴장을 풀어주는 동작이며, 시작 시점의 컨디션이 양호해 표준 강도로 진행했어요.</p>
+      <p><span class="chip nutrition">영양</span>영양상담 · 초기 니즈 파악</p>
+    </td>
+    
+  
+    
+    <td class="session">
+      <p class="fine">2회차 · 06.29 <span class="tag">계획</span></p>
+      <h3>저항밴드 운동과 균형 훈련을 배우셨어요.</h3>
+      <p>상하지 근력과 중심 잡는 능력을 키우는 동작이며, 경미한 피로감이 있어 세트 수를 줄이고 안전한 강도로 진행했어요.</p>
+      <p><span class="chip nutrition">영양</span>영양상담 · 식이일지 1주차 점검</p>
+    </td>
+    </tr>
+  
+    <tr>
+    <td class="session">
+      <p class="fine">3회차 · 07.13 <span class="tag">새 동작</span></p>
+      <h3>밸런스 운동과 계단 오르내리기 적응 훈련을 배우셨어요.</h3>
+      <p>일상에서 자주 쓰이는 균형감각과 하지 근력을 키우는 동작이며, 컨디션이 회복되어 새로운 동작을 함께 시작했어요.</p>
+      
+    </td>
+    
+  
+    
+    <td class="session">
+      <p class="fine">4회차 · 07.27 <span class="tag">추가</span></p>
+      <h3>의자에서 일어서기와 물건 들어 올리기 동작을 추가로 배우셨어요.</h3>
+      <p>하체 근력과 균형감, 상지 기능을 함께 키우는 동작이며, 항암치료 일정이 안정적이라 반복 수를 소폭 늘려 진행했어요.</p>
+      <p><span class="chip nutrition">영양</span>영양상담 · 식이일지 2주차 점검</p>
+    </td>
+    </tr>
+  
+    <tr>
+    <td class="session">
+      <p class="fine">5회차 · 08.17 <span class="tag">점검</span></p>
+      <h3>유산소 운동과 저항 훈련을 복합적으로 재점검했어요.</h3>
+      <p>심폐지구력과 근력을 함께 유지하는 동작이며, 컨디션 저하가 있어 휴식 간격을 늘리고 무리하지 않는 선에서 진행했어요.</p>
+      <p><span class="chip psych">심리</span>심리상담 연계 · 치료 스트레스 관리</p>
+    </td>
+    
+  
+    
+    <td class="session">
+      <p class="fine">6회차 · 09.14 <span class="tag">마무리</span></p>
+      <h3>지금까지 배운 운동을 종합적으로 수행하며 마무리했어요.</h3>
+      <p>스트레칭부터 저항·균형·기능성 훈련까지 전 구간을 안정적으로 수행하며, 3개월 프로그램을 완주하셨어요.</p>
+      <p><span class="chip nutrition">영양</span>영양 최종 상담 · 변화 요약</p>
+    </td>
+    </tr>
+  
+  </table>
+  <p class="fine">회차별 운동·영양·심리 구성은 매 회차 시작 전 확인한 컨디션과 필요도에 따라 조정되었습니다.</p>
+</section>
+
+
+
+
+<section class="page">
+  <table class="top"><tr><td>04 · 운동별 체력 변화</td><td class="right">회복 관리 종합 레포트</td></tr></table>
+  <h2>운동별 체력 변화</h2>
+  
+  <table class="cap">
+    <tr><td colspan="2"><strong>의자에서 일어서기</strong></td></tr>
+    <tr>
+      <td class="before"><p class="l">이전</p><p>손으로 의자를 짚어야 일어남</p></td>
+      <td class="after"><p class="l">이후</p><p>손 지지 없이 스스로 일어섬</p></td>
+    </tr>
+    <tr><td colspan="2">4차에 처음 배우실 땐 지지가 꼭 필요했는데, 6차에는 지지 없이도 안정적으로 하실 만큼 하체 근력과 균형감이 늘었어요.</td></tr>
+  </table>
+  
+  <table class="cap">
+    <tr><td colspan="2"><strong>벽 짚고 팔굽혀펴기</strong></td></tr>
+    <tr>
+      <td class="before"><p class="l">이전</p><p>몇 번 못하고 힘들어하심</p></td>
+      <td class="after"><p class="l">이후</p><p>자세가 안정되어 편안하게 반복</p></td>
+    </tr>
+    <tr><td colspan="2">3차에 자세 잡는 것조차 어려워하셨는데, 5차 복습 때는 스스로 자세를 교정하며 여러 번 반복하실 수 있었어요.</td></tr>
+  </table>
+  
+  <table class="cap">
+    <tr><td colspan="2"><strong>엉덩이 들기 · 날개뼈 모으기</strong></td></tr>
+    <tr>
+      <td class="before"><p class="l">이전</p><p>6차부터 새로 배우기 시작</p></td>
+      <td class="after"><p class="l">이후</p><p>동작과 자세를 익히는 단계</p></td>
+    </tr>
+    <tr><td colspan="2">그동안의 운동 부담이 안정되어 마지막 회차에 새로 더한 동작이며, 아직은 정확한 자세를 익히는 중이라 앞으로 균형·어깨 근력을 함께 키워나갈 예정이에요.</td></tr>
+  </table>
+  
+  <table class="cap">
+    <tr><td colspan="2"><strong>흉터 마사지(지그재그·원형)</strong></td></tr>
+    <tr>
+      <td class="before"><p class="l">이전</p><p>손끝으로 만지는 것도 조심스러움</p></td>
+      <td class="after"><p class="l">이후</p><p>두 가지 방법을 혼자서도 진행</p></td>
+    </tr>
+    <tr><td colspan="2">수술 부위 유착을 예방하고 피부 유연성을 지켜주는 관리법으로, 처음엔 낯설어하셨지만 지금은 방문이 없는 날에도 스스로 챙기실 수 있게 되었어요.</td></tr>
+  </table>
+  
+  <table class="cap">
+    <tr><td colspan="2"><strong>저항밴드 다리 들어올리기</strong></td></tr>
+    <tr>
+      <td class="before"><p class="l">이전</p><p>옆으로 눕는 자세부터 어려워하심</p></td>
+      <td class="after"><p class="l">이후</p><p>밴드 저항에도 10회 안정적으로 반복</p></td>
+    </tr>
+    <tr><td colspan="2">2차에는 자세를 잡는 것 자체를 힘들어하셨는데, 지금은 저항밴드를 걸고도 흔들림 없이 반복하실 수 있을 만큼 고관절 주변 근력이 좋아졌어요.</td></tr>
+  </table>
+  
+  <table class="cap">
+    <tr><td colspan="2"><strong>한 발로 서서 균형 잡기</strong></td></tr>
+    <tr>
+      <td class="before"><p class="l">이전</p><p>3초 이상 버티기 어려워하심</p></td>
+      <td class="after"><p class="l">이후</p><p>양쪽 모두 10초 이상 안정적으로 유지</p></td>
+    </tr>
+    <tr><td colspan="2">낙상 위험과 직결되는 동작인데, 초반엔 손잡이 없이는 힘들어하셨지만 지금은 양쪽 다리 모두 안정적으로 버티실 수 있어요.</td></tr>
+  </table>
+  
+  <div class="warm"><p>지난 3개월은 새로운 목표치를 향해 달린 시간이 아니라, 몸이 다시 할 수 있는 만큼을 스스로 되찾아 온 시간이었어요. 손 지지 없이 일어나고, 흉터를 스스로 관리하고, 새로운 동작을 하나씩 더해가는 것 — 이 작은 변화들이 모여 다음 3개월을 더 편하게 만들어드릴 거예요.</p></div>
+</section>
+
+
+
+
+<section class="page">
+  <table class="top"><tr><td>05 · 수행 지표로 확인한 변화</td><td class="right">회복 관리 종합 레포트</td></tr></table>
+  <h2>수행 지표로 확인한 변화</h2>
+  <table class="rowhead"><tr><td><p class="h3">이번 3개월 동안 익힌 운동</p></td><td class="badge">4개 영역 새로 습득</td></tr></table>
+  
+  <table class="cards"><tr>
+    <td><p class="n">스트레칭·호흡</p><p class="l">1~2회차</p></td><td><p class="n">저항밴드·균형</p><p class="l">2~3회차</p></td><td><p class="n">기능성 훈련</p><p class="l">4회차</p></td><td><p class="n">복합 유산소·저항</p><p class="l">5~6회차</p></td>
+  </tr></table>
+  
+  <table class="rowhead"><tr><td><p class="h3">SPPB 10 / 12 / 12</p></td><td class="badge">총점 천장효과 구간 근접</td></tr></table>
+  <p class="n">균형과 보행 속도가 함께 좋아졌어요.</p>
+  <table class="grid">
+    <tr><th>항목</th><th>첫 검사</th><th>재검사</th><th>점수</th><th>메모</th></tr>
+    
+    <tr><td>균형 검사<div class="fine">면벽 자세 유지시간</div></td><td>3.8초</td><td>10초</td><td>3 → 4</td><td>높을수록 좋음</td></tr>
+    
+    <tr><td>보행 속도<div class="fine">4m 보행 시간</div></td><td>6.8초</td><td>5.1초</td><td>3 → 4</td><td>낮을수록 좋음</td></tr>
+    
+    <tr><td>의자 일어서기<div class="fine">5회 반복 시간</div></td><td>9.8초</td><td>9.8초</td><td>4 → 4</td><td>낮을수록 좋음</td></tr>
+    
+  </table>
+  <div class="note">벽 짚지 않고 버티는 균형 시간과 4m를 걷는 속도 모두 뚜렷하게 개선되었어요. 의자 일어서기는 처음부터 만점(4점)·9.8초로 이미 좋은 상태였고 그 수준을 그대로 유지했어요. 이는 일상 속 균형 잡기와 이동이 더 안정적이고 수월해졌다는 것을 의미해요.</div>
+  <p class="h3">체중 · BMI</p>
+  
+  <p class="n">57.4kg → 56.2kg <span class="delta">-1.2kg · -2.1%</span></p>
+  
+  <p class="fine">확인 필요 — 부종·복수·탈수 여부 및 수액·이뇨제 변경 이력을 함께 확인해 주세요. 이 변화만으로 영양상태나 근육량 개선을 단정하지 않습니다.</p>
+  <p class="fine">BMI 22.4 → 21.9 · 참고정보</p>
+</section>
+
+
+
+
+<section class="page">
+  <table class="top"><tr><td>06 · 암종별 특화 지표</td><td class="right">유방암</td></tr></table>
+  <h2>암종별 특화 지표</h2>
+  
+  <table class="rowhead"><tr><td><p class="h3">① 환측 팔둘레 추이</p></td><td class="badge">-2.0cm · 림프부종 관리 지표</td></tr></table>
+  <div class="note"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 128" width="100%" font-family="ReportKR, sans-serif"><polyline points="28.0,37.8 148.0,18.0 268.0,70.9 388.0,84.2 508.0,97.4 628.0,104.0" fill="none" stroke="#1d4f4c" stroke-width="2"/><circle cx="28.0" cy="37.8" r="3.5" fill="#1d4f4c"/><text x="28.0" y="30.8" text-anchor="middle" font-size="11" fill="#143840">32.4</text><text x="28.0" y="122" text-anchor="middle" font-size="11" fill="#5c6a66">1차</text><circle cx="148.0" cy="18.0" r="3.5" fill="#1d4f4c"/><text x="148.0" y="11.0" text-anchor="middle" font-size="11" fill="#143840">33</text><text x="148.0" y="122" text-anchor="middle" font-size="11" fill="#5c6a66">2차</text><circle cx="268.0" cy="70.9" r="3.5" fill="#1d4f4c"/><text x="268.0" y="63.9" text-anchor="middle" font-size="11" fill="#143840">31.4</text><text x="268.0" y="122" text-anchor="middle" font-size="11" fill="#5c6a66">3차</text><circle cx="388.0" cy="84.2" r="3.5" fill="#1d4f4c"/><text x="388.0" y="77.2" text-anchor="middle" font-size="11" fill="#143840">31</text><text x="388.0" y="122" text-anchor="middle" font-size="11" fill="#5c6a66">4차</text><circle cx="508.0" cy="97.4" r="3.5" fill="#1d4f4c"/><text x="508.0" y="90.4" text-anchor="middle" font-size="11" fill="#143840">30.6</text><text x="508.0" y="122" text-anchor="middle" font-size="11" fill="#5c6a66">5차</text><circle cx="628.0" cy="104.0" r="3.5" fill="#1d4f4c"/><text x="628.0" y="97.0" text-anchor="middle" font-size="11" fill="#143840">30.4</text><text x="628.0" y="122" text-anchor="middle" font-size="11" fill="#5c6a66">6차</text></svg></div>
+  <div class="warm">팔둘레가 꾸준히 줄며 부종이 완화되는 추세예요. 림프부종 위험이 있는 경우, 매 회차 팔둘레를 함께 측정해 변화를 지켜보고 있어요. (32.4 → 30.4cm)</div>
+  <table class="cards"><tr>
+    <td><p class="l">표준화 5지점 부피</p><p class="n">-60mL</p><p class="sub">2150 → 2090 mL</p></td>
+    <td><p class="l">양팔 상대 부피 차이</p><p class="n">-3.5%p</p><p class="sub">8.6 → 5.1%</p></td>
+  </tr></table>
+  <p class="fine">표준화된 5개 지점(P1~P5) 둘레 측정값을 산술한 부피이며, 매 회차 동일 지점·동일 자세·동일 방법으로 측정했습니다.</p>
+  
+  
+  <p class="h3">② 어깨 관절가동범위(ROM)</p>
+  <p class="n">수술 측 어깨의 움직임 범위가 넓어졌어요.</p>
+  <table class="grid">
+    <tr><th>동작</th><th>이전</th><th>이후</th><th>변화</th></tr>
+    
+    <tr><td>팔 앞으로 올리기(굴곡)<div class="fine">팔을 앞으로 들어 올리는 동작의 범위가 늘어 옷 입기·물건 들기가 더 수월해졌어요.</div></td><td>105°</td><td>145°</td><td class="delta">40°</td></tr>
+    
+    <tr><td>팔 옆으로 올리기(외전)<div class="fine">옆으로 팔을 벌리는 범위가 늘어 세안·머리 손질 동작의 제약이 줄었어요.</div></td><td>95°</td><td>130°</td><td class="delta">35°</td></tr>
+    
+    <tr><td>바깥쪽으로 돌리기(외회전)<div class="fine">팔꿈치를 몸에 붙인 채 바깥으로 돌리는 범위가 늘어 뒷정리·옷 여미기 동작이 편해졌어요.</div></td><td>35°</td><td>55°</td><td class="delta">20°</td></tr>
+    
+  </table>
+  <div class="warm">처음에는 팔을 머리 위까지 올리거나 옆으로 벌리는 데 제한이 있었지만, 재검사에서는 세 방향 모두 가동범위가 늘었어요. 이는 일상에서 물건을 꺼내거나 옷을 입는 등 수술한 쪽 팔을 사용하는 동작이 더 수월해졌다는 것을 의미해요.</div>
+  <p class="fine">동일 평가자·동일 각도계 기준으로 측정했습니다.</p>
+  
+  <p class="fine">암종별 신체 변화는 초기 측정값이 있는 검증된 지표에 한해서만 제공합니다. 현재 김OO 님은 유방암 관련 지표 외에 해당하는 예시 데이터가 없습니다.</p>
+</section>
+
+
+
+
+<section class="page">
+  <table class="top"><tr><td>07 · 다음 3개월을 위한 제안</td><td class="right">회복 관리 종합 레포트</td></tr></table>
+  <h2>다음 3개월을 위한 제안</h2>
+  <p class="fine">2026.09.14 기준</p>
+  <table class="cols">
+    <tr>
+      <td><h3>유지할 것</h3><ul><li>주 3회, 회차당 30분 내외의 저항·균형 운동 루틴</li><li>운동 전후 통증·부종 자가 체크 습관</li><li>지금까지 다져온 운동 강도를 무리한 상향 없이 유지</li><li>어깨 스트레칭을 통한 ROM 유지 동작 지속</li></ul></td>
+      <td><h3>관찰할 것</h3><ul><li>체중 변화 추이 (부종·수분 변화와 구분하여 관찰)</li><li>환측 팔 부피·둘레의 주기적 재측정 (동일 방법 유지)</li><li>피로도·수면의 질 변화</li><li>다음 SPPB 평가 시 세부 수행시간 변화 추이</li></ul></td>
+      <td><h3>의료진에게 확인할 것</h3><ul><li>환측 팔의 급격한 부피 증가 또는 통증·발적 발생 시</li><li>단기간 체중 급변(수액·이뇨제 등 처방 변경 등) 시</li><li>어깨가동범위 제한이 다시 심해지는 경우</li><li>운동 중 어지러움, 호흡곤란 등 새로운 증상 발생 시</li></ul></td>
+    </tr>
+  </table>
+  <div class="nurse">
+    <p class="who">서지은 간호사</p>
+    <p>처음 뵀을 때보다 훨씬 안정적으로 움직이시는 모습에 저도 힘이 났습니다. 지금처럼 무리하지 않는 선에서 꾸준히 이어가시면 충분해요. 다음 3개월도 함께하겠습니다.</p>
+  </div>
+  <p class="fine">이번 3개월의 기록은 다음 관리 계획을 위한 근거 자료로 함께 활용됩니다. 궁금하신 점은 언제든 담당 케어니 또는 의료진에게 문의해 주세요.</p>
+</section>
+
+
+<script>
+(function () {
+  function fits(sheet) {
+    if (sheet.clientHeight < 50) return true;
+    return sheet.scrollHeight <= sheet.clientHeight + 1;
+  }
+  function isHeader(node) {
+    return node.nodeType === 1 && (node.classList.contains("run") || node.classList.contains("top"));
+  }
+  function makeNext(sheet, header) {
+    if (document.querySelectorAll(".cover, .page").length > 60) return null;
+    var next = sheet.cloneNode(false);
+    sheet.parentNode.insertBefore(next, sheet.nextSibling);
+    if (header) next.appendChild(header.cloneNode(true));
+    return next;
+  }
+  function scaleToFit(sheet, node) {
+    var style = getComputedStyle(sheet);
+    var room = sheet.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+    Array.prototype.forEach.call(sheet.children, function (el) { if (el !== node) room -= el.offsetHeight; });
+    if (room > 0 && node.scrollHeight > room) node.style.zoom = String(room / node.scrollHeight);
+  }
+  function splitTable(sheet, table, header) {
+    var rows = Array.prototype.slice.call(table.rows);
+    sheet.removeChild(table);
+    var current = sheet;
+    var working = table.cloneNode(false);
+    current.appendChild(working);
+    rows.forEach(function (row) {
+      working.appendChild(row);
+      if (fits(current)) return;
+      if (working.rows.length > 1) {
+        working.removeChild(row);
+        current = makeNext(current, header);
+        working = table.cloneNode(false);
+        current.appendChild(working);
+        working.appendChild(row);
+      }
+      if (!fits(current)) scaleToFit(current, working);
+    });
+    return current;
+  }
+  function appendNode(sheet, node, header) {
+    sheet.appendChild(node);
+    if (fits(sheet) || node.nodeType !== 1) return sheet;
+    var blocks = Array.prototype.filter.call(sheet.children, function (el) { return !isHeader(el); });
+    if (blocks.length > 1) {
+      sheet.removeChild(node);
+      var next = makeNext(sheet, header);
+      if (!next) { sheet.appendChild(node); scaleToFit(sheet, node); return sheet; }
+      return appendNode(next, node, header);
+    }
+    if (node.tagName === "TABLE" && node.rows.length > 1) return splitTable(sheet, node, header);
+    if (node.children.length > 1) {
+      var kids = Array.prototype.slice.call(node.children);
+      sheet.removeChild(node);
+      var current = sheet;
+      var holder = node.cloneNode(false);
+      current.appendChild(holder);
+      kids.forEach(function (kid) {
+        holder.appendChild(kid);
+        if (fits(current) || holder.children.length === 1) return;
+        holder.removeChild(kid);
+        current = makeNext(current, header);
+        holder = node.cloneNode(false);
+        current.appendChild(holder);
+        holder.appendChild(kid);
+      });
+      if (!fits(current)) scaleToFit(current, holder);
+      return current;
+    }
+    scaleToFit(sheet, node);
+    return sheet;
+  }
+  function paginate() {
+    if (document.body.dataset.paged) return;
+    document.body.dataset.paged = "1";
+    var originals = Array.prototype.slice.call(document.querySelectorAll(".cover, .page"));
+    originals.forEach(function (sheet) {
+      var nodes = Array.prototype.slice.call(sheet.childNodes);
+      var header = null;
+      nodes.forEach(function (node) { sheet.removeChild(node); if (!header && isHeader(node)) header = node; });
+      var current = sheet;
+      nodes.forEach(function (node) { current = appendNode(current, node, header); });
+    });
+    var all = document.querySelectorAll(".cover, .page");
+    var brand = document.body.dataset.brand || "";
+    var note = document.body.dataset.note || "";
+    var version = document.body.dataset.version || "";
+    Array.prototype.forEach.call(all, function (el, index) {
+      var foot = document.createElement("div");
+      foot.className = "sheet-foot";
+      var pageNo = (index + 1) + " / " + all.length;
+      foot.textContent = el.classList.contains("cover")
+        ? (document.body.dataset.coverFoot || "")
+        : [brand, note, version ? ("로직 " + version) : "", pageNo].filter(Boolean).join("  ·  ");
+      el.appendChild(foot);
+    });
+  }
+  window.addEventListener("beforeprint", function () {
+    document.querySelectorAll(".cover, .page").forEach(function (el) { el.style.zoom = "1"; });
+  });
+  function start() { if (document.fonts && document.fonts.ready) document.fonts.ready.then(paginate); else paginate(); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
+})();
+</script>
+</body>
+</html>

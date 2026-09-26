@@ -1,0 +1,162 @@
+# 수면 레포트 섹션 규칙
+# 문장과 수치는 로직 엑셀(S3~S7 수식)이 만듭니다.
+# 이 파일은 어떤 페이지를 어떤 입력에 묶을지, 비었을 때 빼 낼지만 정합니다.
+# 항목 이름은 S1 4행·S4 4행 머리글과 같아야 합니다. 개수는 적혀 있지 않습니다.
+
+version: "19차"
+updated_at: "2026-09-23"
+
+document:
+  title: "불면 중심 수면 리듬 진단 리포트"
+  subtitle: "웨어러블 원본으로 계산한 수면 리듬 요약"
+  brand: "healmarucare VIP Care"
+  running_title: "불면 중심 수면 리듬 진단"
+  missing_text: "해당 데이터 없음"
+  footer_note: "데이터 기반 참고 리포트 · 의료 진단 아님"
+
+empty_tokens:
+  - ""
+  - "nan"
+  - "none"
+  - "null"
+  - "n/a"
+  - "na"
+  - "-"
+  - "—"
+  - "없음"
+  - "해당없음"
+  - "해당 없음"
+
+# 하루를 '측정됨'으로 볼 때 필요한 S1 머리글. 하나라도 비면 그 날은 계산에서 빠집니다.
+monitor_headers:
+  - "취침시각"
+  - "기상시각"
+  - "깊은수면_분"
+
+# S7에 있는 페이지. core_headers가 모두 비어 있으면 그 페이지를 생략합니다.
+# chart_header는 S4 머리글입니다. 없으면 차트만 그리지 않습니다.
+# layout 은 원본 리포트의 페이지 형태입니다. question 은 페이지 큰 제목이고, 문장은 엑셀이 만듭니다.
+# ref 는 S3 기준(se, sol, awake, hr, rr, spo2)입니다. tone: min 은 기준 이상이면 안정, max 는 기준 이하면 안정, band 는 하한~상한.
+sections:
+  - page: "03"
+    layout: stacked
+    kicker: "03 · 수면시간 & 수면단계 구성"
+    question: "나의 수면시간"
+    chart_header: "총수면시간_TST_분"
+    unit: "분"
+    core_headers: ["깊은수면_분", "얕은수면_분", "렘수면_분"]
+  - page: "04"
+    layout: combo
+    kicker: "04 · 수면효율"
+    question: "잠자리에 누운 시간 중 실제로 잔 비율"
+    ref: se
+    tone: min
+    chart_header: "수면효율_최종_%(리포트 반영값, 19차)"
+    unit: "%"
+    core_headers: ["취침시각", "기상시각", "깊은수면_분"]
+  - page: "05"
+    layout: combo
+    kicker: "05 · 입면잠복기"
+    question: "불을 끄고 나서 잠들기까지 걸린 시간"
+    ref: sol
+    tone: max
+    chart_header: "입면잠복기_SOL_분"
+    unit: "분"
+    core_headers: ["입면잠복기_분(SOL)"]
+  - page: "06"
+    layout: awake
+    kicker: "06 · 각성횟수"
+    question: "잠든 뒤 밤사이 깨어난 횟수"
+    ref: awake
+    tone: max
+    chart_header: "각성횟수"
+    unit: "회"
+    core_headers: ["각성횟수_회"]
+  - page: "06+"
+    layout: duration
+    question: "각성 지속시간"
+    chart_header: "평균각성지속시간_분(1회당)"
+    unit: "분"
+    core_headers: ["각성시간_실측_분(기기값,선택)"]
+  - page: "07"
+    layout: quad
+    kicker: "07 · 입면잠복기 · 수면효율 · 각성 함께 보기"
+    question: "나의 수면효율"
+    chart_header: "수면효율_최종_%(리포트 반영값, 19차)"
+    unit: "%"
+    core_headers: ["입면잠복기_분(SOL)", "각성횟수_회"]
+  - page: "08"
+    layout: combo
+    kicker: "08 · 수면 중 심박"
+    question: "수면 중 심박수"
+    ref: hr
+    tone: band
+    chart_header: "심박수_HR"
+    unit: "bpm"
+    core_headers: ["심박수_평균_bpm"]
+  - page: "09"
+    layout: combo
+    kicker: "09 · 호흡수"
+    question: "수면 중 호흡 수"
+    ref: rr
+    tone: band
+    chart_header: "호흡수_RR"
+    unit: "회/분"
+    core_headers: ["호흡수_평균_회/분"]
+  - page: "10"
+    layout: combo
+    kicker: "10 · 산소포화도"
+    question: "수면 중 산소포화도"
+    ref: spo2
+    tone: min
+    chart_header: "SpO2_평균"
+    unit: "%"
+    core_headers: ["SpO2_평균_%"]
+  - page: "11"
+    layout: clock
+    kicker: "11 · 취침·기상 시각 규칙성"
+    question: "나의 취침·기상"
+    chart_header: "취침시각_분환산"
+    unit: "분"
+    core_headers: ["취침시각", "기상시각"]
+  - page: "12"
+    layout: compare
+    kicker: "12 · 좋았던 밤 vs 나빴던 밤"
+    question: "좋았던 밤과 힘들었던 밤"
+    title: "좋았던 밤과 힘들었던 밤"
+    core_headers: ["취침시각", "기상시각", "깊은수면_분"]
+  - page: "13"
+    layout: activity
+    kicker: "13 · 활동시간 · 총 소모 칼로리 · 걸음수"
+    question: "활동·에너지·걸음수, 세 지표를 한 그래프로"
+    chart_header: "활동시간_분"
+    unit: "분"
+    core_headers: ["활동시간_분"]
+  - page: "14"
+    layout: calories
+    question: "활동과 함께 본 에너지"
+    chart_header: "소모칼로리_기기값"
+    unit: "kcal"
+    core_headers: ["소모칼로리_기기값_kcal(선택)"]
+  - page: "15"
+    layout: vitality
+    kicker: "14 · 활력점수 (Vitality Score)"
+    question: "매일의 활력"
+    chart_header: "활력점수_기기값"
+    unit: "점"
+    core_headers: ["활력점수_기기값(0~100)"]
+  - page: "16"
+    layout: reference
+    kicker: "15 · 종합진단 — 참고범위 대비"
+    question: "항목별 참고범위"
+    core_headers: ["깊은수면_분", "입면잠복기_분(SOL)", "각성횟수_회"]
+  - page: "17"
+    layout: signals
+    kicker: "16 · 이상신호 스크리닝"
+    question: "평소와 달랐던 밤"
+    core_headers: ["심박수_평균_bpm", "호흡수_평균_회/분", "SpO2_평균_%"]
+  - page: "18"
+    layout: routine
+    kicker: "17 · 루틴 제안"
+    question: "수면습관, 이렇게 바꿔보세요"
+    core_headers: ["취침시각", "활동시간_분"]

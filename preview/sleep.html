@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<title>불면 중심 수면 리듬 진단 리포트</title>
+<style>
+@font-face { font-family: "ReportKR"; src: url("../assets/fonts/NotoSansKR-Regular.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "ReportKR"; src: url("../assets/fonts/NotoSansKR-Bold.woff2") format("woff2"); font-weight: 700; }
+@page {
+  size: A4;
+  margin: 10mm 11mm 12mm 11mm;
+  background: #f4f1ec;
+  @bottom-left { content: "healmarucare VIP Care"; font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #7a847f; }
+  @bottom-center { content: "데이터 기반 참고 리포트 · 의료 진단 아님"; font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #7a847f; }
+  @bottom-right { content: counter(page) " / " counter(pages); font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #7a847f; }
+}
+@page cover {
+  margin: 14mm 14mm 12mm 14mm;
+  background: #183840;
+  @bottom-left { content: "이 리포트가 실제로 들여다보는 6가지 지표"; font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; font-size: 8pt; color: #9eb0b0; }
+  @bottom-center { content: none; }
+  @bottom-right { content: none; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "ReportKR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; color: #243033; font-size: 9pt; line-height: 1.45; background: #f4f1ec; }
+.cover { page: cover; color: #f7f4ef; }
+.sheet-foot { display: none; }
+@media print {
+  .sheet-inner { zoom: 1 !important; }
+  .sheet-foot { display: none !important; }
+}
+@media screen {
+  body { background: #d9d4c8; margin: 0; padding: 8mm 0 12mm; min-width: 210mm; }
+  .cover, .page {
+    width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    margin: 8mm auto 0;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 22px rgba(24, 40, 48, 0.14);
+    break-before: auto;
+  }
+  .cover { background: #183840; padding: 14mm 14mm 16mm; }
+  .page { background: #f4f1ec; padding: 10mm 11mm 16mm; }
+  .sheet-foot {
+    display: block;
+    position: absolute;
+    left: 11mm;
+    right: 11mm;
+    bottom: 6mm;
+    font-size: 8pt;
+    color: #7a847f;
+  }
+  .cover .sheet-foot { left: 14mm; right: 14mm; color: #9eb0b0; }
+}
+.date { text-align: right; color: #d5dedc; font-size: 10pt; margin: 0; }
+.cover-rule { border: 0; border-top: 0.6pt solid #3d5c60; margin: 4mm 0 28mm; }
+.eye { margin: 8mm 0 0; letter-spacing: 0.14em; color: #d7c4a4; font-size: 9pt; }
+.copper { width: 18mm; height: 2px; background: #c4a574; margin: 4mm 0 6mm; }
+.cover h1 { margin: 0; font-size: 32pt; line-height: 1.25; font-weight: 700; }
+.quote { margin: 8mm 0 0; color: #e7eeec; font-size: 11pt; max-width: 150mm; }
+.quote strong { color: #ffffff; }
+.pills { width: 100%; margin-top: 10mm; border-collapse: separate; border-spacing: 3mm 0; margin-left: -3mm; }
+.pills td { background: #214850; color: #f4f1ea; border-radius: 10px; padding: 4mm; width: 46%; }
+.pills .k { margin: 0; color: #b7c6c4; font-size: 8pt; }
+.pills .v { margin: 1mm 0 0; font-size: 12pt; font-weight: 700; }
+.chips { margin-top: 8mm; }
+.chip { display: inline-block; border: 1px solid #6d8888; border-radius: 12px; padding: 1mm 3mm; margin: 0 1mm 1mm 0; font-size: 8.5pt; color: #d5e0de; }
+.page { break-before: page; }
+.run { width: 100%; border-bottom: 0.6pt solid #ddd8ce; margin-bottom: 5mm; }
+.run td { font-size: 8pt; color: #7d8682; padding-bottom: 2mm; }
+.right { text-align: right; }
+h2 { margin: 0 0 1.5mm; font-size: 16pt; line-height: 1.25; color: #1c3338; }
+.lead { margin: 0 0 4mm; color: #5e6966; font-size: 9.5pt; }
+.card, .hero, .how, .mean, .suggest, .signal-card { background: #fff; border-radius: 10px; padding: 2.5mm 3.5mm; margin: 0 0 2.2mm; }
+.hero .k { margin: 0; color: #7a8480; font-size: 8pt; }
+.big { margin: 0.5mm 0; font-size: 20pt; font-weight: 700; color: #183840; line-height: 1.15; }
+.range { margin: 0; color: #5e6966; font-size: 9pt; }
+.how { background: #fff; }
+.mean { background: #e5f0ea; }
+.suggest { background: #f6e6dc; }
+.label { margin: 0 0 1.5mm; font-size: 8pt; letter-spacing: 0.06em; color: #6a6158; font-weight: 700; }
+.card p, .how p, .mean p, .suggest p { margin: 0; }
+.stage { width: 100%; border-collapse: collapse; margin: 1mm 0 3mm; font-size: 8.5pt; }
+.stage td { padding: 1mm 1.5mm; }
+.sw { display: inline-block; width: 8px; height: 8px; margin-right: 1mm; }
+.deep { background: #184048; }
+.light { background: #68a098; }
+.rem { background: #8878a0; }
+.concept { background: #fff; border-radius: 10px; padding: 2mm 3mm; margin: 0 0 1.6mm; }
+.num { color: #c4a574; font-weight: 700; margin-right: 2mm; }
+.h { margin: 4mm 0 2mm; font-size: 11pt; }
+.split { width: 100%; border-collapse: separate; border-spacing: 3mm 0; margin: 2mm 0 3mm -3mm; }
+.split td { background: #fff; border-radius: 10px; padding: 3mm; width: 25%; vertical-align: top; }
+.split .n { margin: 0; font-size: 13pt; font-weight: 700; }
+.split .k { margin: 0; color: #6d7774; font-size: 8pt; }
+.night { border-radius: 12px; padding: 3.5mm; margin: 0 0 3mm; background: #fff; }
+.night.good { border-top: 4px solid #1d4f4c; }
+.night.bad { border-top: 4px solid #c45c4a; }
+.mini { width: 32%; }
+.ref { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; margin-bottom: 3mm; }
+.ref th, .ref td { text-align: left; padding: 2.2mm 3mm; border-bottom: 0.4pt solid #ece7df; font-size: 9.5pt; }
+.ref th { color: #7a8480; font-weight: 400; font-size: 8pt; }
+.low { color: #c45c4a; font-weight: 700; }
+.ok { color: #1d4f4c; }
+.pair td { width: 50%; vertical-align: top; background: #fff; border-radius: 12px; padding: 3.5mm; }
+.pair { width: 100%; border-collapse: separate; border-spacing: 3mm 0; margin-left: -3mm; }
+.pair .good h3 { color: #1d4f4c; }
+.pair .bad h3 { color: #c45c4a; }
+.check { background: #fff; border-radius: 12px; padding: 3mm 4mm; }
+.check li { margin: 1mm 0; }
+.fine { color: #6d7774; font-size: 8.5pt; }
+.bucket { height: 10px; background: #d7ebe4; }
+.bucket b { display: block; height: 10px; background: #1d4f4c; }
+</style>
+</head>
+<body data-brand="healmarucare VIP Care" data-note="데이터 기반 참고 리포트 · 의료 진단 아님" data-cover-foot="이 리포트가 실제로 들여다보는 6가지 지표">
+<header class="cover">
+  <p class="date">2026.09.08 – 09.14</p>
+  <hr class="cover-rule"/>
+  <p class="eye">SLEEP RHYTHM DIAGNOSIS · INSOMNIA FOCUS</p>
+  <div class="copper"></div>
+  <h1>나의 잠을<br/>돌아보는 시간</h1>
+  <p class="quote">"몇 시간 잤는지"가 아니라 "왜 그 잠이 회복으로 이어지지 않는지".<br/>이번 리포트는 수면 시간이 아니라, 수면의 <strong>질과 리듬</strong>이 흐트러진 지점을 찾는 데서 출발합니다.</p>
+  <table class="pills">
+    <tr>
+      <td><p class="k">이름</p><p class="v">예시 대상자</p></td>
+      <td><p class="k">측정</p><p class="v">7/7일 · 여 · 45세</p></td>
+    </tr>
+  </table>
+  <p class="chips">
+    <span class="chip">수면효율</span>
+    <span class="chip">입면잠복기</span>
+    <span class="chip">각성횟수</span>
+    <span class="chip">수면중 심박수</span>
+    <span class="chip">호흡수</span>
+    <span class="chip">SpO2</span>
+  </p>
+</header>
+
+<section class="page">
+  <table class="run"><tr><td>02 · 개념 — 무엇을 보는가</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+  <h2>수면 중 몸이 보내는 8가지 신호</h2>
+  <p class="lead">각 지표는 "잠을 잘 잤는지"가 아니라 "왜 그 잠이 회복이 되지 않았는가"에 답하기 위한 것입니다.</p>
+  <p class="h">수면의 구조</p>
+  <div class="concept"><span class="num">01</span><strong>총 수면시간</strong><p class="fine">하룻밤 동안 몸과 뇌가 실제로 잠들어 있었던 시간이 충분한지를 알아보기 위한 값입니다.</p></div>
+  <div class="concept"><span class="num">02</span><strong>수면효율</strong><p class="fine">침대에 누워 있는 총 시간 중 실제로 잔 시간은 어느 정도 되는지를 알아보기 위한 값입니다.</p></div>
+  <div class="concept"><span class="num">03</span><strong>입면잠복기</strong><p class="fine">잠자리에 누운 뒤 실제로 잠들기까지 얼마나 걸리는지, 즉 쉽게 잠들 수 있는지를 알아보기 위한 값입니다.</p></div>
+  <div class="concept"><span class="num">04</span><strong>각성횟수</strong><p class="fine">잠든 후에도 밤사이 얼마나 자주, 얼마나 오래 깨는지를 보아 수면이 끊기지 않고 이어지는지 알아보기 위한 값입니다.</p></div>
+  <div class="concept"><span class="num">05</span><strong>렘수면 REM</strong><p class="fine">안구가 빠르게 움직이고 뇌파가 활발해지는 얕은 수면 단계로, 꿈과 기억 정리·감정 조절이 이루어집니다.</p></div>
+  <p class="h">수면 중 신체 반응</p>
+  <div class="concept"><span class="num">06</span><strong>수면 중 심박수</strong><p class="fine">수면 중 몸이 충분히 이완되어 심박수가 낮아지는지를 알아보기 위한 값입니다.</p></div>
+  <div class="concept"><span class="num">07</span><strong>호흡수</strong><p class="fine">수면 중 호흡이 편안하고 안정적인 리듬으로 이루어지고 있는지를 알아보기 위한 값입니다.</p></div>
+  <div class="concept"><span class="num">08</span><strong>산소포화도</strong><p class="fine">수면 중 몸에 산소가 충분히 공급되고 있는지를 확인하기 위한 값입니다.</p></div>
+  <p class="fine">01–05는 수면의 구조를, 06–08은 수면 중 신체 반응을 나타냅니다. 이 리포트는 각 지표를 따로따로 보지 않고, 지표들이 서로 어떤 의미로 연결되어 움직이는지를 함께 확인합니다.</p>
+</section>
+
+
+
+
+
+<section class="page">
+  
+<table class="run"><tr><td>03 · 수면시간 & 수면단계 구성</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>나의 수면시간</h2>
+
+
+  
+  <p class="lead">총 수면시간을 깊은수면·얕은수면·렘수면 세 구간으로 나누어 쌓아 표시했습니다. 막대 위 숫자는 그날의 총 수면시간입니다.</p>
+  <div class="hero">
+    <p class="k">이번 주 평균 · 총 수면시간</p>
+    <p class="big">5시간 01분</p>
+    <p class="range">평균 301분 · 범위 214~400분 · 변동폭 186분</p>
+  </div>
+  <div class="card"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" width="100%" font-family="ReportKR, sans-serif"><rect x="8" y="4" width="10" height="10" fill="#184048"/><text x="22" y="13" font-size="9" fill="#5c6864">깊은수면</text><rect x="78" y="4" width="10" height="10" fill="#68a098"/><text x="92" y="13" font-size="9" fill="#5c6864">얕은수면</text><rect x="148" y="4" width="10" height="10" fill="#8878a0"/><text x="162" y="13" font-size="9" fill="#5c6864">렘수면</text><rect x="70.4" y="154.8" width="46.0" height="17.2" fill="#184048"/><text x="93.4" y="166.4" text-anchor="middle" font-size="8" fill="#ffffff">18%</text><rect x="70.4" y="102.3" width="46.0" height="52.6" fill="#68a098"/><text x="93.4" y="131.5" text-anchor="middle" font-size="8" fill="#ffffff">55%</text><rect x="70.4" y="76.5" width="46.0" height="25.8" fill="#8878a0"/><text x="93.4" y="92.4" text-anchor="middle" font-size="8" fill="#ffffff">27%</text><text x="93.4" y="70.5" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">4시간 49분</text><text x="93.4" y="192" text-anchor="middle" font-size="11" fill="#243033">월</text><rect x="153.3" y="158.8" width="46.0" height="13.2" fill="#184048"/><rect x="153.3" y="101.3" width="46.0" height="57.5" fill="#68a098"/><text x="176.3" y="133.0" text-anchor="middle" font-size="8" fill="#ffffff">60%</text><rect x="153.3" y="76.5" width="46.0" height="24.8" fill="#8878a0"/><text x="176.3" y="91.9" text-anchor="middle" font-size="8" fill="#ffffff">26%</text><text x="176.3" y="70.5" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">4시간 49분</text><text x="176.3" y="192" text-anchor="middle" font-size="11" fill="#243033">화</text><rect x="236.1" y="152.5" width="46.0" height="19.5" fill="#184048"/><text x="259.1" y="165.2" text-anchor="middle" font-size="8" fill="#ffffff">20%</text><rect x="236.1" y="101.9" width="46.0" height="50.6" fill="#68a098"/><text x="259.1" y="130.2" text-anchor="middle" font-size="8" fill="#ffffff">52%</text><rect x="236.1" y="74.5" width="46.0" height="27.4" fill="#8878a0"/><text x="259.1" y="91.2" text-anchor="middle" font-size="8" fill="#ffffff">28%</text><text x="259.1" y="68.5" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">4시간 55분</text><text x="259.1" y="192" text-anchor="middle" font-size="11" fill="#243033">수</text><rect x="319.0" y="160.1" width="46.0" height="11.9" fill="#184048"/><rect x="319.0" y="104.9" width="46.0" height="55.2" fill="#68a098"/><text x="342.0" y="135.5" text-anchor="middle" font-size="8" fill="#ffffff">61%</text><rect x="319.0" y="81.4" width="46.0" height="23.5" fill="#8878a0"/><text x="342.0" y="96.2" text-anchor="middle" font-size="8" fill="#ffffff">26%</text><text x="342.0" y="75.4" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">4시간 34분</text><text x="342.0" y="192" text-anchor="middle" font-size="11" fill="#243033">목</text><rect x="401.9" y="165.7" width="46.0" height="6.3" fill="#184048"/><rect x="401.9" y="119.1" width="46.0" height="46.6" fill="#68a098"/><text x="424.9" y="145.4" text-anchor="middle" font-size="8" fill="#ffffff">66%</text><rect x="401.9" y="101.3" width="46.0" height="17.8" fill="#8878a0"/><text x="424.9" y="113.2" text-anchor="middle" font-size="8" fill="#ffffff">25%</text><text x="424.9" y="95.3" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">3시간 34분</text><text x="424.9" y="192" text-anchor="middle" font-size="11" fill="#243033">금</text><rect x="484.7" y="142.9" width="46.0" height="29.1" fill="#184048"/><text x="507.7" y="160.5" text-anchor="middle" font-size="8" fill="#ffffff">22%</text><rect x="484.7" y="79.5" width="46.0" height="63.5" fill="#68a098"/><text x="507.7" y="114.2" text-anchor="middle" font-size="8" fill="#ffffff">48%</text><rect x="484.7" y="39.8" width="46.0" height="39.7" fill="#8878a0"/><text x="507.7" y="62.6" text-anchor="middle" font-size="8" fill="#ffffff">30%</text><text x="507.7" y="33.8" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">6시간 40분</text><text x="507.7" y="192" text-anchor="middle" font-size="11" fill="#243033">토</text><rect x="567.6" y="150.5" width="46.0" height="21.5" fill="#184048"/><text x="590.6" y="164.3" text-anchor="middle" font-size="8" fill="#ffffff">19%</text><rect x="567.6" y="90.4" width="46.0" height="60.2" fill="#68a098"/><text x="590.6" y="123.4" text-anchor="middle" font-size="8" fill="#ffffff">53%</text><rect x="567.6" y="58.3" width="46.0" height="32.1" fill="#8878a0"/><text x="590.6" y="77.3" text-anchor="middle" font-size="8" fill="#ffffff">28%</text><text x="590.6" y="52.3" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">5시간 44분</text><text x="590.6" y="192" text-anchor="middle" font-size="11" fill="#243033">일</text></svg>
+    <table class="stage">
+      <tr><td></td><td>월</td><td>화</td><td>수</td><td>목</td><td>금</td><td>토</td><td>일</td></tr>
+      <tr><td><span class="sw deep"></span>깊은수면</td><td>52분</td><td>40분</td><td>59분</td><td>36분</td><td>19분</td><td>1시간 28분</td><td>1시간 05분</td></tr>
+      <tr><td><span class="sw light"></span>얕은수면</td><td>2시간 39분</td><td>2시간 54분</td><td>2시간 33분</td><td>2시간 47분</td><td>2시간 21분</td><td>3시간 12분</td><td>3시간 02분</td></tr>
+      <tr><td><span class="sw rem"></span>렘수면</td><td>1시간 18분</td><td>1시간 15분</td><td>1시간 23분</td><td>1시간 11분</td><td>54분</td><td>2시간</td><td>1시간 37분</td></tr>
+    </table>
+  </div>
+  
+<div class="how"><p class="label">어떻게 계산되나요?</p><p>스마트워치는 심박·움직임 패턴으로 수면단계(깊은수면·얕은수면·렘수면·각성)를 추정합니다. 같은 단계로 분류된 시간을 하루 단위로 합산해 막대로 쌓습니다. 세 구간의 합이 그날의 총 수면시간입니다.</p></div>
+<div class="mean"><p class="label">무엇을 의미하나요?</p><p>이번 주 평균 총수면시간은 301분(5시간 1분)으로, 목표(하루 7시간) 대비 부족했습니다. 총수면시간이 가장 길었던 토요일은 깊은수면 22.0%·렘수면 30.0%로 이번 주 중 비중이 가장 높았고, 가장 짧았던 금요일은 얕은수면 비중이 65.9%로 가장 높았습니다 — 오래 잘수록 깊은수면·렘수면 비중이 늘고 얕은수면 비중은 줄어드는 흐름이 있었습니다.</p></div>
+<div class="suggest"><p class="label">제안</p><p>목표 수면시간(하루 7시간, 주 49시간) 대비 이번 주 실제 총수면시간은 약 35시간으로, 약 13.9시간의 수면부채가 누적되었습니다. 한 번에 몰아 자기보다 하루 20~30분씩 취침시각을 점진적으로 앞당겨 부족분을 줄여가는 것을 목표로 삼을 수 있습니다.</p></div>
+
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>04 · 수면효율</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>잠자리에 누운 시간 중 실제로 잔 비율</h2>
+
+
+  
+  <p class="lead">평균 76% · 범위 65~84% · 변동폭 19%p</p>
+  <div class="hero">
+    <p class="k">이번 주 평균 · 수면효율</p>
+    <p class="big">76%</p>
+    <p class="range">평균 76% · 범위 65~84% · 변동폭 19%p</p>
+  </div>
+  <div class="card"><p class="label">7일간 변화 추이</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">84</text><line x1="40" y1="48.5" x2="604" y2="48.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="51.5" text-anchor="end" font-size="8" fill="#8a908c">79.2</text><line x1="40" y1="77.0" x2="604" y2="77.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="80.0" text-anchor="end" font-size="8" fill="#8a908c">74.5</text><line x1="40" y1="105.5" x2="604" y2="105.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="108.5" text-anchor="end" font-size="8" fill="#8a908c">69.8</text><line x1="40" y1="134.0" x2="604" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">65</text><rect x="63.3" y="56.0" width="34.0" height="78.0" rx="2" fill="#a0c8c0"/><text x="80.3" y="52.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">78</text><rect x="143.9" y="80.0" width="34.0" height="54.0" rx="2" fill="#a0c8c0"/><text x="160.9" y="76.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">74</text><rect x="224.4" y="20.0" width="34.0" height="114.0" rx="2" fill="#a0c8c0"/><text x="241.4" y="16.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">84</text><rect x="305.0" y="134.0" width="34.0" height="0.0" rx="2" fill="#a0c8c0"/><text x="322.0" y="130.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">65</text><rect x="385.6" y="128.0" width="34.0" height="6.0" rx="2" fill="#a0c8c0"/><text x="402.6" y="124.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">66</text><rect x="466.1" y="26.0" width="34.0" height="108.0" rx="2" fill="#a0c8c0"/><text x="483.1" y="22.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">83</text><rect x="546.7" y="50.0" width="34.0" height="84.0" rx="2" fill="#a0c8c0"/><text x="563.7" y="46.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">79</text><polyline points="80.3,56.0 160.9,80.0 241.4,20.0 322.0,134.0 402.6,128.0 483.1,26.0 563.7,50.0" fill="none" stroke="#184048" stroke-width="2"/><circle cx="80.3" cy="56.0" r="3" fill="#184048"/><circle cx="160.9" cy="80.0" r="3" fill="#184048"/><circle cx="241.4" cy="20.0" r="3" fill="#184048"/><circle cx="322.0" cy="134.0" r="3" fill="#184048"/><circle cx="402.6" cy="128.0" r="3" fill="#184048"/><circle cx="483.1" cy="26.0" r="3" fill="#184048"/><circle cx="563.7" cy="50.0" r="3" fill="#184048"/><text x="80.3" y="152" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="152" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="152" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="152" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="152" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="152" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="152" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></div>
+  
+  
+  
+<div class="how"><p class="label">어떻게 계산되나요?</p><p>수면효율(%) = 실제로 잔 시간 ÷ 침대에 머문 시간 × 100입니다. 이상 참고범위는 85% 이상이며, 이보다 낮을수록 누워 있는 시간에 비해 실제 수면 시간이 적었다는 뜻입니다.</p></div>
+<div class="mean"><p class="label">무엇을 의미하나요?</p><p>이번 주 평균 수면효율은 76%로 참고범위(85% 이상) 에 못 미쳤습니다. 요일별 최저치는 65%(목요일)까지 내려간 날이 있었습니다. 입면잠복기·각성횟수와 같은 계산식 안에서 함께 움직이는 이유는 7페이지를 확인하세요. 이 수치는 웨어러블이 날짜별로 제공한 수면효율이 있으면 그 값을 그대로 반영하고, 제공되지 않은 날만 취침·기상시각 기준 계산값(총수면시간÷침상시간×100)으로 대신합니다.</p></div>
+<div class="suggest"><p class="label">제안</p><p>수면효율이 낮은 날이 이어질 때 일반적으로 권장되는 자극조절법입니다 — 잠자리에 누운 지 20분이 지나도 잠들지 않으면 잠시 일어나 있다가 졸릴 때 다시 눕고, 침대는 수면 외 용도로 사용하지 않습니다. 목표: 85% 이상.</p></div>
+
+  
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>05 · 입면잠복기</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>불을 끄고 나서 잠들기까지 걸린 시간</h2>
+
+
+  
+  <p class="lead">평균 24분 · 범위 15~34분 · 변동폭 19분</p>
+  <div class="hero">
+    <p class="k">이번 주 평균 · 입면잠복기</p>
+    <p class="big">24분</p>
+    <p class="range">평균 24분 · 범위 15~34분 · 변동폭 19분</p>
+  </div>
+  <div class="card"><p class="label">7일간 변화 추이</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">34</text><line x1="40" y1="48.5" x2="604" y2="48.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="51.5" text-anchor="end" font-size="8" fill="#8a908c">29.2</text><line x1="40" y1="77.0" x2="604" y2="77.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="80.0" text-anchor="end" font-size="8" fill="#8a908c">24.5</text><line x1="40" y1="105.5" x2="604" y2="105.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="108.5" text-anchor="end" font-size="8" fill="#8a908c">19.8</text><line x1="40" y1="134.0" x2="604" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">15</text><rect x="63.3" y="110.0" width="34.0" height="24.0" rx="2" fill="#a0c8c0"/><text x="80.3" y="106.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">19</text><rect x="143.9" y="56.0" width="34.0" height="78.0" rx="2" fill="#a0c8c0"/><text x="160.9" y="52.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">28</text><rect x="224.4" y="122.0" width="34.0" height="12.0" rx="2" fill="#a0c8c0"/><text x="241.4" y="118.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">17</text><rect x="305.0" y="32.0" width="34.0" height="102.0" rx="2" fill="#a0c8c0"/><text x="322.0" y="28.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">32</text><rect x="385.6" y="20.0" width="34.0" height="114.0" rx="2" fill="#a0c8c0"/><text x="402.6" y="16.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">34</text><rect x="466.1" y="134.0" width="34.0" height="0.0" rx="2" fill="#a0c8c0"/><text x="483.1" y="130.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">15</text><rect x="546.7" y="104.0" width="34.0" height="30.0" rx="2" fill="#a0c8c0"/><text x="563.7" y="100.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">20</text><polyline points="80.3,110.0 160.9,56.0 241.4,122.0 322.0,32.0 402.6,20.0 483.1,134.0 563.7,104.0" fill="none" stroke="#184048" stroke-width="2"/><circle cx="80.3" cy="110.0" r="3" fill="#184048"/><circle cx="160.9" cy="56.0" r="3" fill="#184048"/><circle cx="241.4" cy="122.0" r="3" fill="#184048"/><circle cx="322.0" cy="32.0" r="3" fill="#184048"/><circle cx="402.6" cy="20.0" r="3" fill="#184048"/><circle cx="483.1" cy="134.0" r="3" fill="#184048"/><circle cx="563.7" cy="104.0" r="3" fill="#184048"/><text x="80.3" y="152" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="152" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="152" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="152" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="152" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="152" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="152" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></div>
+  
+  
+  
+<div class="how"><p class="label">어떻게 계산되나요?</p><p>잠자리에 누운 시각부터 수면이 시작된 시각까지의 시간입니다. 이상 참고범위는 20분 이내이며, 길어질수록 잠드는 데 더 오래 걸렸다는 뜻입니다.</p></div>
+<div class="mean"><p class="label">무엇을 의미하나요?</p><p>이번 주 평균 입면잠복기는 24분으로 참고범위(20분 이내) 보다 길었습니다. 요일별 최댓값은 34분(금요일)까지 늘어난 날이 있었습니다. 활동시간과 입면잠복기의 상관계수는 -0.97로, 활동이 적을수록 입면잠복기가 길어지는 경향이 있었습니다.</p></div>
+<div class="suggest"><p class="label">제안</p><p>잠드는 데 걸리는 시간이 길게 느껴지는 날이 이어질 때 취침 30~60분 전부터 조명을 낮추고 화면 사용을 줄이는 것이 일반적으로 도움이 됩니다. 목표: 20분 이내.</p></div>
+
+  
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>06 · 각성횟수</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>잠든 뒤 밤사이 깨어난 횟수</h2>
+
+
+  
+  <p class="lead">평균 2.7회 · 범위 2~4회</p>
+  <div class="hero">
+    <p class="k">이번 주 평균 · 각성횟수</p>
+    <p class="big">2.7회</p>
+    <p class="range">평균 2.7회 · 범위 2~4회</p>
+  </div>
+  <div class="card"><p class="label">7일간 변화 추이</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">4</text><line x1="40" y1="48.5" x2="604" y2="48.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="51.5" text-anchor="end" font-size="8" fill="#8a908c">3.5</text><line x1="40" y1="77.0" x2="604" y2="77.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="80.0" text-anchor="end" font-size="8" fill="#8a908c">3</text><line x1="40" y1="105.5" x2="604" y2="105.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="108.5" text-anchor="end" font-size="8" fill="#8a908c">2.5</text><line x1="40" y1="134.0" x2="604" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">2</text><rect x="63.3" y="134.0" width="34.0" height="0.0" rx="2" fill="#a0c8c0"/><text x="80.3" y="130.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">2</text><rect x="143.9" y="77.0" width="34.0" height="57.0" rx="2" fill="#a0c8c0"/><text x="160.9" y="73.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">3</text><rect x="224.4" y="134.0" width="34.0" height="0.0" rx="2" fill="#a0c8c0"/><text x="241.4" y="130.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">2</text><rect x="305.0" y="77.0" width="34.0" height="57.0" rx="2" fill="#a0c8c0"/><text x="322.0" y="73.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">3</text><rect x="385.6" y="20.0" width="34.0" height="114.0" rx="2" fill="#a0c8c0"/><text x="402.6" y="16.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">4</text><rect x="466.1" y="134.0" width="34.0" height="0.0" rx="2" fill="#a0c8c0"/><text x="483.1" y="130.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">2</text><rect x="546.7" y="77.0" width="34.0" height="57.0" rx="2" fill="#a0c8c0"/><text x="563.7" y="73.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">3</text><polyline points="80.3,134.0 160.9,77.0 241.4,134.0 322.0,77.0 402.6,20.0 483.1,134.0 563.7,77.0" fill="none" stroke="#184048" stroke-width="2"/><circle cx="80.3" cy="134.0" r="3" fill="#184048"/><circle cx="160.9" cy="77.0" r="3" fill="#184048"/><circle cx="241.4" cy="134.0" r="3" fill="#184048"/><circle cx="322.0" cy="77.0" r="3" fill="#184048"/><circle cx="402.6" cy="20.0" r="3" fill="#184048"/><circle cx="483.1" cy="134.0" r="3" fill="#184048"/><circle cx="563.7" cy="77.0" r="3" fill="#184048"/><text x="80.3" y="152" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="152" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="152" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="152" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="152" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="152" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="152" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></div>
+  
+    
+    <div class="card">
+      <p class="label">각성 지속시간과 함께 보면</p>
+      <p class="big">21.6분</p>
+      <p>이번 주 평균 각성시간은 하루 57분이었고, 각성횟수로 나누면 한 번 깼을 때 평균 21.6분간 깨어 있었던 셈입니다. 지속시간이 가장 길었던 토요일은 29.0분(각성 2회)까지 이어졌고, 가장 짧았던 금요일은 15.8분(각성 4회)에 그쳤습니다. 각성횟수와 지속시간은 상관계수 r=-0.66로 반대 방향으로 움직였으며, 지속시간이 길었던 날일수록 오히려 총수면시간(r=0.80)·수면효율(r=0.41)은 더 높은 경향을 보여, 몇 번 깼는지와 한 번 깼을 때 얼마나 오래 깨어 있었는지는 서로 다른 정보를 담고 있는 것으로 보입니다.</p>
+      <p class="fine">※ 이번 표본은 7일 데이터 기준이며, 실제 누적 데이터에서는 관계의 강도나 방향이 달라질 수 있습니다.</p>
+    </div>
+    
+  
+  
+  
+<div class="how"><p class="label">어떻게 계산되나요?</p><p>요일별 측정값을 평균·범위와 함께 표시합니다. 기준선은 로직 엑셀의 참고범위 시트에서 가져옵니다.</p></div>
+<div class="mean"><p class="label">무엇을 의미하나요?</p><p>이번 주 평균 각성횟수는 2.7회로 참고범위(2회 이하) 를 넘었습니다. 각성횟수가 가장 많았던 금요일은 입면잠복기도 평균보다 길어 함께 나빠지는 경향이 있었습니다.</p></div>
+<div class="suggest"><p class="label">제안</p><p>밤사이 깨는 횟수가 많은 날이 이어질 때 카페인·알코올 섭취 시각을 취침 6시간 이전으로 당기고, 깼을 때 시계를 보지 않는 것이 재입면에 도움이 됩니다. 목표: 2회 이하.</p></div>
+
+  
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>07 · 입면잠복기 · 수면효율 · 각성 함께 보기</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>나의 수면효율</h2>
+
+
+  
+  <p class="lead">총 수면시간·수면효율·입면잠복기·각성횟수는 하나의 계산식으로 연결되어 있습니다. 침대에 머문 시간은 잠들기까지 걸린 시간 + 실제로 잔 시간 + 자다 깬 시간을 모두 더한 값이고, 수면효율은 그중 실제로 잔 시간의 비율입니다.</p>
+  <table class="split">
+    <tr>
+      <td><p class="k">평균 침대에 머문 시간</p><p class="n">6시간 21분</p></td>
+      <td><p class="k">평균 수면효율</p><p class="n">TIB평균 324분대</p></td>
+      <td><p class="k">평균 각성횟수</p><p class="n">2.7회</p></td>
+      <td><p class="k">입면잠복기와 수면효율</p><p class="n"> r(활동↔SE)=0.96</p></td>
+    </tr>
+  </table>
+  <div class="card"><p class="label">침대에 머문 시간 구성 · 수면효율 · 각성횟수</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">9시간 33분</text><line x1="40" y1="48.5" x2="604" y2="48.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="51.5" text-anchor="end" font-size="8" fill="#8a908c">7시간 10분</text><line x1="40" y1="77.0" x2="604" y2="77.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="80.0" text-anchor="end" font-size="8" fill="#8a908c">4시간 47분</text><line x1="40" y1="105.5" x2="604" y2="105.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="108.5" text-anchor="end" font-size="8" fill="#8a908c">2시간 23분</text><line x1="40" y1="134.0" x2="604" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">0분</text><rect x="63.3" y="63.4" width="34.0" height="70.6" rx="2" fill="#a0c8c0"/><text x="80.3" y="59.4" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">5시간 55분</text><rect x="143.9" y="58.5" width="34.0" height="75.5" rx="2" fill="#a0c8c0"/><text x="160.9" y="54.5" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">6시간 20분</text><rect x="224.4" y="63.4" width="34.0" height="70.6" rx="2" fill="#a0c8c0"/><text x="241.4" y="59.4" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">5시간 55분</text><rect x="305.0" y="60.4" width="34.0" height="73.6" rx="2" fill="#a0c8c0"/><text x="322.0" y="56.4" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">6시간 10분</text><rect x="385.6" y="71.4" width="34.0" height="62.6" rx="2" fill="#a0c8c0"/><text x="402.6" y="67.4" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">5시간 15분</text><rect x="466.1" y="40.6" width="34.0" height="93.4" rx="2" fill="#a0c8c0"/><text x="483.1" y="36.6" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">7시간 50분</text><rect x="546.7" y="50.5" width="34.0" height="83.5" rx="2" fill="#a0c8c0"/><text x="563.7" y="46.5" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">7시간</text><polyline points="80.3,57.8 160.9,72.0 241.4,36.6 322.0,103.8 402.6,100.2 483.1,40.2 563.7,54.3" fill="none" stroke="#184048" stroke-width="2"/><circle cx="80.3" cy="57.8" r="3" fill="#184048"/><circle cx="160.9" cy="72.0" r="3" fill="#184048"/><circle cx="241.4" cy="36.6" r="3" fill="#184048"/><circle cx="322.0" cy="103.8" r="3" fill="#184048"/><circle cx="402.6" cy="100.2" r="3" fill="#184048"/><circle cx="483.1" cy="40.2" r="3" fill="#184048"/><circle cx="563.7" cy="54.3" r="3" fill="#184048"/><text x="80.3" y="152" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="152" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="152" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="152" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="152" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="152" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="152" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></div>
+  <div class="card"><p class="label">활동시간 · 입면잠복기 · 수면효율</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">76</text><line x1="40" y1="48.5" x2="604" y2="48.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="51.5" text-anchor="end" font-size="8" fill="#8a908c">57</text><line x1="40" y1="77.0" x2="604" y2="77.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="80.0" text-anchor="end" font-size="8" fill="#8a908c">38</text><line x1="40" y1="105.5" x2="604" y2="105.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="108.5" text-anchor="end" font-size="8" fill="#8a908c">19</text><line x1="40" y1="134.0" x2="604" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">0</text><rect x="63.3" y="70.7" width="34.0" height="63.3" rx="2" fill="#a0c8c0"/><text x="80.3" y="66.7" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">42</text><rect x="143.9" y="87.3" width="34.0" height="46.7" rx="2" fill="#a0c8c0"/><text x="160.9" y="83.3" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">31</text><rect x="224.4" y="51.1" width="34.0" height="82.9" rx="2" fill="#a0c8c0"/><text x="241.4" y="47.1" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">55</text><rect x="305.0" y="97.8" width="34.0" height="36.2" rx="2" fill="#a0c8c0"/><text x="322.0" y="93.8" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">24</text><rect x="385.6" y="106.9" width="34.0" height="27.1" rx="2" fill="#a0c8c0"/><text x="402.6" y="102.9" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">18</text><rect x="466.1" y="40.6" width="34.0" height="93.4" rx="2" fill="#a0c8c0"/><text x="483.1" y="36.6" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">62</text><rect x="546.7" y="66.2" width="34.0" height="67.8" rx="2" fill="#a0c8c0"/><text x="563.7" y="62.2" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">45</text><polyline points="80.3,89.6 160.9,57.8 241.4,96.7 322.0,43.7 402.6,36.6 483.1,103.8 563.7,86.1" fill="none" stroke="#c47a4a" stroke-width="2"/><circle cx="80.3" cy="89.6" r="3" fill="#c47a4a"/><circle cx="160.9" cy="57.8" r="3" fill="#c47a4a"/><circle cx="241.4" cy="96.7" r="3" fill="#c47a4a"/><circle cx="322.0" cy="43.7" r="3" fill="#c47a4a"/><circle cx="402.6" cy="36.6" r="3" fill="#c47a4a"/><circle cx="483.1" cy="103.8" r="3" fill="#c47a4a"/><circle cx="563.7" cy="86.1" r="3" fill="#c47a4a"/><text x="80.3" y="152" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="152" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="152" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="152" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="152" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="152" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="152" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></div>
+  
+<div class="how"><p class="label">어떻게 계산되나요?</p><p>막대는 침대에 머문 시간 또는 활동시간이고, 실선은 수면효율 또는 입면잠복기입니다. 세 지표가 같은 날 함께 움직이는지를 보기 위한 그래프입니다.</p></div>
+<div class="mean"><p class="label">무엇을 의미하나요?</p><p>이번 주 3일은 입면잠복기·각성횟수·수면효율이 모두 함께 나빠진 복합형 밤이었고, 1일은 입면잠복기는 정상이지만 각성횟수만 높은 자주깨어남형, 0일은 각성횟수는 정상이지만 입면잠복기만 긴 잠들기어려움형이었습니다. 활동시간과 입면잠복기(r=-0.97), 활동시간과 수면효율(r=0.96) 모두 강한 상관을 보였습니다.</p></div>
+<div class="suggest"><p class="label">제안</p><p>입면잠복기·각성횟수가 함께 높은 날은 05페이지의 이완 루틴으로 「잠들기 어려움」에 먼저 대응하고, 입면잠복기는 정상인데 각성횟수만 높은 날은 06페이지의 각성 유발 요인 조정을 먼저 살펴보는 것이 더 효율적입니다.</p></div>
+
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>08 · 수면 중 심박</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>수면 중 심박수</h2>
+
+
+  
+  <p class="lead">평균 60bpm · 범위 55~71bpm · r(HR↔RR)=0.99 · r(HR↔SpO2)=-0.99</p>
+  <div class="hero">
+    <p class="k">이번 주 평균 · 수면 중 심박수</p>
+    <p class="big">60bpm</p>
+    <p class="range">평균 60bpm · 범위 55~71bpm · r(HR↔RR)=0.99 · r(HR↔SpO2)=-0.99</p>
+  </div>
+  <div class="card"><p class="label">7일간 변화 추이</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">71</text><line x1="40" y1="48.5" x2="604" y2="48.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="51.5" text-anchor="end" font-size="8" fill="#8a908c">67</text><line x1="40" y1="77.0" x2="604" y2="77.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="80.0" text-anchor="end" font-size="8" fill="#8a908c">63</text><line x1="40" y1="105.5" x2="604" y2="105.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="108.5" text-anchor="end" font-size="8" fill="#8a908c">59</text><line x1="40" y1="134.0" x2="604" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">55</text><rect x="63.3" y="112.6" width="34.0" height="21.4" rx="2" fill="#e0c0a8"/><text x="80.3" y="108.6" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">58</text><rect x="143.9" y="91.2" width="34.0" height="42.8" rx="2" fill="#e0c0a8"/><text x="160.9" y="87.2" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">61</text><rect x="224.4" y="119.8" width="34.0" height="14.2" rx="2" fill="#e0c0a8"/><text x="241.4" y="115.8" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">57</text><rect x="305.0" y="98.4" width="34.0" height="35.6" rx="2" fill="#e0c0a8"/><text x="322.0" y="94.4" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">60</text><rect x="385.6" y="20.0" width="34.0" height="114.0" rx="2" fill="#e0c0a8"/><text x="402.6" y="16.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">71</text><rect x="466.1" y="134.0" width="34.0" height="0.0" rx="2" fill="#e0c0a8"/><text x="483.1" y="130.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">55</text><rect x="546.7" y="126.9" width="34.0" height="7.1" rx="2" fill="#e0c0a8"/><text x="563.7" y="122.9" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">56</text><polyline points="80.3,112.6 160.9,91.2 241.4,119.8 322.0,98.4 402.6,20.0 483.1,134.0 563.7,126.9" fill="none" stroke="#8a5848" stroke-width="2"/><circle cx="80.3" cy="112.6" r="3" fill="#8a5848"/><circle cx="160.9" cy="91.2" r="3" fill="#8a5848"/><circle cx="241.4" cy="119.8" r="3" fill="#8a5848"/><circle cx="322.0" cy="98.4" r="3" fill="#8a5848"/><circle cx="402.6" cy="20.0" r="3" fill="#8a5848"/><circle cx="483.1" cy="134.0" r="3" fill="#8a5848"/><circle cx="563.7" cy="126.9" r="3" fill="#8a5848"/><text x="80.3" y="152" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="152" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="152" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="152" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="152" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="152" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="152" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></div>
+  
+  
+  
+<div class="how"><p class="label">어떻게 계산되나요?</p><p>수면 시각부터 기상까지 구간에서 측정된 심박수(bpm)의 평균입니다. 이상 참고범위는 45–70bpm입니다.</p></div>
+<div class="mean"><p class="label">무엇을 의미하나요?</p><p>주간 평균 심박수는 60bpm으로 참고범위(45~70bpm) 안에 있습니다. 요일별 최댓값(71bpm, 금요일)은 참고범위 상단을 넘겼습니다. 호흡수·SpO2와 함께 흔들리는 날이 반복되는지는 17페이지에서 별도로 확인합니다.</p></div>
+<div class="suggest"><p class="label">제안</p><p>수면 중 심박수는 대체로 참고범위 안에서 움직였습니다. 특별한 조정보다 현재 패턴을 유지하며 관찰을 지속하는 것을 권장합니다.</p></div>
+
+  
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>09 · 호흡수</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>수면 중 호흡 수</h2>
+
+
+  
+  <p class="lead">평균 16회/분 · 범위 14~19회/분 · r(RR↔SpO2)=-1.00</p>
+  <div class="hero">
+    <p class="k">이번 주 평균 · 호흡수</p>
+    <p class="big">16회/분</p>
+    <p class="range">평균 16회/분 · 범위 14~19회/분 · r(RR↔SpO2)=-1.00</p>
+  </div>
+  <div class="card"><p class="label">7일간 변화 추이</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">19</text><line x1="40" y1="48.5" x2="604" y2="48.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="51.5" text-anchor="end" font-size="8" fill="#8a908c">17.8</text><line x1="40" y1="77.0" x2="604" y2="77.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="80.0" text-anchor="end" font-size="8" fill="#8a908c">16.5</text><line x1="40" y1="105.5" x2="604" y2="105.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="108.5" text-anchor="end" font-size="8" fill="#8a908c">15.2</text><line x1="40" y1="134.0" x2="604" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">14</text><rect x="63.3" y="111.2" width="34.0" height="22.8" rx="2" fill="#d7c3ae"/><text x="80.3" y="107.2" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">15</text><rect x="143.9" y="88.4" width="34.0" height="45.6" rx="2" fill="#d7c3ae"/><text x="160.9" y="84.4" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">16</text><rect x="224.4" y="111.2" width="34.0" height="22.8" rx="2" fill="#d7c3ae"/><text x="241.4" y="107.2" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">15</text><rect x="305.0" y="88.4" width="34.0" height="45.6" rx="2" fill="#d7c3ae"/><text x="322.0" y="84.4" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">16</text><rect x="385.6" y="20.0" width="34.0" height="114.0" rx="2" fill="#d7c3ae"/><text x="402.6" y="16.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">19</text><rect x="466.1" y="134.0" width="34.0" height="0.0" rx="2" fill="#d7c3ae"/><text x="483.1" y="130.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">14</text><rect x="546.7" y="111.2" width="34.0" height="22.8" rx="2" fill="#d7c3ae"/><text x="563.7" y="107.2" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">15</text><polyline points="80.3,111.2 160.9,88.4 241.4,111.2 322.0,88.4 402.6,20.0 483.1,134.0 563.7,111.2" fill="none" stroke="#8a5848" stroke-width="2"/><circle cx="80.3" cy="111.2" r="3" fill="#8a5848"/><circle cx="160.9" cy="88.4" r="3" fill="#8a5848"/><circle cx="241.4" cy="111.2" r="3" fill="#8a5848"/><circle cx="322.0" cy="88.4" r="3" fill="#8a5848"/><circle cx="402.6" cy="20.0" r="3" fill="#8a5848"/><circle cx="483.1" cy="134.0" r="3" fill="#8a5848"/><circle cx="563.7" cy="111.2" r="3" fill="#8a5848"/><text x="80.3" y="152" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="152" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="152" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="152" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="152" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="152" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="152" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></div>
+  
+  
+  
+<div class="how"><p class="label">어떻게 계산되나요?</p><p>수면 중 분당 호흡 횟수의 평균입니다. 이상 참고범위는 12–20회/분입니다.</p></div>
+<div class="mean"><p class="label">무엇을 의미하나요?</p><p>주간 평균 호흡수는 16회/분으로 참고범위(12~20회/분) 안에 있습니다. 요일별 최댓값(19회/분, 금요일)은 이번 주 중 가장 높았던 날입니다. 심박수(r=0.99)·SpO2(r=-1.00)와 함께 흔들리는 경향이 반복되는지는 17페이지에서 다룹니다.</p></div>
+<div class="suggest"><p class="label">제안</p><p>호흡수는 대체로 참고범위 안에서 움직였습니다. 특별한 조정보다 현재 패턴을 유지하며 관찰을 지속하는 것을 권장합니다.</p></div>
+
+  
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>10 · 산소포화도</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>수면 중 산소포화도</h2>
+
+
+  
+  <p class="lead">평균 96% · 범위 93~98%</p>
+  <div class="hero">
+    <p class="k">이번 주 평균 · SpO2</p>
+    <p class="big">96%</p>
+    <p class="range">평균 96% · 범위 93~98%</p>
+  </div>
+  <div class="card"><p class="label">7일간 변화 추이</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">98</text><line x1="40" y1="48.5" x2="604" y2="48.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="51.5" text-anchor="end" font-size="8" fill="#8a908c">96.8</text><line x1="40" y1="77.0" x2="604" y2="77.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="80.0" text-anchor="end" font-size="8" fill="#8a908c">95.5</text><line x1="40" y1="105.5" x2="604" y2="105.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="108.5" text-anchor="end" font-size="8" fill="#8a908c">94.2</text><line x1="40" y1="134.0" x2="604" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">93</text><rect x="63.3" y="42.8" width="34.0" height="91.2" rx="2" fill="#e0c0a8"/><text x="80.3" y="38.8" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">97</text><rect x="143.9" y="65.6" width="34.0" height="68.4" rx="2" fill="#e0c0a8"/><text x="160.9" y="61.6" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">96</text><rect x="224.4" y="42.8" width="34.0" height="91.2" rx="2" fill="#e0c0a8"/><text x="241.4" y="38.8" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">97</text><rect x="305.0" y="65.6" width="34.0" height="68.4" rx="2" fill="#e0c0a8"/><text x="322.0" y="61.6" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">96</text><rect x="385.6" y="134.0" width="34.0" height="0.0" rx="2" fill="#e0c0a8"/><text x="402.6" y="130.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">93</text><rect x="466.1" y="20.0" width="34.0" height="114.0" rx="2" fill="#e0c0a8"/><text x="483.1" y="16.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">98</text><rect x="546.7" y="42.8" width="34.0" height="91.2" rx="2" fill="#e0c0a8"/><text x="563.7" y="38.8" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">97</text><polyline points="80.3,42.8 160.9,65.6 241.4,42.8 322.0,65.6 402.6,134.0 483.1,20.0 563.7,42.8" fill="none" stroke="#8a5848" stroke-width="2"/><circle cx="80.3" cy="42.8" r="3" fill="#8a5848"/><circle cx="160.9" cy="65.6" r="3" fill="#8a5848"/><circle cx="241.4" cy="42.8" r="3" fill="#8a5848"/><circle cx="322.0" cy="65.6" r="3" fill="#8a5848"/><circle cx="402.6" cy="134.0" r="3" fill="#8a5848"/><circle cx="483.1" cy="20.0" r="3" fill="#8a5848"/><circle cx="563.7" cy="42.8" r="3" fill="#8a5848"/><text x="80.3" y="152" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="152" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="152" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="152" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="152" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="152" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="152" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></div>
+  
+  
+  
+<div class="how"><p class="label">어떻게 계산되나요?</p><p>수면 중 혈중 산소포화도(%)의 평균입니다. 이상 참고범위는 95% 이상입니다.</p></div>
+<div class="mean"><p class="label">무엇을 의미하나요?</p><p>주간 평균 SpO2는 96%로 참고범위(95% 이상) 안에 있습니다. 요일별 최솟값(93%, 금요일)은 참고범위 아래로 내려간 날이었습니다. 호흡수와의 상관계수는 -1.00로 매우 강한 음의 상관을 보였습니다.</p></div>
+<div class="suggest"><p class="label">제안</p><p>SpO2 평균은 참고범위 안에 있으나 주간 편차가 존재합니다. 참고범위 내에서도 편차가 반복되는지 지속 관찰을 권장합니다.</p></div>
+
+  
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>11 · 취침·기상 시각 규칙성</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>나의 취침·기상</h2>
+
+
+  
+  <p class="lead">잠든 시각과 일어난 시각이 매일 비슷할수록 생체리듬이 안정적입니다. 두 시각 모두 요일별 실측값을 선으로 이었습니다.</p>
+  <div class="hero"><p class="k">평균 잠든 시각</p><p class="big">취침 00:17(±35분)</p><p class="range">평균 취침 00:17(±35분) · 평균 기상 06:37(±18분) · 목표 취침 22:23</p></div>
+  <div class="card"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="44" y1="18.0" x2="624" y2="18.0" stroke="#e6e4dc" stroke-width="1"/><text x="38" y="21.0" text-anchor="end" font-size="8" fill="#8a908c">01:32</text><line x1="44" y1="47.0" x2="624" y2="47.0" stroke="#e6e4dc" stroke-width="1"/><text x="38" y="50.0" text-anchor="end" font-size="8" fill="#8a908c">00:46</text><line x1="44" y1="76.0" x2="624" y2="76.0" stroke="#e6e4dc" stroke-width="1"/><text x="38" y="79.0" text-anchor="end" font-size="8" fill="#8a908c">23:59</text><line x1="44" y1="105.0" x2="624" y2="105.0" stroke="#e6e4dc" stroke-width="1"/><text x="38" y="108.0" text-anchor="end" font-size="8" fill="#8a908c">23:12</text><line x1="44" y1="134.0" x2="624" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="38" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">22:26</text><polyline points="44.0,50.4 140.7,69.1 237.3,62.9 334.0,53.6 430.7,34.9 527.3,103.2 624.0,78.4" fill="none" stroke="#184048" stroke-width="2"/><circle cx="44.0" cy="50.4" r="3.5" fill="#184048"/><text x="44.0" y="42.4" text-anchor="middle" font-size="9" fill="#184048">00:40</text><text x="44.0" y="152" text-anchor="middle" font-size="10" fill="#5c6864">월</text><circle cx="140.7" cy="69.1" r="3.5" fill="#184048"/><text x="140.7" y="61.1" text-anchor="middle" font-size="9" fill="#184048">00:10</text><text x="140.7" y="152" text-anchor="middle" font-size="10" fill="#5c6864">화</text><circle cx="237.3" cy="62.9" r="3.5" fill="#184048"/><text x="237.3" y="54.9" text-anchor="middle" font-size="9" fill="#184048">00:20</text><text x="237.3" y="152" text-anchor="middle" font-size="10" fill="#5c6864">수</text><circle cx="334.0" cy="53.6" r="3.5" fill="#184048"/><text x="334.0" y="45.6" text-anchor="middle" font-size="9" fill="#184048">00:35</text><text x="334.0" y="152" text-anchor="middle" font-size="10" fill="#5c6864">목</text><circle cx="430.7" cy="34.9" r="3.5" fill="#184048"/><text x="430.7" y="26.9" text-anchor="middle" font-size="9" fill="#184048">01:05</text><text x="430.7" y="152" text-anchor="middle" font-size="10" fill="#5c6864">금</text><circle cx="527.3" cy="103.2" r="3.5" fill="#184048"/><text x="527.3" y="95.2" text-anchor="middle" font-size="9" fill="#184048">23:15</text><text x="527.3" y="152" text-anchor="middle" font-size="10" fill="#5c6864">토</text><circle cx="624.0" cy="78.4" r="3.5" fill="#184048"/><text x="624.0" y="70.4" text-anchor="middle" font-size="9" fill="#184048">23:55</text><text x="624.0" y="152" text-anchor="middle" font-size="10" fill="#5c6864">일</text></svg></div>
+  <div class="hero"><p class="k">평균 기상 시각</p><p class="big"></p></div>
+  <div class="card"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="44" y1="18.0" x2="624" y2="18.0" stroke="#e6e4dc" stroke-width="1"/><text x="38" y="21.0" text-anchor="end" font-size="8" fill="#8a908c">07:17</text><line x1="44" y1="47.0" x2="624" y2="47.0" stroke="#e6e4dc" stroke-width="1"/><text x="38" y="50.0" text-anchor="end" font-size="8" fill="#8a908c">06:56</text><line x1="44" y1="76.0" x2="624" y2="76.0" stroke="#e6e4dc" stroke-width="1"/><text x="38" y="79.0" text-anchor="end" font-size="8" fill="#8a908c">06:35</text><line x1="44" y1="105.0" x2="624" y2="105.0" stroke="#e6e4dc" stroke-width="1"/><text x="38" y="108.0" text-anchor="end" font-size="8" fill="#8a908c">06:14</text><line x1="44" y1="134.0" x2="624" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="38" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">05:53</text><polyline points="44.0,75.9 140.7,82.7 237.3,103.2 334.0,62.2 430.7,96.4 527.3,34.9 624.0,48.6" fill="none" stroke="#c47a4a" stroke-width="2"/><circle cx="44.0" cy="75.9" r="3.5" fill="#c47a4a"/><text x="44.0" y="67.9" text-anchor="middle" font-size="9" fill="#184048">06:35</text><text x="44.0" y="152" text-anchor="middle" font-size="10" fill="#5c6864">월</text><circle cx="140.7" cy="82.7" r="3.5" fill="#c47a4a"/><text x="140.7" y="74.7" text-anchor="middle" font-size="9" fill="#184048">06:30</text><text x="140.7" y="152" text-anchor="middle" font-size="10" fill="#5c6864">화</text><circle cx="237.3" cy="103.2" r="3.5" fill="#c47a4a"/><text x="237.3" y="95.2" text-anchor="middle" font-size="9" fill="#184048">06:15</text><text x="237.3" y="152" text-anchor="middle" font-size="10" fill="#5c6864">수</text><circle cx="334.0" cy="62.2" r="3.5" fill="#c47a4a"/><text x="334.0" y="54.2" text-anchor="middle" font-size="9" fill="#184048">06:45</text><text x="334.0" y="152" text-anchor="middle" font-size="10" fill="#5c6864">목</text><circle cx="430.7" cy="96.4" r="3.5" fill="#c47a4a"/><text x="430.7" y="88.4" text-anchor="middle" font-size="9" fill="#184048">06:20</text><text x="430.7" y="152" text-anchor="middle" font-size="10" fill="#5c6864">금</text><circle cx="527.3" cy="34.9" r="3.5" fill="#c47a4a"/><text x="527.3" y="26.9" text-anchor="middle" font-size="9" fill="#184048">07:05</text><text x="527.3" y="152" text-anchor="middle" font-size="10" fill="#5c6864">토</text><circle cx="624.0" cy="48.6" r="3.5" fill="#c47a4a"/><text x="624.0" y="40.6" text-anchor="middle" font-size="9" fill="#184048">06:55</text><text x="624.0" y="152" text-anchor="middle" font-size="10" fill="#5c6864">일</text></svg></div>
+  
+<div class="how"><p class="label">어떻게 계산되나요?</p><p>매일의 취침·기상 시각을 자정 기준 분 단위로 환산한 뒤, 7일 동안 얼마나 들쭉날쭉했는지를 표준편차로 구합니다. 참고범위는 20분 이내입니다.</p></div>
+<div class="mean"><p class="label">무엇을 의미하나요?</p><p>취침시각은 평균 00:17, 요일 간 편차 ±35분으로 참고범위(20분 이내) 참고범위 초과 (불규칙)이며, 기상시각은 평균 06:37, 편차 ±18분으로 참고범위 안입니다. 이는 「몇 시에 일어나는지」보다 「몇 시에 잠자리에 드는지」가 먼저 흔들리고 있다는 뜻으로 읽을 수 있습니다.</p></div>
+<div class="suggest"><p class="label">제안</p><p>평균 기상시각(06:37)을 고정점으로 목표 수면시간 7시간, 목표 수면효율 85%를 반영해 역산하면 권장 취침시각은 약 22:23입니다. 현재 평균 취침시각(00:17)과 차이가 있다면, 하루 15~20분씩 점진적으로 앞당기는 방식을 권장합니다.</p></div>
+
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>12 · 좋았던 밤 vs 나빴던 밤</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>좋았던 밤과 힘들었던 밤</h2>
+
+
+  
+  <p class="lead">이번 주 수면효율이 가장 높았던 밤과 가장 낮았던 밤을 나란히 놓고, 수면이 어떤 순서로 흘러갔는지 살펴봅니다.</p>
+  
+  
+  <div class="night good">
+    <p><strong>좋았던 밤</strong> · 9/10(수) · 수면효율 84% · 총 수면시간 4시간 55분</p>
+    <table class="split">
+      <tr>
+        <td><p class="k">잠들</p><p class="n">17분</p></td>
+        <td><p class="k">깊은 잠</p><p class="n">59분</p></td>
+        <td><p class="k">렘수면</p><p class="n">1시간 23분</p></td>
+        <td><p class="k">얕은 잠</p><p class="n">2시간 33분</p></td>
+      </tr>
+    </table>
+    <p class="fine">취침 00:20 → 기상 06:15</p>
+  </div>
+  
+  
+  <div class="night bad">
+    <p><strong>힘들었던 밤</strong> · 9/11(목) · 수면효율 65% · 총 수면시간 4시간 34분</p>
+    <table class="split">
+      <tr>
+        <td><p class="k">잠들</p><p class="n">32분</p></td>
+        <td><p class="k">깊은 잠</p><p class="n">36분</p></td>
+        <td><p class="k">렘수면</p><p class="n">1시간 11분</p></td>
+        <td><p class="k">얕은 잠</p><p class="n">2시간 47분</p></td>
+      </tr>
+    </table>
+    <p class="fine">취침 00:35 → 기상 06:45</p>
+  </div>
+  
+  <div class="how"><p class="label">어떻게 구분하나요?</p><p>수면효율이 가장 높은 날과 가장 낮은 날을 로직 시트의 주간 요약에서 골랐습니다. 각 칸은 그날의 입면잠복기, 깊은수면, 렘수면, 얕은수면입니다.</p></div>
+  <div class="mean"><p class="label">무엇을 의미하나요?</p><p>두 밤은 같은 계산식으로 견주어 볼 수 있습니다. 깊은수면이 길고 얕은수면 비중이 낮은 밤이 회복에 더 가깝게 읽힙니다.</p></div>
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>13 · 활동시간 · 총 소모 칼로리 · 걸음수</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>활동·에너지·걸음수, 세 지표를 한 그래프로</h2>
+
+
+  
+  <p class="lead">활동시간, 총 소모 칼로리, 걸음수를 한 그래프 위에서 함께 보고, 같은 날 어떻게 움직이는지 확인합니다.</p>
+  <table class="split">
+    <tr>
+      <td><p class="k">평균 활동시간</p><p class="n">40분/일</p></td>
+      <td><p class="k">평균 총 소모 칼로리</p><p class="n">1,631kcal(기기값)</p></td>
+      <td><p class="k">평균 걸음수</p><p class="n">6,015보</p></td>
+    </tr>
+  </table>
+  <div class="card"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">76분</text><line x1="40" y1="48.5" x2="604" y2="48.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="51.5" text-anchor="end" font-size="8" fill="#8a908c">57분</text><line x1="40" y1="77.0" x2="604" y2="77.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="80.0" text-anchor="end" font-size="8" fill="#8a908c">38분</text><line x1="40" y1="105.5" x2="604" y2="105.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="108.5" text-anchor="end" font-size="8" fill="#8a908c">19분</text><line x1="40" y1="134.0" x2="604" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">0분</text><rect x="63.3" y="70.7" width="34.0" height="63.3" rx="2" fill="#a0c8c0"/><text x="80.3" y="66.7" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">42분</text><rect x="143.9" y="87.3" width="34.0" height="46.7" rx="2" fill="#a0c8c0"/><text x="160.9" y="83.3" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">31분</text><rect x="224.4" y="51.1" width="34.0" height="82.9" rx="2" fill="#a0c8c0"/><text x="241.4" y="47.1" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">55분</text><rect x="305.0" y="97.8" width="34.0" height="36.2" rx="2" fill="#a0c8c0"/><text x="322.0" y="93.8" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">24분</text><rect x="385.6" y="106.9" width="34.0" height="27.1" rx="2" fill="#a0c8c0"/><text x="402.6" y="102.9" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">18분</text><rect x="466.1" y="40.6" width="34.0" height="93.4" rx="2" fill="#a0c8c0"/><text x="483.1" y="36.6" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">62분</text><rect x="546.7" y="66.2" width="34.0" height="67.8" rx="2" fill="#a0c8c0"/><text x="563.7" y="62.2" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">45분</text><polyline points="80.3,70.7 160.9,87.3 241.4,51.1 322.0,97.8 402.6,106.9 483.1,40.6 563.7,66.2" fill="none" stroke="#8a5848" stroke-width="2"/><circle cx="80.3" cy="70.7" r="3" fill="#8a5848"/><circle cx="160.9" cy="87.3" r="3" fill="#8a5848"/><circle cx="241.4" cy="51.1" r="3" fill="#8a5848"/><circle cx="322.0" cy="97.8" r="3" fill="#8a5848"/><circle cx="402.6" cy="106.9" r="3" fill="#8a5848"/><circle cx="483.1" cy="40.6" r="3" fill="#8a5848"/><circle cx="563.7" cy="66.2" r="3" fill="#8a5848"/><text x="80.3" y="152" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="152" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="152" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="152" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="152" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="152" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="152" text-anchor="middle" font-size="11" fill="#243033">일</text></svg>
+    <table class="stage">
+      <tr><td>걸음수</td><td>6384</td><td>4712</td><td>8360</td><td>3648</td><td>2736</td><td>9424</td><td>6840</td></tr>
+      <tr><td>활동시간(분)</td><td>42</td><td>31</td><td>55</td><td>24</td><td>18</td><td>62</td><td>45</td></tr>
+      <tr><td>칼로리</td><td>1650</td><td>1580</td><td>1720</td><td>1540</td><td>1490</td><td>1780</td><td>1660</td></tr>
+    </table>
+  </div>
+  
+<div class="how"><p class="label">어떻게 계산되나요?</p><p>활동시간은 기기가 기록한 분, 칼로리는 기기 표시값, 걸음수는 선택 입력값입니다. 절대 칼로리 목표보다 활동량과 같은 방향으로 움직이는지를 봅니다.</p></div>
+<div class="mean"><p class="label">무엇을 의미하나요?</p><p>이번 주 합계 활동시간은 약 277분으로 주간 권장기준(150분) 을 넘겼습니다. 요일별 최저 18분~최고 62분으로 편차(범위 44분)가 큰 편이며, 활동이 특정 요일(토)에 몰려 있는 경향이 있습니다.</p></div>
+<div class="suggest"><p class="label">제안</p><p>주간 총 활동량이 충분한 수준이라면 양을 더 늘리기보다, 매일 비슷한 시간대에 짧게라도 걷는 방식으로 요일별 편차를 줄이는 것을 목표로 삼아볼 수 있습니다. 활동과 수면효율의 관계는 7페이지에서 함께 살펴봅니다.</p></div>
+
+  
+  <div class="suggest"><p class="label">칼로리</p><p>칼로리 소모량은 활동시간이 많았던 날 함께 높아지는 경향을 보였습니다(상관계수 r=1.00). 절대값보다 활동량과 같은 방향으로 움직이는지가 이 지표를 읽는 더 유용한 방법입니다. 참고로 체중 58kg·키 162cm·나이 45세 기준 추정 기초대사량(BMR)은 약 1,207kcal이며, 활동 소모량을 더한 추정 총 소모칼로리는 평균 약 1,367kcal로, 기기 표시값(평균 1,631kcal)과 약 264kcal 차이가 있습니다. 이 추정치는 참고용이며 기기의 정확한 내부 산식과 다를 수 있습니다.</p></div>
+  
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>14 · 활력점수 (Vitality Score)</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>매일의 활력</h2>
+
+
+  
+  <p class="lead">평균 65점 · 범위 50~74점</p>
+  <div class="hero">
+    <p class="k">이번 주 평균 · 활력점수 (Vitality Score)</p>
+    <p class="big">68점 → 70점</p>
+    <p class="range">평균 65점 · 범위 50~74점</p>
+  </div>
+  <div class="card"><p class="label">7일간 변화 추이</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">74</text><line x1="40" y1="48.5" x2="604" y2="48.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="51.5" text-anchor="end" font-size="8" fill="#8a908c">68</text><line x1="40" y1="77.0" x2="604" y2="77.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="80.0" text-anchor="end" font-size="8" fill="#8a908c">62</text><line x1="40" y1="105.5" x2="604" y2="105.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="108.5" text-anchor="end" font-size="8" fill="#8a908c">56</text><line x1="40" y1="134.0" x2="604" y2="134.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="137.0" text-anchor="end" font-size="8" fill="#8a908c">50</text><rect x="63.3" y="48.5" width="34.0" height="85.5" rx="2" fill="#e0c0a8"/><text x="80.3" y="44.5" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">68</text><rect x="143.9" y="67.5" width="34.0" height="66.5" rx="2" fill="#e0c0a8"/><text x="160.9" y="63.5" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">64</text><rect x="224.4" y="29.5" width="34.0" height="104.5" rx="2" fill="#e0c0a8"/><text x="241.4" y="25.5" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">72</text><rect x="305.0" y="86.5" width="34.0" height="47.5" rx="2" fill="#e0c0a8"/><text x="322.0" y="82.5" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">60</text><rect x="385.6" y="134.0" width="34.0" height="0.0" rx="2" fill="#e0c0a8"/><text x="402.6" y="130.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">50</text><rect x="466.1" y="20.0" width="34.0" height="114.0" rx="2" fill="#e0c0a8"/><text x="483.1" y="16.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">74</text><rect x="546.7" y="39.0" width="34.0" height="95.0" rx="2" fill="#e0c0a8"/><text x="563.7" y="35.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">70</text><polyline points="80.3,48.5 160.9,67.5 241.4,29.5 322.0,86.5 402.6,134.0 483.1,20.0 563.7,39.0" fill="none" stroke="#8a5848" stroke-width="2"/><circle cx="80.3" cy="48.5" r="3" fill="#8a5848"/><circle cx="160.9" cy="67.5" r="3" fill="#8a5848"/><circle cx="241.4" cy="29.5" r="3" fill="#8a5848"/><circle cx="322.0" cy="86.5" r="3" fill="#8a5848"/><circle cx="402.6" cy="134.0" r="3" fill="#8a5848"/><circle cx="483.1" cy="20.0" r="3" fill="#8a5848"/><circle cx="563.7" cy="39.0" r="3" fill="#8a5848"/><text x="80.3" y="152" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="152" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="152" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="152" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="152" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="152" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="152" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></div>
+  
+  
+  
+<div class="how"><p class="label">어떻게 계산되나요?</p><p>활력점수는 그날의 누적 활동량에 따라 0에서 100 쪽으로 가까워지거나 멀어지는 흐름으로 읽습니다. 하루를 0에서 다시 시작하는 점수로, 전날 수면과 당일 활동을 함께 봅니다.</p></div>
+<div class="mean"><p class="label">무엇을 의미하나요?</p><p>이번 주 활력점수는 평균 65점(범위 50~74점)이며, 하루 스냅샷이 아니라 0에서 시작해 활동량 증감에 따라 100 쪽으로 가까워지거나 멀어지는 누적형 흐름으로 해석합니다. 전날 수면효율과 다음날 활력점수의 상관계수는 -0.13로, 전날 수면효율과 뚜렷한 선후행 관계는 확인되지 않아, 하루 단위 등락보다 여러 날에 걸친 방향성으로 읽는 것이 더 적절합니다.</p></div>
+<div class="suggest"><p class="label">제안</p><p>활력점수를 직접 높이려 하기보다, 근본 원인인 수면의 질을 개선하는 접근이 더 효과적입니다. 04~10페이지의 개선 제안을 먼저 참고하세요.</p></div>
+
+  
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>15 · 종합진단 — 참고범위 대비</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>항목별 참고범위</h2>
+
+
+  
+  <table class="ref">
+    <tr><th>지표</th><th>이번 주 평균</th><th>이상 참고범위</th><th>참고범위 대비</th></tr>
+    
+    <tr><td>수면효율</td><td>75.6%</td><td>85% 이상</td><td class="low">9.4% 낮음</td></tr>
+    
+    <tr><td>입면잠복기</td><td>23.6분</td><td>20분 이내</td><td class="low">3.6분 김</td></tr>
+    
+    <tr><td>각성횟수</td><td>2.7회</td><td>2회 이내</td><td class="low">0.7회 초과</td></tr>
+    
+    <tr><td>수면 중 심박수</td><td>59.7bpm</td><td>45–70bpm</td><td class="ok">범위 안</td></tr>
+    
+    <tr><td>호흡수</td><td>15.7회/분</td><td>12–20회/분</td><td class="ok">범위 안</td></tr>
+    
+    <tr><td>산소포화도</td><td>96.3%</td><td>95% 이상</td><td class="ok">범위 안</td></tr>
+    
+  </table>
+  <table class="pair">
+    <tr>
+      <td class="good"><h3>수면 구조</h3><p>수면효율·입면잠복기·각성횟수 세 지표는 모두 참고범위에 못 미쳤습니다. 세 지표는 7페이지에서 정리했듯 같은 계산식으로 연결되어 있습니다. 심박수·호흡수·SpO2의 주간 평균은 참고범위 안입니다. 다만 1일(금)은 세 지표가 동시에 흔들려 17페이지에서 별도로 짚습니다. 활동량↔수면효율 상관계수는 r=0.96이며, 활동 10분↑당 수면효율 약 4.5%p, 총수면시간 약 30.4분 증가하는 관계로 추정됩니다. 활동 3단계 평균 수면효율은 저활동 68%, 중활동 79%, 고활동 84%입니다.</p></td>
+      <td class="bad"><h3>신체 반응</h3><p>수면 구조 지표가 참고범위에 못 미치는 경우, 활동량을 고활동 구간(평균 수면효율 84%)으로 끌어올리는 것이 가장 효과적인 단일 레버입니다. 세부 실행안은 18페이지 루틴 제안을 참고하세요.</p></td>
+    </tr>
+  </table>
+  
+  <div class="card">
+    <p class="label">수면-활동 통합 지표</p>
+    
+    <p>저활동 3일 · 수면효율 68.3% · 총수면 259분</p>
+    <div class="bucket"><b style="width: 68.3%"></b></div>
+    
+    <p>중활동 2일 · 수면효율 78.5% · 총수면 316.5분</p>
+    <div class="bucket"><b style="width: 78.5%"></b></div>
+    
+    <p>고활동 2일 · 수면효율 83.5% · 총수면 347.5분</p>
+    <div class="bucket"><b style="width: 83.5%"></b></div>
+    
+  </div>
+  
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>16 · 이상신호 스크리닝</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>평소와 달랐던 밤</h2>
+
+
+  
+  
+  <p class="big">9/12(금) 밤, 세 지표가 함께 움직였습니다</p>
+  
+  <p class="lead">이상신호 1일 · 해당 요일: 금 · 다중영역 동반 예</p>
+  <table class="split">
+    <tr>
+      <td class="mini"><p class="k">수면 중 심박수</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">71</text><line x1="40" y1="38.5" x2="604" y2="38.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="41.5" text-anchor="end" font-size="8" fill="#8a908c">67</text><line x1="40" y1="57.0" x2="604" y2="57.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="60.0" text-anchor="end" font-size="8" fill="#8a908c">63</text><line x1="40" y1="75.5" x2="604" y2="75.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="78.5" text-anchor="end" font-size="8" fill="#8a908c">59</text><line x1="40" y1="94.0" x2="604" y2="94.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="97.0" text-anchor="end" font-size="8" fill="#8a908c">55</text><rect x="63.3" y="80.1" width="34.0" height="13.9" rx="2" fill="#d5e4e0"/><text x="80.3" y="76.1" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">58</text><rect x="143.9" y="66.2" width="34.0" height="27.8" rx="2" fill="#d5e4e0"/><text x="160.9" y="62.2" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">61</text><rect x="224.4" y="84.8" width="34.0" height="9.2" rx="2" fill="#d5e4e0"/><text x="241.4" y="80.8" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">57</text><rect x="305.0" y="70.9" width="34.0" height="23.1" rx="2" fill="#d5e4e0"/><text x="322.0" y="66.9" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">60</text><rect x="385.6" y="20.0" width="34.0" height="74.0" rx="2" fill="#c45c4a"/><text x="402.6" y="16.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">71</text><rect x="466.1" y="94.0" width="34.0" height="0.0" rx="2" fill="#d5e4e0"/><text x="483.1" y="90.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">55</text><rect x="546.7" y="89.4" width="34.0" height="4.6" rx="2" fill="#d5e4e0"/><text x="563.7" y="85.4" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">56</text><polyline points="80.3,80.1 160.9,66.2 241.4,84.8 322.0,70.9 402.6,20.0 483.1,94.0 563.7,89.4" fill="none" stroke="#184048" stroke-width="2"/><circle cx="80.3" cy="80.1" r="3" fill="#184048"/><circle cx="160.9" cy="66.2" r="3" fill="#184048"/><circle cx="241.4" cy="84.8" r="3" fill="#184048"/><circle cx="322.0" cy="70.9" r="3" fill="#184048"/><circle cx="402.6" cy="20.0" r="3" fill="#184048"/><circle cx="483.1" cy="94.0" r="3" fill="#184048"/><circle cx="563.7" cy="89.4" r="3" fill="#184048"/><text x="80.3" y="112" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="112" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="112" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="112" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="112" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="112" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="112" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></td>
+      <td class="mini"><p class="k">호흡수</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">19</text><line x1="40" y1="38.5" x2="604" y2="38.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="41.5" text-anchor="end" font-size="8" fill="#8a908c">17.8</text><line x1="40" y1="57.0" x2="604" y2="57.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="60.0" text-anchor="end" font-size="8" fill="#8a908c">16.5</text><line x1="40" y1="75.5" x2="604" y2="75.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="78.5" text-anchor="end" font-size="8" fill="#8a908c">15.2</text><line x1="40" y1="94.0" x2="604" y2="94.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="97.0" text-anchor="end" font-size="8" fill="#8a908c">14</text><rect x="63.3" y="79.2" width="34.0" height="14.8" rx="2" fill="#d5e4e0"/><text x="80.3" y="75.2" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">15</text><rect x="143.9" y="64.4" width="34.0" height="29.6" rx="2" fill="#d5e4e0"/><text x="160.9" y="60.4" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">16</text><rect x="224.4" y="79.2" width="34.0" height="14.8" rx="2" fill="#d5e4e0"/><text x="241.4" y="75.2" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">15</text><rect x="305.0" y="64.4" width="34.0" height="29.6" rx="2" fill="#d5e4e0"/><text x="322.0" y="60.4" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">16</text><rect x="385.6" y="20.0" width="34.0" height="74.0" rx="2" fill="#c45c4a"/><text x="402.6" y="16.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">19</text><rect x="466.1" y="94.0" width="34.0" height="0.0" rx="2" fill="#d5e4e0"/><text x="483.1" y="90.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">14</text><rect x="546.7" y="79.2" width="34.0" height="14.8" rx="2" fill="#d5e4e0"/><text x="563.7" y="75.2" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">15</text><polyline points="80.3,79.2 160.9,64.4 241.4,79.2 322.0,64.4 402.6,20.0 483.1,94.0 563.7,79.2" fill="none" stroke="#184048" stroke-width="2"/><circle cx="80.3" cy="79.2" r="3" fill="#184048"/><circle cx="160.9" cy="64.4" r="3" fill="#184048"/><circle cx="241.4" cy="79.2" r="3" fill="#184048"/><circle cx="322.0" cy="64.4" r="3" fill="#184048"/><circle cx="402.6" cy="20.0" r="3" fill="#184048"/><circle cx="483.1" cy="94.0" r="3" fill="#184048"/><circle cx="563.7" cy="79.2" r="3" fill="#184048"/><text x="80.3" y="112" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="112" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="112" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="112" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="112" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="112" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="112" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></td>
+      <td class="mini"><p class="k">산소포화도</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="100%" font-family="ReportKR, sans-serif"><line x1="40" y1="20.0" x2="604" y2="20.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="23.0" text-anchor="end" font-size="8" fill="#8a908c">98</text><line x1="40" y1="38.5" x2="604" y2="38.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="41.5" text-anchor="end" font-size="8" fill="#8a908c">96.8</text><line x1="40" y1="57.0" x2="604" y2="57.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="60.0" text-anchor="end" font-size="8" fill="#8a908c">95.5</text><line x1="40" y1="75.5" x2="604" y2="75.5" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="78.5" text-anchor="end" font-size="8" fill="#8a908c">94.2</text><line x1="40" y1="94.0" x2="604" y2="94.0" stroke="#e6e4dc" stroke-width="1"/><text x="34" y="97.0" text-anchor="end" font-size="8" fill="#8a908c">93</text><rect x="63.3" y="34.8" width="34.0" height="59.2" rx="2" fill="#d5e4e0"/><text x="80.3" y="30.8" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">97</text><rect x="143.9" y="49.6" width="34.0" height="44.4" rx="2" fill="#d5e4e0"/><text x="160.9" y="45.6" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">96</text><rect x="224.4" y="34.8" width="34.0" height="59.2" rx="2" fill="#d5e4e0"/><text x="241.4" y="30.8" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">97</text><rect x="305.0" y="49.6" width="34.0" height="44.4" rx="2" fill="#d5e4e0"/><text x="322.0" y="45.6" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">96</text><rect x="385.6" y="94.0" width="34.0" height="0.0" rx="2" fill="#c45c4a"/><text x="402.6" y="90.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">93</text><rect x="466.1" y="20.0" width="34.0" height="74.0" rx="2" fill="#d5e4e0"/><text x="483.1" y="16.0" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">98</text><rect x="546.7" y="34.8" width="34.0" height="59.2" rx="2" fill="#d5e4e0"/><text x="563.7" y="30.8" text-anchor="middle" font-size="9" fill="#184048" font-weight="700">97</text><polyline points="80.3,34.8 160.9,49.6 241.4,34.8 322.0,49.6 402.6,94.0 483.1,20.0 563.7,34.8" fill="none" stroke="#184048" stroke-width="2"/><circle cx="80.3" cy="34.8" r="3" fill="#184048"/><circle cx="160.9" cy="49.6" r="3" fill="#184048"/><circle cx="241.4" cy="34.8" r="3" fill="#184048"/><circle cx="322.0" cy="49.6" r="3" fill="#184048"/><circle cx="402.6" cy="94.0" r="3" fill="#184048"/><circle cx="483.1" cy="20.0" r="3" fill="#184048"/><circle cx="563.7" cy="34.8" r="3" fill="#184048"/><text x="80.3" y="112" text-anchor="middle" font-size="11" fill="#243033">월</text><text x="160.9" y="112" text-anchor="middle" font-size="11" fill="#243033">화</text><text x="241.4" y="112" text-anchor="middle" font-size="11" fill="#243033">수</text><text x="322.0" y="112" text-anchor="middle" font-size="11" fill="#243033">목</text><text x="402.6" y="112" text-anchor="middle" font-size="11" fill="#243033">금</text><text x="483.1" y="112" text-anchor="middle" font-size="11" fill="#243033">토</text><text x="563.7" y="112" text-anchor="middle" font-size="11" fill="#243033">일</text></svg></td>
+    </tr>
+  </table>
+  <div class="mean"><p class="label">무엇을 의미하나요?</p><p>이번 주 1일(금)은 심박수·호흡수·SpO2가 같은 날 밤 동시에 평소 범위(편차기준: HR +8bpm / RR +2회 / SpO2 -2%p)를 벗어났습니다. 우연히 겹쳤을 가능성도 있어 확진이 아닌 관찰 플래그로만 남깁니다. 같은 날 활동시간·활력점수도 이번 주 중 가장 낮아, 생리 지표뿐 아니라 활동 영역에서도 함께 낮아진 날로 확인됩니다(13·15페이지 참고).</p></div>
+  <div class="suggest"><p class="label">왜 확진이 아니라 관찰인가</p><p>하루의 일시적 변화는 스트레스·카페인·알코올·활동량 등 다양한 요인으로도 나타날 수 있어 이 리포트는 진단을 내리지 않으며, 같은 패턴이 반복되는지 지켜볼 것을 제안합니다. 다음 주에도 세 지표가 같은 방향으로 함께 움직인다면 의료진과의 상담을 권합니다.</p></div>
+
+  
+</section>
+
+<section class="page">
+  
+<table class="run"><tr><td>17 · 루틴 제안</td><td class="right">불면 중심 수면 리듬 진단</td></tr></table>
+<h2>수면습관, 이렇게 바꿔보세요</h2>
+
+
+  
+  <p class="lead">목표 취침 22:23 · 목표 활동 50분/일 · r(활동↔SE)=0.96</p>
+  <div class="card"><p>네 가지 루틴 제안의 근거를 이번 주 데이터로 다시 확인하면: ① 취침시각 편차 ±35분(참고범위 20분 이내) → 목표 취침시각 22:23으로 역산, ② 활동↔수면효율 상관계수 r=0.96, 고활동 구간(평균 수면효율 84%) 진입을 위한 목표 활동시간 50분 이상, ③ 입면잠복기·각성횟수 관련 저녁 루틴, ④ 이상신호 1일(금) 발생 — 반복 여부를 계속 기록합니다.</p></div>
+  <table class="split">
+    <tr>
+      
+      <td><p class="num">①</p><p>취침시각 편차가 참고범위(20분 이내)를 넘으면 카드1(취침시각 먼저 고정하기)을,</p></td>
+      
+      
+      <td><p class="num">②</p><p>활동시간이 목표(50분/일) 미만인 날이 많으면 카드2(낮 활동량 늘리기)를,</p></td>
+      </tr><tr>
+      
+      <td><p class="num">③</p><p>복합형·잠들기어려움형 밤이 있으면 카드3(저녁 루틴)을,</p></td>
+      
+      
+      <td><p class="num">④</p><p>이상신호가 1건 이상이면 카드4(흔들린 밤 기록)를 우선순위로 제안합니다.</p></td>
+      </tr><tr>
+      
+    </tr>
+  </table>
+  <div class="check">
+    <p class="label">체크리스트</p>
+    <ul>
+      <li>매일 같은 시각 기상 (주말 포함)</li>
+      <li>낮 활동 30분 이상</li>
+      <li>취침 2–3시간 전 카페인·알코올을 자제</li>
+      <li>취침 1시간 전 화면·밝은 조명 줄이기</li>
+      <li>컨디션이 흔들린 날은 한 줄로 메모</li>
+    </ul>
+  </div>
+  <p class="fine">① 취침시각 편차가 참고범위(20분 이내)를 넘으면 카드1(취침시각 먼저 고정하기)을, ② 활동시간이 목표(50분/일) 미만인 날이 많으면 카드2(낮 활동량 늘리기)를, ③ 복합형·잠들기어려움형 밤이 있으면 카드3(저녁 루틴)을, ④ 이상신호가 1건 이상이면 카드4(흔들린 밤 기록)를 우선순위로 제안합니다.</p>
+  
+</section>
+
+<script>
+(function () {
+  function fits(sheet) {
+    if (sheet.clientHeight < 50) return true;
+    return sheet.scrollHeight <= sheet.clientHeight + 1;
+  }
+  function isHeader(node) {
+    return node.nodeType === 1 && (node.classList.contains("run") || node.classList.contains("top"));
+  }
+  function makeNext(sheet, header) {
+    if (document.querySelectorAll(".cover, .page").length > 60) return null;
+    var next = sheet.cloneNode(false);
+    sheet.parentNode.insertBefore(next, sheet.nextSibling);
+    if (header) next.appendChild(header.cloneNode(true));
+    return next;
+  }
+  function scaleToFit(sheet, node) {
+    var style = getComputedStyle(sheet);
+    var room = sheet.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+    Array.prototype.forEach.call(sheet.children, function (el) { if (el !== node) room -= el.offsetHeight; });
+    if (room > 0 && node.scrollHeight > room) node.style.zoom = String(room / node.scrollHeight);
+  }
+  function splitTable(sheet, table, header) {
+    var rows = Array.prototype.slice.call(table.rows);
+    sheet.removeChild(table);
+    var current = sheet;
+    var working = table.cloneNode(false);
+    current.appendChild(working);
+    rows.forEach(function (row) {
+      working.appendChild(row);
+      if (fits(current)) return;
+      if (working.rows.length > 1) {
+        working.removeChild(row);
+        current = makeNext(current, header);
+        working = table.cloneNode(false);
+        current.appendChild(working);
+        working.appendChild(row);
+      }
+      if (!fits(current)) scaleToFit(current, working);
+    });
+    return current;
+  }
+  function appendNode(sheet, node, header) {
+    sheet.appendChild(node);
+    if (fits(sheet) || node.nodeType !== 1) return sheet;
+    var blocks = Array.prototype.filter.call(sheet.children, function (el) { return !isHeader(el); });
+    if (blocks.length > 1) {
+      sheet.removeChild(node);
+      var next = makeNext(sheet, header);
+      if (!next) { sheet.appendChild(node); scaleToFit(sheet, node); return sheet; }
+      return appendNode(next, node, header);
+    }
+    if (node.tagName === "TABLE" && node.rows.length > 1) return splitTable(sheet, node, header);
+    if (node.children.length > 1) {
+      var kids = Array.prototype.slice.call(node.children);
+      sheet.removeChild(node);
+      var current = sheet;
+      var holder = node.cloneNode(false);
+      current.appendChild(holder);
+      kids.forEach(function (kid) {
+        holder.appendChild(kid);
+        if (fits(current) || holder.children.length === 1) return;
+        holder.removeChild(kid);
+        current = makeNext(current, header);
+        holder = node.cloneNode(false);
+        current.appendChild(holder);
+        holder.appendChild(kid);
+      });
+      if (!fits(current)) scaleToFit(current, holder);
+      return current;
+    }
+    scaleToFit(sheet, node);
+    return sheet;
+  }
+  function paginate() {
+    if (document.body.dataset.paged) return;
+    document.body.dataset.paged = "1";
+    var originals = Array.prototype.slice.call(document.querySelectorAll(".cover, .page"));
+    originals.forEach(function (sheet) {
+      var nodes = Array.prototype.slice.call(sheet.childNodes);
+      var header = null;
+      nodes.forEach(function (node) { sheet.removeChild(node); if (!header && isHeader(node)) header = node; });
+      var current = sheet;
+      nodes.forEach(function (node) { current = appendNode(current, node, header); });
+    });
+    var all = document.querySelectorAll(".cover, .page");
+    var brand = document.body.dataset.brand || "";
+    var note = document.body.dataset.note || "";
+    var version = document.body.dataset.version || "";
+    Array.prototype.forEach.call(all, function (el, index) {
+      var foot = document.createElement("div");
+      foot.className = "sheet-foot";
+      var pageNo = (index + 1) + " / " + all.length;
+      foot.textContent = el.classList.contains("cover")
+        ? (document.body.dataset.coverFoot || "")
+        : [brand, note, version ? ("로직 " + version) : "", pageNo].filter(Boolean).join("  ·  ");
+      el.appendChild(foot);
+    });
+  }
+  window.addEventListener("beforeprint", function () {
+    document.querySelectorAll(".cover, .page").forEach(function (el) { el.style.zoom = "1"; });
+  });
+  function start() { if (document.fonts && document.fonts.ready) document.fonts.ready.then(paginate); else paginate(); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
+})();
+</script>
+</body>
+</html>
